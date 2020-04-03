@@ -4,31 +4,29 @@ public abstract class Troupes {
 	
 	private int PV;
 	private int Degats;
-	private int ID;
-	private int pos_x;
-	private int pos_y;
-	private int Portee_Attaque;
+	private Coordonnées position;
+	private String type;
 	
-	public Troupes(int pv, int degats, int iD, int portee) {
+	public Troupes(int pv, int degats, Coordonnées pos, String t) {
 		PV = pv;
 		Degats = degats;
-		ID = iD;
-		Portee_Attaque=portee;
+		position=pos;
+		type=t;
 	}
 	
+
 	// Getters
-	int getPV() {return PV;}
-	int getDegats() {return Degats;}
-	int getId() {return ID;}
-	int getX() {return pos_x;}
-	int getY() {return pos_y;}
-	int getPortee() {return Portee_Attaque;}
-	
+	public int getPV() {return PV;}
+	public int getDegats() {return Degats;}
+	public Coordonnées getPosition() {return position;}
+	public String getType() {
+		return type;
+	}
 	// Setters
-	void setPV(int pv) {PV=pv;}
-	void setDegats(int degats) {Degats=degats;}
-	void setId(int id) {ID=id;}
-	void setX(int x) {pos_x=x;}
-	void setY(int y) {pos_y=y;}
-	void setPortee(int portee) {Portee_Attaque=portee;}
+	public void setPV(int pv) {PV=pv;}
+	public void setDegats(int degats) {Degats=degats;}
+	public void setPosition(Coordonnées pos) {position=pos;}
+	public void setType(String type) {
+		this.type = type;
+	}
 }

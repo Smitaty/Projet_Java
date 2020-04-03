@@ -1,7 +1,7 @@
 package Troupes;
 
 public class Archer extends Troupes{
-	Archer(int pv, int degats, int iD, int portee){
-		super(pv,degats,iD,portee);
+	public Archer(Coordonnées pos){
+		super(100,20,pos,"Archer");
 	}
 }
