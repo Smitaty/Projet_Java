@@ -1,6 +1,7 @@
 package IG;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.RescaleOp;
 import java.awt.image.BufferedImage;
@@ -204,7 +205,7 @@ public class Plateau extends JPanel{
 			if(unité_rouge.get(i).getType()=="Chevalier") {
 				try {
 					img = ImageIO.read(new File(path+"warrior_arriere.png"));
-					RescaleOp op = new RescaleOp(rouge, contraste, null);
+					RescaleOp op = new RescaleOp(rouge,contraste,null);
 					img = op.filter( img, null);
 					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 				}catch(IOException e) {
