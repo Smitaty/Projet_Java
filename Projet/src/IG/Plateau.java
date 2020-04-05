@@ -1,7 +1,6 @@
 package IG;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.RescaleOp;
 import java.awt.image.BufferedImage;
@@ -21,7 +20,6 @@ public class Plateau extends JPanel{
 	private ArrayList<Troupes> unité_bleue;
 	private ArrayList<Coordonnées> arbres;
 	private ArrayList<Coordonnées> rochers;
-	private ArrayList<Coordonnées> château;
 	private int largeur;
 	private int hauteur;
 	
@@ -57,7 +55,6 @@ public class Plateau extends JPanel{
 			unité_rouge = new ArrayList<Troupes>();
 			arbres = new ArrayList<Coordonnées>();
 			rochers = new ArrayList<Coordonnées>();
-			château = new ArrayList<Coordonnées>();
 			
 			int h=0;
 			while ((ligne = tampon.readLine())!=null) {
@@ -102,7 +99,13 @@ public class Plateau extends JPanel{
 					}
 					if(ligne.charAt(i)=='F') {
 						Coordonnées coor = new Coordonnées(i,h);
-						château.add(coor);
+						Chateau chateau = new Chateau(coor);
+						unité_bleue.add(chateau);
+					}
+					if(ligne.charAt(i)=='f') {
+						Coordonnées coor = new Coordonnées(i,h);
+						Chateau chateau = new Chateau(coor);
+						unité_rouge.add(chateau);
 					}
 				}
 				++h;
@@ -143,7 +146,6 @@ public class Plateau extends JPanel{
 		dessine_troupes(g);
 		dessine_arbres(g);
 		dessine_rochers(g);
-		dessine_châteaux(g);
 		
 	}
 	
@@ -176,7 +178,7 @@ public class Plateau extends JPanel{
 			}
 			if(unité_bleue.get(i).getType()=="Archer") {
 				try {
-					img = ImageIO.read(new File(path+"Repos.png"));
+					img = ImageIO.read(new File(path+"Bas_Repos.png"));
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
 					img = op.filter( img, null);
 					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
@@ -187,6 +189,16 @@ public class Plateau extends JPanel{
 			if(unité_bleue.get(i).getType()=="Mage") {
 				try {
 					img = ImageIO.read(new File(path+"mage_avant.png"));
+					RescaleOp op = new RescaleOp(bleu, contraste, null);
+					img = op.filter( img, null);
+					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+				}catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(unité_bleue.get(i).getType()=="Château") {
+				try {
+					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
 					img = op.filter( img, null);
 					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
@@ -214,7 +226,7 @@ public class Plateau extends JPanel{
 			}
 			if(unité_rouge.get(i).getType()=="Archer") {
 				try {
-					img = ImageIO.read(new File(path+"JHRepos.png"));
+					img = ImageIO.read(new File(path+"Haut_Repos.png"));
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
 					img = op.filter( img, null);
 					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
@@ -225,6 +237,16 @@ public class Plateau extends JPanel{
 			if(unité_rouge.get(i).getType()=="Mage") {
 				try {
 					img = ImageIO.read(new File(path+"witch_arriere.png"));
+					RescaleOp op = new RescaleOp(rouge, contraste, null);
+					img = op.filter( img, null);
+					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+				}catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(unité_rouge.get(i).getType()=="Château") {
+				try {
+					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
 					img = op.filter( img, null);
 					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
@@ -272,28 +294,6 @@ public class Plateau extends JPanel{
 			
 			try {
 				Image img = ImageIO.read(new File(path+"rocher.png"));
-				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void dessine_châteaux(Graphics g) {
-		int fen_x = getSize().width;
-		int fen_y = getSize().height;
-
-		double stepx = fen_x/(double)largeur;
-		double stepy = fen_y/(double)hauteur;
-		
-		for(int i=0; i<château.size(); ++i) {
-			int x = château.get(i).getX();
-			int y = château.get(i).getY();
-			double pos_x=x*stepx;
-			double pos_y=y*stepy;
-			
-			try {
-				Image img = ImageIO.read(new File(path+"chateau.png"));
 				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 			}catch(IOException e) {
 				e.printStackTrace();
