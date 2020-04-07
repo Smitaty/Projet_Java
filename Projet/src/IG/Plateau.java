@@ -194,7 +194,7 @@ public class Plateau extends JPanel{
 						img = ImageIO.read(new File(path+"Bas_Repos.png"));
 					}
 					if(unité.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"HAUT_Repos.png"));
+						img = ImageIO.read(new File(path+"Haut_Repos.png"));
 					}
 					if(unité.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"Gauche_Repos.png"));
@@ -416,6 +416,88 @@ public class Plateau extends JPanel{
 
 	public void setHauteur(int hauteur) {
 		this.hauteur = hauteur;
+	}
+	
+	public Troupes getChateau(ArrayList<Troupes> unites) {
+		for(Troupes unite : unites) {
+			if(unite.getType() == "Château") return unite;
+		}
+		return null;
+	}
+	
+	public Troupes getTroupeBleu(Troupes troupe) {
+		boolean trouver=false;
+		int i=0;
+		int tx = troupe.getPosition().getX();
+		int ty = troupe.getPosition().getY();
+		while(trouver==false && i<unité_bleue.size()) {
+			int x = unité_bleue.get(i).getPosition().getX();
+			int y = unité_bleue.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+				return unité_bleue.get(i);
+			}
+			else {
+				++i;
+			}
+		}
+		return null;
+	}
+	
+	public Troupes getTroupeBleu(Coordonnées coor) {
+		boolean trouver=false;
+		int i=0;
+		int tx = coor.getX();
+		int ty = coor.getY();
+		while(trouver==false && i<unité_bleue.size()) {
+			int x = unité_bleue.get(i).getPosition().getX();
+			int y = unité_bleue.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+				return unité_bleue.get(i);
+			}
+			else {
+				++i;
+			}
+		}
+		return null;
+	}
+	
+	public Troupes getTroupeRouge(Troupes troupe) {
+		boolean trouver=false;
+		int i=0;
+		int tx = troupe.getPosition().getX();
+		int ty = troupe.getPosition().getY();
+		while(trouver==false && i<unité_rouge.size()) {
+			int x = unité_rouge.get(i).getPosition().getX();
+			int y = unité_rouge.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+			}
+			else {
+				++i;
+			}
+		}
+		return unité_rouge.get(i);
+	}
+	
+	public Troupes getTroupeRouge(Coordonnées coor) {
+		boolean trouver=false;
+		int i=0;
+		int tx = coor.getX();
+		int ty = coor.getY();
+		while(trouver==false && i<unité_rouge.size()) {
+			int x = unité_rouge.get(i).getPosition().getX();
+			int y = unité_rouge.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+				return unité_rouge.get(i);
+			}
+			else {
+				++i;
+			}
+		}
+		return null;
 	}
 	
 }

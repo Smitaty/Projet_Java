@@ -1,14 +1,10 @@
 package Game;
 
 public abstract class Game {
-	static private long tpsParTour=60;
-	private int tour=0;
+	static private long tpsParTour=90;
+	private int tour;
 	
 	public Game() {
-		this.init();
-	}
-	
-	public void init() {
 		tour=0;
 	}
 
