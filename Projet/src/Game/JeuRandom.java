@@ -37,7 +37,7 @@ public class JeuRandom extends Game implements Runnable{
 	public void run() {
 		System.out.println("Début de partie");
 		afficheCoordonnéesTroupes();
-		while(chateauBleu.getPV()>0 || chateauRouge.getPV()>0) {
+		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
 				for(Troupes troupe : TroupesBleues) {
 					if(troupe.getType()!="Château") {
