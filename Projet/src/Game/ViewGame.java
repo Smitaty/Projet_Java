@@ -8,9 +8,9 @@ import javax.swing.JFrame;
 
 import IG.Plateau;
 
-public class ViewGame implements Observer{
-	
+public class ViewGame implements Observer{	
 	public ViewGame(Plateau plateau) {
+
 		JFrame frame = new JFrame();
 		frame.setTitle("Plateau");
 		frame.setSize(new Dimension(700, 700));

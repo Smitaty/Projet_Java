@@ -1,7 +1,7 @@
 package Troupes;
 
 public class Chateau extends Troupes{
-	public Chateau(Coordonnées pos) {
+	public Chateau(Coordonnees pos) {
 		super(300,0,pos,"Château",Direction.NORD);
 	}
 }

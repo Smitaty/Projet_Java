@@ -16,10 +16,10 @@ public class Plateau extends JPanel{
 	
 	String path ="src/Image/";
 
-	private ArrayList<Troupes> unité_rouge;
-	private ArrayList<Troupes> unité_bleue;
-	private ArrayList<Coordonnées> arbres;
-	private ArrayList<Coordonnées> rochers;
+	private ArrayList<Troupes> unite_rouge;
+	private ArrayList<Troupes> unite_bleue;
+	private ArrayList<Coordonnees> arbres;
+	private ArrayList<Coordonnees> rochers;
 	private int largeur;
 	private int hauteur;
 	
@@ -51,61 +51,61 @@ public class Plateau extends JPanel{
 			lecture = new InputStreamReader(flux);
 			tampon = new BufferedReader(lecture);
 			
-			unité_bleue = new ArrayList<Troupes>();
-			unité_rouge = new ArrayList<Troupes>();
-			arbres = new ArrayList<Coordonnées>();
-			rochers = new ArrayList<Coordonnées>();
+			unite_bleue = new ArrayList<Troupes>();
+			unite_rouge = new ArrayList<Troupes>();
+			arbres = new ArrayList<Coordonnees>();
+			rochers = new ArrayList<Coordonnees>();
 			
 			int h=0;
 			while ((ligne = tampon.readLine())!=null) {
 				for(int i=0; i<ligne.length(); ++i) {
 					if(ligne.charAt(i)=='T') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						arbres.add(coor);
 					}
 					if(ligne.charAt(i)=='R') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						rochers.add(coor);
 					}
 					if(ligne.charAt(i)=='A') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Archer archer = new Archer(coor,Direction.SUD);
-						unité_bleue.add(archer);
+						unite_bleue.add(archer);
 					}
 					if(ligne.charAt(i)=='a') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Archer archer = new Archer(coor,Direction.NORD);
-						unité_rouge.add(archer);
+						unite_rouge.add(archer);
 					}
 					if(ligne.charAt(i)=='C') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Chevalier chevalier = new Chevalier(coor,Direction.SUD);
-						unité_bleue.add(chevalier);
+						unite_bleue.add(chevalier);
 					}
 					if(ligne.charAt(i)=='c') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Chevalier chevalier = new Chevalier(coor,Direction.NORD);
-						unité_rouge.add(chevalier);
+						unite_rouge.add(chevalier);
 					}
 					if(ligne.charAt(i)=='M') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Mage mage = new Mage(coor,Direction.SUD);
-						unité_bleue.add(mage);
+						unite_bleue.add(mage);
 					}
 					if(ligne.charAt(i)=='m') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Mage mage = new Mage(coor,Direction.NORD);
-						unité_rouge.add(mage);
+						unite_rouge.add(mage);
 					}
 					if(ligne.charAt(i)=='F') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Chateau chateau = new Chateau(coor);
-						unité_bleue.add(chateau);
+						unite_bleue.add(chateau);
 					}
 					if(ligne.charAt(i)=='f') {
-						Coordonnées coor = new Coordonnées(i,h);
+						Coordonnees coor = new Coordonnees(i,h);
 						Chateau chateau = new Chateau(coor);
-						unité_rouge.add(chateau);
+						unite_rouge.add(chateau);
 					}
 				}
 				++h;
@@ -142,12 +142,11 @@ public class Plateau extends JPanel{
 			}
 			position_x+=stepx;
 		}
-		if(unité_bleue.size()>0 && unité_rouge.size()>0) {
+		if(unite_bleue.size()>0 && unite_rouge.size()>0) {
 			dessine_troupes(g);
 		}
 		dessine_arbres(g);
 		dessine_rochers(g);
-		
 	}
 	
 	public void dessine_troupes(Graphics g) {
@@ -161,24 +160,24 @@ public class Plateau extends JPanel{
 		float[] bleu = {0.75f,0.75f,3,1.0f};
 		float[] contraste = {0,0,0,1.0f};
 		
-		for(int i=0; i<unité_bleue.size(); ++i) {
-			int x = unité_bleue.get(i).getPosition().getX();
-			int y = unité_bleue.get(i).getPosition().getY();
-			Troupes unité = unité_bleue.get(i);
+		for(int i=0; i<unite_bleue.size(); ++i) {
+			int x = unite_bleue.get(i).getPosition().getX();
+			int y = unite_bleue.get(i).getPosition().getY();
+			Troupes unite = unite_bleue.get(i);
 			double pos_x=x*stepx;
 			double pos_y=y*stepy;
-			if(unité.getType()=="Chevalier") {
+			if(unite.getType()=="Chevalier") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"chevalier_avant.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"chevalier_arriere.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"chevalier_gauche.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"chevalier_droite.png"));
 					}
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
@@ -188,18 +187,18 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité.getType()=="Archer") {
+			if(unite.getType()=="Archer") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"Bas_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"Haut_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"Gauche_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"Droite_Repos.png"));
 					}
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
@@ -209,18 +208,18 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité.getType()=="Mage") {
+			if(unite.getType()=="Mage") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"mage_avant.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"mage_arriere.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"mage_gauche.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"mage_droite.png"));
 					}
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
@@ -230,7 +229,7 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité.getType()=="Château") {
+			if(unite.getType()=="Château") {
 				try {
 					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
@@ -242,25 +241,25 @@ public class Plateau extends JPanel{
 			}
 		}
 		
-		for(int i=0; i<unité_rouge.size(); ++i) {
-			int x = unité_rouge.get(i).getPosition().getX();
-			int y = unité_rouge.get(i).getPosition().getY();
-			Troupes unité = unité_rouge.get(i);
+		for(int i=0; i<unite_rouge.size(); ++i) {
+			int x = unite_rouge.get(i).getPosition().getX();
+			int y = unite_rouge.get(i).getPosition().getY();
+			Troupes unite = unite_rouge.get(i);
 			double pos_x=x*stepx;
 			double pos_y=y*stepy;
 			
-			if(unité_rouge.get(i).getType()=="Chevalier") {
+			if(unite_rouge.get(i).getType()=="Chevalier") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"warrior_avant.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"warrior_arriere.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"warrior_gauche.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"warrior_droite.png"));
 					}
 					RescaleOp op = new RescaleOp(rouge,contraste,null);
@@ -270,18 +269,18 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité_rouge.get(i).getType()=="Archer") {
+			if(unite_rouge.get(i).getType()=="Archer") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"Bas_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"Haut_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"Gauche_Repos.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"Droite_Repos.png"));
 					}
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
@@ -291,18 +290,18 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité_rouge.get(i).getType()=="Mage") {
+			if(unite_rouge.get(i).getType()=="Mage") {
 				try {
-					if(unité.getDirection()==Direction.SUD) {
+					if(unite.getDirection()==Direction.SUD) {
 						img = ImageIO.read(new File(path+"witch_avant.png"));
 					}
-					if(unité.getDirection()==Direction.NORD) {
+					if(unite.getDirection()==Direction.NORD) {
 						img = ImageIO.read(new File(path+"witch_arriere.png"));
 					}
-					if(unité.getDirection()==Direction.OUEST) {
+					if(unite.getDirection()==Direction.OUEST) {
 						img = ImageIO.read(new File(path+"witch_gauche.png"));
 					}
-					if(unité.getDirection()==Direction.EST) {
+					if(unite.getDirection()==Direction.EST) {
 						img = ImageIO.read(new File(path+"witch_droite.png"));
 					}
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
@@ -312,7 +311,7 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unité_rouge.get(i).getType()=="Château") {
+			if(unite_rouge.get(i).getType()=="Château") {
 				try {
 					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
@@ -370,27 +369,27 @@ public class Plateau extends JPanel{
 	}
 
 	
-	public ArrayList<Troupes> getUnité_rouge() {
-		return unité_rouge;
+	public ArrayList<Troupes> getUnite_rouge() {
+		return unite_rouge;
 	}
 
-	public void setUnité_rouge(ArrayList<Troupes> unité_rouge) {
-		this.unité_rouge = unité_rouge;
+	public void setUnite_rouge(ArrayList<Troupes> unite_rouge) {
+		this.unite_rouge = unite_rouge;
 	}
 
-	public ArrayList<Troupes> getUnité_bleue() {
-		return unité_bleue;
+	public ArrayList<Troupes> getUnite_bleue() {
+		return unite_bleue;
 	}
 
-	public void setUnité_bleue(ArrayList<Troupes> unité_bleue) {
-		this.unité_bleue = unité_bleue;
+	public void setUnite_bleue(ArrayList<Troupes> unite_bleue) {
+		this.unite_bleue = unite_bleue;
 	}
 
-	public ArrayList<Coordonnées> getArbres() {
+	public ArrayList<Coordonnees> getArbres() {
 		return arbres;
 	}
 	
-	public boolean ArbreEn(Coordonnées coor) {
+	public boolean ArbreEn(Coordonnees coor) {
 		int x = coor.getX();
 		int y = coor.getY();
 		for(int i=0; i<arbres.size(); ++i) {
@@ -402,15 +401,15 @@ public class Plateau extends JPanel{
 		return false;
 	}
 
-	public void setArbres(ArrayList<Coordonnées> arbres) {
+	public void setArbres(ArrayList<Coordonnees> arbres) {
 		this.arbres = arbres;
 	}
 
-	public ArrayList<Coordonnées> getRochers() {
+	public ArrayList<Coordonnees> getRochers() {
 		return rochers;
 	}
 
-	public void setRochers(ArrayList<Coordonnées> rochers) {
+	public void setRochers(ArrayList<Coordonnees> rochers) {
 		this.rochers = rochers;
 	}
 
@@ -430,6 +429,7 @@ public class Plateau extends JPanel{
 		this.hauteur = hauteur;
 	}
 	
+	
 	public Troupes getChateau(ArrayList<Troupes> unites) {
 		for(Troupes unite : unites) {
 			if(unite.getType() == "Château") return unite;
@@ -442,12 +442,12 @@ public class Plateau extends JPanel{
 		int i=0;
 		int tx = troupe.getPosition().getX();
 		int ty = troupe.getPosition().getY();
-		while(trouver==false && i<unité_bleue.size()) {
-			int x = unité_bleue.get(i).getPosition().getX();
-			int y = unité_bleue.get(i).getPosition().getY();
+		while(trouver==false && i<unite_bleue.size()) {
+			int x = unite_bleue.get(i).getPosition().getX();
+			int y = unite_bleue.get(i).getPosition().getY();
 			if(tx==x && ty==y) {
 				trouver = true;
-				return unité_bleue.get(i);
+				return unite_bleue.get(i);
 			}
 			else {
 				++i;
@@ -456,17 +456,17 @@ public class Plateau extends JPanel{
 		return null;
 	}
 	
-	public Troupes getTroupeBleu(Coordonnées coor) {
+	public Troupes getTroupeBleu(Coordonnees coor) {
 		boolean trouver=false;
 		int i=0;
 		int tx = coor.getX();
 		int ty = coor.getY();
-		while(trouver==false && i<unité_bleue.size()) {
-			int x = unité_bleue.get(i).getPosition().getX();
-			int y = unité_bleue.get(i).getPosition().getY();
+		while(trouver==false && i<unite_bleue.size()) {
+			int x = unite_bleue.get(i).getPosition().getX();
+			int y = unite_bleue.get(i).getPosition().getY();
 			if(tx==x && ty==y) {
 				trouver = true;
-				return unité_bleue.get(i);
+				return unite_bleue.get(i);
 			}
 			else {
 				++i;
@@ -480,9 +480,9 @@ public class Plateau extends JPanel{
 		int i=0;
 		int tx = troupe.getPosition().getX();
 		int ty = troupe.getPosition().getY();
-		while(trouver==false && i<unité_rouge.size()) {
-			int x = unité_rouge.get(i).getPosition().getX();
-			int y = unité_rouge.get(i).getPosition().getY();
+		while(trouver==false && i<unite_rouge.size()) {
+			int x = unite_rouge.get(i).getPosition().getX();
+			int y = unite_rouge.get(i).getPosition().getY();
 			if(tx==x && ty==y) {
 				trouver = true;
 			}
@@ -490,20 +490,20 @@ public class Plateau extends JPanel{
 				++i;
 			}
 		}
-		return unité_rouge.get(i);
+		return unite_rouge.get(i);
 	}
 	
-	public Troupes getTroupeRouge(Coordonnées coor) {
+	public Troupes getTroupeRouge(Coordonnees coor) {
 		boolean trouver=false;
 		int i=0;
 		int tx = coor.getX();
 		int ty = coor.getY();
-		while(trouver==false && i<unité_rouge.size()) {
-			int x = unité_rouge.get(i).getPosition().getX();
-			int y = unité_rouge.get(i).getPosition().getY();
+		while(trouver==false && i<unite_rouge.size()) {
+			int x = unite_rouge.get(i).getPosition().getX();
+			int y = unite_rouge.get(i).getPosition().getY();
 			if(tx==x && ty==y) {
 				trouver = true;
-				return unité_rouge.get(i);
+				return unite_rouge.get(i);
 			}
 			else {
 				++i;

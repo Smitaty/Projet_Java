@@ -14,11 +14,11 @@ public class Main {
 		
 		Plateau plateau = new Plateau("src/Layout/Plateau.lay");
 		ViewGame view = new ViewGame(plateau);
-		try {
+		/*try {
 			Thread.sleep(18000);
 		}catch(Exception e) {
 			
-		}
+		}*/
 		JeuRandom jeu = new JeuRandom(plateau);
 	}
 

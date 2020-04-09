@@ -1,10 +1,10 @@
 package Troupes;
 
-public class Coordonnées {
+public class Coordonnees {
 	protected int x;
 	protected int y;
 
-	public Coordonnées(int x, int y) {
+	public Coordonnees(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;

@@ -1,9 +1,11 @@
 package Game;
 
 import IG.Plateau;
+import Strategie.StrategieRandom;
+
 import java.util.ArrayList;
 import Troupes.Troupes;
-import Stratégie.StratégieRandom;
+
 import java.util.Random;
 
 public class JeuRandom extends Game{
@@ -17,14 +19,14 @@ public class JeuRandom extends Game{
 	public JeuRandom(Plateau plateau) {
 		super();
 		this.plateau = plateau;
-		TroupesBleues = plateau.getUnité_bleue();
-		TroupesRouges = plateau.getUnité_rouge();
+		TroupesBleues = plateau.getUnite_bleue();
+		TroupesRouges = plateau.getUnite_rouge();
 		chateauBleu = plateau.getChateau(TroupesBleues);
 		chateauRouge = plateau.getChateau(TroupesRouges);
 		bleu = new Random().nextInt(2);
 	}
 	
-	public void afficheCoordonnéesTroupes() {
+	public void afficheCoordonneesTroupes() {
 		for(Troupes troupe : TroupesBleues) {
 			System.out.println(troupe.getType()+" Bleu "+troupe.getDirection()+" "+troupe.getPosition().getX()+" "+troupe.getPosition().getY());
 		}
@@ -40,14 +42,14 @@ public class JeuRandom extends Game{
 	}
 	
 	public void partie() {
-		System.out.println("Début de partie");
-		afficheCoordonnéesTroupes();
+		System.out.println("Debut de partie");
+		afficheCoordonneesTroupes();
 		//notifyObserver();
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
 				for(Troupes troupe : TroupesBleues) {
 					if(troupe.getType()!="Château") {
-						StratégieRandom strat = new StratégieRandom(troupe,plateau);
+						StrategieRandom strat = new StrategieRandom(troupe,plateau);
 						TroupesAction action = strat.coupRandom();
 						System.out.println(troupe.getType()+" bleu  "+action);
 						strat.jouer(action, troupe,true);
@@ -67,7 +69,7 @@ public class JeuRandom extends Game{
 			else {
 				for(Troupes troupe : TroupesRouges) {
 					if(troupe.getType()!="Château") {
-						StratégieRandom strat = new StratégieRandom(troupe,plateau);
+						StrategieRandom strat = new StrategieRandom(troupe,plateau);
 						TroupesAction action = strat.coupRandom();
 						System.out.println(troupe.getType()+" rouge "+action);
 						strat.jouer(action, troupe,false);

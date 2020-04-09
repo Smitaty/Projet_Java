@@ -1,4 +1,4 @@
-package Stratégie;
+package Strategie;
 
 import IG.Plateau;
 import Game.TroupesAction;
@@ -6,9 +6,9 @@ import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class StratégieRandom extends Stratégie{
+public class StrategieRandom extends Strategie{
 	private Plateau plateau;
-	public StratégieRandom(Troupes troupes, Plateau plateau) {
+	public StrategieRandom(Troupes troupes, Plateau plateau) {
 		super(troupes,plateau);
 		this.plateau=plateau;
 	}
@@ -27,30 +27,30 @@ public class StratégieRandom extends Stratégie{
 	
 	public void jouer(TroupesAction action,Troupes troupe, boolean estBleu) {
 		if(estBleu) {
-			Troupes unité = plateau.getTroupeBleu(troupe);
+			Troupes unite = plateau.getTroupeBleu(troupe);
 			switch (action) {
 				case TOP:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX(),unité.getPosition().getY()-1));
-					unité.setDirection(Direction.NORD);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX(),unite.getPosition().getY()-1));
+					unite.setDirection(Direction.NORD);
 					break;
 				case BOTTOM:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX(),unité.getPosition().getY()+1));
-					unité.setDirection(Direction.SUD);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX(),unite.getPosition().getY()+1));
+					unite.setDirection(Direction.SUD);
 					break;
 				case LEFT:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX()-1,unité.getPosition().getY()));
-					unité.setDirection(Direction.OUEST);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX()-1,unite.getPosition().getY()));
+					unite.setDirection(Direction.OUEST);
 					break;
 				case RIGHT:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX()+1,unité.getPosition().getY()));
-					unité.setDirection(Direction.EST);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX()+1,unite.getPosition().getY()));
+					unite.setDirection(Direction.EST);
 					break;
 				case ATTACK1:
 					Troupes cible = chercheCible(troupe,troupe.getDirection(),true);
 					cible.setPV(cible.getPV()-troupe.getDegats());
 					if(cible.getPV()<=0)
 						if(cible.getType()!="Château")
-							plateau.getUnité_rouge().remove(cible);
+							plateau.getUnite_rouge().remove(cible);
 						else
 							System.out.println("Château rouge détruit !");
 					break;
@@ -59,7 +59,7 @@ public class StratégieRandom extends Stratégie{
 					cible2.setPV(cible2.getPV()-troupe.getDegats()+20);
 					if(cible2.getPV()<=0) {
 						if(cible2.getType()!="Château")
-							plateau.getUnité_rouge().remove(cible2);
+							plateau.getUnite_rouge().remove(cible2);
 						else
 							System.out.println("Château rouge détruit !");
 					}
@@ -69,30 +69,30 @@ public class StratégieRandom extends Stratégie{
 			}
 		}
 		else {
-			Troupes unité = plateau.getTroupeRouge(troupe);
+			Troupes unite = plateau.getTroupeRouge(troupe);
 			switch (action) {
 				case TOP:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX(),unité.getPosition().getY()-1));
-					unité.setDirection(Direction.NORD);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX(),unite.getPosition().getY()-1));
+					unite.setDirection(Direction.NORD);
 					break;
 				case BOTTOM:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX(),unité.getPosition().getY()+1));
-					unité.setDirection(Direction.SUD);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX(),unite.getPosition().getY()+1));
+					unite.setDirection(Direction.SUD);
 					break;
 				case LEFT:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX()-1,unité.getPosition().getY()));
-					unité.setDirection(Direction.OUEST);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX()-1,unite.getPosition().getY()));
+					unite.setDirection(Direction.OUEST);
 					break;
 				case RIGHT:
-					unité.setPosition(new Coordonnées(unité.getPosition().getX()+1,unité.getPosition().getY()));
-					unité.setDirection(Direction.EST);
+					unite.setPosition(new Coordonnees(unite.getPosition().getX()+1,unite.getPosition().getY()));
+					unite.setDirection(Direction.EST);
 					break;
 				case ATTACK1:
 					Troupes cible = chercheCible(troupe,troupe.getDirection(),false);
 					cible.setPV(cible.getPV()-troupe.getDegats());
 					if(cible.getPV()<=0) {
 						if(cible.getType()!="Château")
-							plateau.getUnité_bleue().remove(cible);
+							plateau.getUnite_bleue().remove(cible);
 						else
 							System.out.println("Château rouge détruit !");
 					}
@@ -102,7 +102,7 @@ public class StratégieRandom extends Stratégie{
 					cible2.setPV(cible2.getPV()-troupe.getDegats());
 					if(cible2.getPV()<=0) {
 						if(cible2.getType()!="Château")
-							plateau.getUnité_bleue().remove(cible2);
+							plateau.getUnite_bleue().remove(cible2);
 						else
 							System.out.println("Château rouge détruit !");
 					}
@@ -121,35 +121,35 @@ public class StratégieRandom extends Stratégie{
 		if(estBleu) {
 			switch (dir) {
 				case NORD:
-					cible = plateau.getTroupeRouge(new Coordonnées(x, y-1));
+					cible = plateau.getTroupeRouge(new Coordonnees(x, y-1));
 					if(cible==null && (type=="Archer" || type=="Mage")) {
-						cible = plateau.getTroupeRouge(new Coordonnées(x,y-2));
+						cible = plateau.getTroupeRouge(new Coordonnees(x,y-2));
 						if(cible==null)
-							cible = plateau.getTroupeRouge(new Coordonnées(x,y-3));
+							cible = plateau.getTroupeRouge(new Coordonnees(x,y-3));
 					}
 					break;
 				case SUD:
-					cible = plateau.getTroupeRouge(new Coordonnées(x, y+1));
+					cible = plateau.getTroupeRouge(new Coordonnees(x, y+1));
 					if(cible==null && (type=="Archer" || type=="Mage")) {
-						cible = plateau.getTroupeRouge(new Coordonnées(x,y+2));
+						cible = plateau.getTroupeRouge(new Coordonnees(x,y+2));
 						if(cible==null)
-							cible = plateau.getTroupeRouge(new Coordonnées(x,y+3));
+							cible = plateau.getTroupeRouge(new Coordonnees(x,y+3));
 					}
 					break;
 				case OUEST:
-					cible = plateau.getTroupeRouge(new Coordonnées(x-1, y));
+					cible = plateau.getTroupeRouge(new Coordonnees(x-1, y));
 					if(cible==null && (type=="Archer" || type=="Mage")) {
-						cible = plateau.getTroupeRouge(new Coordonnées(x-2,y));
+						cible = plateau.getTroupeRouge(new Coordonnees(x-2,y));
 						if(cible==null)
-							cible = plateau.getTroupeRouge(new Coordonnées(x-3,y));
+							cible = plateau.getTroupeRouge(new Coordonnees(x-3,y));
 					}
 					break;
 				case EST:
-					cible = plateau.getTroupeRouge(new Coordonnées(x+1, y));
+					cible = plateau.getTroupeRouge(new Coordonnees(x+1, y));
 					if(cible==null && (type=="Archer" || type=="Mage")) {
-						cible = plateau.getTroupeRouge(new Coordonnées(x+2,y));
+						cible = plateau.getTroupeRouge(new Coordonnees(x+2,y));
 						if(cible==null)
-							cible = plateau.getTroupeRouge(new Coordonnées(x+3,y));
+							cible = plateau.getTroupeRouge(new Coordonnees(x+3,y));
 					}
 					break;
 			}
@@ -157,35 +157,35 @@ public class StratégieRandom extends Stratégie{
 		else {
 			switch (dir) {
 			case NORD:
-				cible = plateau.getTroupeBleu(new Coordonnées(x, y-1));
+				cible = plateau.getTroupeBleu(new Coordonnees(x, y-1));
 				if(cible==null && (type=="Archer" || type=="Mage")) {
-					cible = plateau.getTroupeBleu(new Coordonnées(x,y-2));
+					cible = plateau.getTroupeBleu(new Coordonnees(x,y-2));
 					if(cible==null)
-						cible = plateau.getTroupeBleu(new Coordonnées(x,y-3));
+						cible = plateau.getTroupeBleu(new Coordonnees(x,y-3));
 				}
 				break;
 			case SUD:
-				cible = plateau.getTroupeBleu(new Coordonnées(x, y+1));
+				cible = plateau.getTroupeBleu(new Coordonnees(x, y+1));
 				if(cible==null && (type=="Archer" || type=="Mage")) {
-					cible = plateau.getTroupeBleu(new Coordonnées(x,y+2));
+					cible = plateau.getTroupeBleu(new Coordonnees(x,y+2));
 					if(cible==null)
-						cible = plateau.getTroupeBleu(new Coordonnées(x,y+3));
+						cible = plateau.getTroupeBleu(new Coordonnees(x,y+3));
 				}
 				break;
 			case OUEST:
-				cible = plateau.getTroupeBleu(new Coordonnées(x-1, y));
+				cible = plateau.getTroupeBleu(new Coordonnees(x-1, y));
 				if(cible==null && (type=="Archer" || type=="Mage")) {
-					cible = plateau.getTroupeBleu(new Coordonnées(x-2,y));
+					cible = plateau.getTroupeBleu(new Coordonnees(x-2,y));
 					if(cible==null)
-						cible = plateau.getTroupeBleu(new Coordonnées(x-3,y));
+						cible = plateau.getTroupeBleu(new Coordonnees(x-3,y));
 				}
 				break;
 			case EST:
-				cible = plateau.getTroupeBleu(new Coordonnées(x+1, y));
+				cible = plateau.getTroupeBleu(new Coordonnees(x+1, y));
 				if(cible==null && (type=="Archer" || type=="Mage")) {
-					cible = plateau.getTroupeBleu(new Coordonnées(x+2,y));
+					cible = plateau.getTroupeBleu(new Coordonnees(x+2,y));
 					if(cible==null)
-						cible = plateau.getTroupeBleu(new Coordonnées(x+3,y));
+						cible = plateau.getTroupeBleu(new Coordonnees(x+3,y));
 				}
 				break;
 			}
