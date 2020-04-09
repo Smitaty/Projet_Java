@@ -60,7 +60,7 @@ public class JeuRandom extends Game{
 				//notifyObserver();
 				plateau.repaint();
 				try {
-					Thread.sleep(18000);
+					Thread.sleep(1000);
 				}catch(Exception e) {
 					System.out.println(e.getMessage());
 				}
@@ -79,7 +79,7 @@ public class JeuRandom extends Game{
 				//notifyObserver();
 				plateau.repaint();
 				try {
-					Thread.sleep(18000);
+					Thread.sleep(1000);
 				}catch(Exception e) {
 					System.out.println(e.getMessage());
 				}

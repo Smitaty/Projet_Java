@@ -24,7 +24,6 @@ public class Plateau extends JPanel{
 	private int hauteur;
 	
 	public Plateau(String file) {
-		
 		try {
 			InputStream flux =new FileInputStream(file); 
 			InputStreamReader lecture =new InputStreamReader(flux);
@@ -128,16 +127,17 @@ public class Plateau extends JPanel{
 		double stepy=fen_y/(double)hauteur;
 		
 		double position_x=0;
+		Image img = null;
+		try {
+	        img = ImageIO.read(new File(path+"herbe.png"));
+	        }catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		
 		for(int x=0; x<largeur; ++x){
 			double position_y=0;
 			for(int y=0; y<hauteur; ++y) {
-				try {
-					Image img = ImageIO.read(new File(path+"herbe.png"));
 					g.drawImage(img, (int)position_x, (int)position_y, (int)stepx, (int)stepy, this);
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
 				position_y+=stepy;
 			}
 			position_x+=stepx;
