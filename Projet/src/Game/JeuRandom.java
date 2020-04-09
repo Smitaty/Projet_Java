@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import Troupes.Troupes;
 import Stratégie.StratégieRandom;
 import java.util.Random;
-import java.lang.Thread;
 
-public class JeuRandom extends Game implements Runnable{
+public class JeuRandom extends Game{
 	private Plateau plateau;
 	private ArrayList<Troupes> TroupesBleues;
 	private ArrayList<Troupes> TroupesRouges;
@@ -34,9 +33,16 @@ public class JeuRandom extends Game implements Runnable{
 		}
 	}
 	
-	public void run() {
+	public void notifyObserver() {
+		for (Observer ob : super.getObs()) {
+            ob.update(plateau);
+        }
+	}
+	
+	public void partie() {
 		System.out.println("Début de partie");
 		afficheCoordonnéesTroupes();
+		//notifyObserver();
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
 				for(Troupes troupe : TroupesBleues) {
@@ -45,9 +51,11 @@ public class JeuRandom extends Game implements Runnable{
 						TroupesAction action = strat.coupRandom();
 						System.out.println(troupe.getType()+" bleu  "+action);
 						strat.jouer(action, troupe,true);
+						
 					}
 				}
 				System.out.println("Fin tour bleu");
+				//notifyObserver();
 				plateau.repaint();
 				try {
 					Thread.sleep(18000);
@@ -66,6 +74,7 @@ public class JeuRandom extends Game implements Runnable{
 					}
 				}
 				System.out.println("Fin tour rouge");
+				//notifyObserver();
 				plateau.repaint();
 				try {
 					Thread.sleep(18000);

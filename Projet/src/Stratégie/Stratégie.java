@@ -93,10 +93,10 @@ public abstract class Stratégie {
 				listecoups.add(TroupesAction.ATTACK1);
 			}
 			else if (troupe.getType()=="Archer" || troupe.getType()=="Mage") {
-				if(attaqueValide(new Coordonnées(x,y-2),estBleu(troupe))) {
+				if(attaqueValide(new Coordonnées(x,y-2),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x,y-1))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
-				else if(attaqueValide(new Coordonnées(x,y-3),estBleu(troupe))) {
+				else if(attaqueValide(new Coordonnées(x,y-3),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x,y-1)) && !plateau.ArbreEn(new Coordonnées(x,y-2))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
 			}
@@ -106,10 +106,10 @@ public abstract class Stratégie {
 				listecoups.add(TroupesAction.ATTACK1);
 			}
 			else if (troupe.getType()=="Archer" || troupe.getType()=="Mage") {
-				if(attaqueValide(new Coordonnées(x,y+2),estBleu(troupe))) {
+				if(attaqueValide(new Coordonnées(x,y+2),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x,y+1))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
-				else if(attaqueValide(new Coordonnées(x,y+3),estBleu(troupe))) {
+				else if(attaqueValide(new Coordonnées(x,y+3),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x,y+1)) && !plateau.ArbreEn(new Coordonnées(x,y+2))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
 			}
@@ -119,10 +119,10 @@ public abstract class Stratégie {
 				listecoups.add(TroupesAction.ATTACK1);
 			}
 			else if (troupe.getType()=="Archer" || troupe.getType()=="Mage") {
-				if(attaqueValide(new Coordonnées(x+2,y),estBleu(troupe))) {
+				if(attaqueValide(new Coordonnées(x+2,y),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x+1,y))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
-				else if(attaqueValide(new Coordonnées(x+3,y),estBleu(troupe))) {
+				else if(attaqueValide(new Coordonnées(x+3,y),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x+1,y)) && !plateau.ArbreEn(new Coordonnées(x+2,y))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
 			}
@@ -132,10 +132,10 @@ public abstract class Stratégie {
 				listecoups.add(TroupesAction.ATTACK1);
 			}
 			else if (troupe.getType()=="Archer" || troupe.getType()=="Mage") {
-				if(attaqueValide(new Coordonnées(x-2,y),estBleu(troupe))) {
+				if(attaqueValide(new Coordonnées(x-2,y),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x-1,y))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
-				else if(attaqueValide(new Coordonnées(x-3,y),estBleu(troupe))) {
+				else if(attaqueValide(new Coordonnées(x-3,y),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnées(x-1,y)) && !plateau.ArbreEn(new Coordonnées(x-2,y))) {
 					listecoups.add(TroupesAction.ATTACK1);
 				}
 			}

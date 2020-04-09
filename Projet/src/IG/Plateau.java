@@ -389,6 +389,18 @@ public class Plateau extends JPanel{
 	public ArrayList<Coordonnées> getArbres() {
 		return arbres;
 	}
+	
+	public boolean ArbreEn(Coordonnées coor) {
+		int x = coor.getX();
+		int y = coor.getY();
+		for(int i=0; i<arbres.size(); ++i) {
+			int ax = arbres.get(i).getX();
+			int ay = arbres.get(i).getY();
+			if(x==ax && y==ay)
+				return true;
+		}
+		return false;
+	}
 
 	public void setArbres(ArrayList<Coordonnées> arbres) {
 		this.arbres = arbres;
