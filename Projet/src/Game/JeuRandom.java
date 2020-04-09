@@ -45,10 +45,12 @@ public class JeuRandom extends Game{
 		System.out.println("Debut de partie");
 		afficheCoordonneesTroupes();
 		//notifyObserver();
+		System.out.println(plateau.getLargeur()+" "+plateau.getHauteur());
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
 				for(Troupes troupe : TroupesBleues) {
 					if(troupe.getType()!="Château") {
+						System.out.println(troupe.getPosition().getX()+" "+troupe.getPosition().getY());
 						StrategieRandom strat = new StrategieRandom(troupe,plateau);
 						TroupesAction action = strat.coupRandom();
 						System.out.println(troupe.getType()+" bleu  "+action);

@@ -24,7 +24,7 @@ public abstract class Strategie {
 	public boolean deplacementValide(Coordonnees coor) {
 		int x = coor.getX();
 		int y = coor.getY();
-		if(x<plateau.getLargeur() && y<=plateau.getHauteur() && x>0 && y>0) {
+		if(x<plateau.getLargeur() && y<plateau.getHauteur() && x>0 && y>0) {
 			ArrayList<Troupes> listeTroupesBleu = plateau.getUnite_bleue();
 			ArrayList<Troupes> listeTroupesRouge = plateau.getUnite_rouge();
 			ArrayList<Coordonnees> listeArbres = plateau.getArbres();
