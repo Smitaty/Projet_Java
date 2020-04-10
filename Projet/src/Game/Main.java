@@ -1,10 +1,6 @@
 package Game;
 import IG.*;
-import Game.*;
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import javax.swing.JFrame;
+import Strategie.*;
 import java.lang.Thread;
 
 public class Main {
@@ -18,8 +14,8 @@ public class Main {
 			Thread.sleep(2000);
 		}catch(Exception e) {
 			
-		}
-		JeuRandom jeu = new JeuRandom(plateau);
+		} 
+		Jeu jeu = new Jeu(plateau,new StrategiePlusProche(plateau),new StrategieRandom(plateau));
 	}
 
 }

@@ -16,6 +16,12 @@ public abstract class Troupes {
 		direction=dir;
 	}
 	
+		
+
+	@Override
+	public String toString() {
+		return "Troupes [PV=" + PV + ", position=(" + position.getX() + "," + position.getY() + "), type=" + type + ", direction=" + direction + "]";
+	}
 
 	// Getters
 	public int getPV() {return PV;}
