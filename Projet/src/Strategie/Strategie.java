@@ -92,30 +92,38 @@ public abstract class Strategie {
 		if(deplacementValide(new Coordonnees(x-1,y))) {
 			listecoups.add(TroupesAction.LEFT);
 		}
-		if(type=="Chevalier") {
-			boolean estPresentAttaque = false;
-			if(attaqueValide(new Coordonnees(x,y-1),estBleu)) {
-				Troupes ennemiPotentiel=null;
-				if(estBleu) {
-					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y-1));
+		boolean estPresentAttaque = false;
+		if(attaqueValide(new Coordonnees(x,y-1),estBleu)) {
+			Troupes ennemiPotentiel=null;
+			if(estBleu) {
+				ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y-1));
+			}
+			else {
+				ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y-1));
+			}
+			listecoups.add(TroupesAction.ATTACK1);
+			estPresentAttaque=true;
+			troupe.setDirection(Direction.NORD);
+			ennemi=ennemiPotentiel;
+		}
+		if(attaqueValide(new Coordonnees(x,y+1),estBleu)) {
+			Troupes ennemiPotentiel=null;
+			if(estBleu) {
+				ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y+1));
+			}
+			else {
+				ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y+1));
+			}
+			if(ennemi==null) {
+				if(estPresentAttaque==false) {
+					listecoups.add(TroupesAction.ATTACK1);
+					estPresentAttaque=true;
 				}
-				else {
-					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y-1));
-				}
-				listecoups.add(TroupesAction.ATTACK1);
-				estPresentAttaque=true;
-				troupe.setDirection(Direction.NORD);
+				troupe.setDirection(Direction.SUD);
 				ennemi=ennemiPotentiel;
 			}
-			if(attaqueValide(new Coordonnees(x,y+1),estBleu)) {
-				Troupes ennemiPotentiel=null;
-				if(estBleu) {
-					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y+1));
-				}
-				else {
-					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y+1));
-				}
-				if(ennemi==null) {
+			else {
+				if(ennemi.getPV()>ennemiPotentiel.getPV()) {
 					if(estPresentAttaque==false) {
 						listecoups.add(TroupesAction.ATTACK1);
 						estPresentAttaque=true;
@@ -123,26 +131,26 @@ public abstract class Strategie {
 					troupe.setDirection(Direction.SUD);
 					ennemi=ennemiPotentiel;
 				}
-				else {
-					if(ennemi.getPV()>ennemiPotentiel.getPV()) {
-						if(estPresentAttaque==false) {
-							listecoups.add(TroupesAction.ATTACK1);
-							estPresentAttaque=true;
-						}
-						troupe.setDirection(Direction.SUD);
-						ennemi=ennemiPotentiel;
-					}
-				}
 			}
-			if(attaqueValide(new Coordonnees(x+1,y),estBleu)) {
-				Troupes ennemiPotentiel=null;
-				if(estBleu) {
-					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x+1,y));
+		}
+		if(attaqueValide(new Coordonnees(x+1,y),estBleu)) {
+			Troupes ennemiPotentiel=null;
+			if(estBleu) {
+				ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x+1,y));
+			}
+			else {
+				ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x+1,y));
+			}
+			if(ennemi==null) {
+				if(estPresentAttaque==false) {
+					listecoups.add(TroupesAction.ATTACK1);
+					estPresentAttaque=true;
 				}
-				else {
-					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x+1,y));
-				}
-				if(ennemi==null) {
+				troupe.setDirection(Direction.EST);
+				ennemi=ennemiPotentiel;
+			}
+			else {
+				if(ennemi.getPV()>ennemiPotentiel.getPV()) {
 					if(estPresentAttaque==false) {
 						listecoups.add(TroupesAction.ATTACK1);
 						estPresentAttaque=true;
@@ -150,26 +158,26 @@ public abstract class Strategie {
 					troupe.setDirection(Direction.EST);
 					ennemi=ennemiPotentiel;
 				}
-				else {
-					if(ennemi.getPV()>ennemiPotentiel.getPV()) {
-						if(estPresentAttaque==false) {
-							listecoups.add(TroupesAction.ATTACK1);
-							estPresentAttaque=true;
-						}
-						troupe.setDirection(Direction.EST);
-						ennemi=ennemiPotentiel;
-					}
-				}
 			}
-			if(attaqueValide(new Coordonnees(x-1,y),estBleu)) {
-				Troupes ennemiPotentiel=null;
-				if(estBleu) {
-					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x-1,y));
+		}
+		if(attaqueValide(new Coordonnees(x-1,y),estBleu)) {
+			Troupes ennemiPotentiel=null;
+			if(estBleu) {
+				ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x-1,y));
+			}
+			else {
+				ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x-1,y));
+			}
+			if(ennemi==null) {
+				if(estPresentAttaque==false) {
+					listecoups.add(TroupesAction.ATTACK1);
+					estPresentAttaque=true;
 				}
-				else {
-					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x-1,y));
-				}
-				if(ennemi==null) {
+				troupe.setDirection(Direction.OUEST);
+				ennemi=ennemiPotentiel;
+			}
+			else {
+				if(ennemi.getPV()>ennemiPotentiel.getPV()) {
 					if(estPresentAttaque==false) {
 						listecoups.add(TroupesAction.ATTACK1);
 						estPresentAttaque=true;
@@ -177,20 +185,9 @@ public abstract class Strategie {
 					troupe.setDirection(Direction.OUEST);
 					ennemi=ennemiPotentiel;
 				}
-				else {
-					if(ennemi.getPV()>ennemiPotentiel.getPV()) {
-						if(estPresentAttaque==false) {
-							listecoups.add(TroupesAction.ATTACK1);
-							estPresentAttaque=true;
-						}
-						troupe.setDirection(Direction.OUEST);
-						ennemi=ennemiPotentiel;
-					}
-				}
 			}
 		}
-		else {
-			boolean estPresentAttaque=false;
+		if(type=="Archer" || type=="Mage") {
 			if(attaqueValide(new Coordonnees(x,y-2),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnees(x,y-1))) {
 				Troupes ennemiPotentiel=null;
 				if(estBleu) {
@@ -249,13 +246,13 @@ public abstract class Strategie {
 				}
 			}
 			else {
-				if(attaqueValide(new Coordonnees(x,y-3),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnees(x,y+1)) && !plateau.ArbreEn(new Coordonnees(x,y+2))) {
+				if(attaqueValide(new Coordonnees(x,y+3),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnees(x,y+1)) && !plateau.ArbreEn(new Coordonnees(x,y+2))) {
 					Troupes ennemiPotentiel=null;
 					if(estBleu) {
-						ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y-3));
+						ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x,y+3));
 					}
 					else {
-						ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y-3));
+						ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x,y+3));
 					}
 					if(ennemi==null) {
 						if(estPresentAttaque==false) {
@@ -315,7 +312,7 @@ public abstract class Strategie {
 							listecoups.add(TroupesAction.ATTACK1);
 							estPresentAttaque=true;
 						}
-						troupe.setDirection(Direction.SUD);
+						troupe.setDirection(Direction.OUEST);
 						ennemi=ennemiPotentiel;
 					}
 					else {
@@ -324,7 +321,7 @@ public abstract class Strategie {
 								listecoups.add(TroupesAction.ATTACK1);
 								estPresentAttaque=true;
 							}
-							troupe.setDirection(Direction.SUD);
+							troupe.setDirection(Direction.OUEST);
 							ennemi=ennemiPotentiel;
 						}
 					}
@@ -333,10 +330,10 @@ public abstract class Strategie {
 			if(attaqueValide(new Coordonnees(x+2,y),estBleu(troupe)) && !plateau.ArbreEn(new Coordonnees(x+1,y))) {
 				Troupes ennemiPotentiel=null;
 				if(estBleu) {
-					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x+1,y));
+					ennemiPotentiel=plateau.getTroupeRouge(new Coordonnees(x+2,y));
 				}
 				else {
-					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x+1,y));
+					ennemiPotentiel=plateau.getTroupeBleu(new Coordonnees(x+2,y));
 				}
 				if(ennemi==null) {
 					if(estPresentAttaque==false) {
@@ -368,7 +365,7 @@ public abstract class Strategie {
 							listecoups.add(TroupesAction.ATTACK1);
 							estPresentAttaque=true;
 						}
-						troupe.setDirection(Direction.SUD);
+						troupe.setDirection(Direction.EST);
 						ennemi=ennemiPotentiel;
 					}
 					else {
@@ -377,7 +374,7 @@ public abstract class Strategie {
 								listecoups.add(TroupesAction.ATTACK1);
 								estPresentAttaque=true;
 							}
-							troupe.setDirection(Direction.SUD);
+							troupe.setDirection(Direction.EST);
 							ennemi=ennemiPotentiel;
 						}
 					}

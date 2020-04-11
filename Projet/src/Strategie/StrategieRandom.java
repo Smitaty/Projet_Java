@@ -13,13 +13,18 @@ public class StrategieRandom extends Strategie{
 
 	public TroupesAction coup(Troupes troupe) {
 		ArrayList<TroupesAction> coups = coupsPossibles(troupe);
-		for(int i=0; i<coups.size(); ++i) {
-			if(coups.get(i)==TroupesAction.ATTACK1)
-				return TroupesAction.ATTACK1;
+		if(coups.size()>0) {
+			for(int i=0; i<coups.size(); ++i) {
+				if(coups.get(i)==TroupesAction.ATTACK1)
+					return TroupesAction.ATTACK1;
+			}
+			int nbcoups = coups.size();
+			Random r = new Random();
+			int coup = r.nextInt(nbcoups);
+			return coups.get(coup);
 		}
-		int nbcoups = coups.size();
-		Random r = new Random();
-		int coup = r.nextInt(nbcoups);
-		return coups.get(coup);
+		else {
+			return TroupesAction.STOP;
+		}
 	}
 }

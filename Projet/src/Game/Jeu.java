@@ -49,42 +49,45 @@ public class Jeu extends Game{
 		System.out.println("Debut de partie");
 		afficheCoordonneesTroupes();
 		//notifyObserver();
-		System.out.println(plateau.getLargeur()+" "+plateau.getHauteur());
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
-				for(Troupes troupe : TroupesBleues) {
-					if(troupe.getType()!="Château") {
-						TroupesAction action = strategieBleu.coup(troupe);
-						System.out.println(troupe.toString()+", action="+action);
-						strategieBleu.jouer(action, troupe,true);
-						
+				if(TroupesBleues.size()>1) {
+					for(Troupes troupe : TroupesBleues) {
+						if(troupe.getType()!="Château" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+							TroupesAction action = strategieBleu.coup(troupe);
+							System.out.println(troupe.toString()+", action="+action);
+							strategieBleu.jouer(action, troupe,true);
+							
+						}
 					}
-				}
-				System.out.println("Fin tour bleu");
-				//notifyObserver();
-				plateau.repaint();
-				try {
-					Thread.sleep(2000);
-				}catch(Exception e) {
-					System.out.println(e.getMessage());
+					System.out.println("Fin tour bleu");
+					//notifyObserver();
+					plateau.repaint();
+					try {
+						Thread.sleep(3000);
+					}catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
 				}
 				bleu=1;
 			}
 			else {
-				for(Troupes troupe : TroupesRouges) {
-					if(troupe.getType()!="Château") {
-						TroupesAction action = strategieRouge.coup(troupe);
-						System.out.println(troupe.toString()+", action="+action);
-						strategieRouge.jouer(action, troupe,false);
+				if(TroupesRouges.size()>1) {
+					for(Troupes troupe : TroupesRouges) {
+						if(troupe.getType()!="Château" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+							TroupesAction action = strategieRouge.coup(troupe);
+							System.out.println(troupe.toString()+", action="+action);
+							strategieRouge.jouer(action, troupe,false);
+						}
 					}
-				}
-				System.out.println("Fin tour rouge");
-				//notifyObserver();
-				plateau.repaint();
-				try {
-					Thread.sleep(2000);
-				}catch(Exception e) {
-					System.out.println(e.getMessage());
+					System.out.println("Fin tour rouge");
+					//notifyObserver();
+					plateau.repaint();
+					try {
+						Thread.sleep(3000);
+					}catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
 				}
 				bleu=0;
 			}

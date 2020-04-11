@@ -14,6 +14,15 @@ public class StrategiePlusProche extends Strategie{
 		this.plateau=plateau;
 	}
 	
+	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
+		for(int i=0; i<coups.size(); ++i) {
+			if(coups.get(i)==action) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public TroupesAction coup(Troupes troupe) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
@@ -22,43 +31,60 @@ public class StrategiePlusProche extends Strategie{
 		int ey = ennemi.getPosition().getY();
 		
 		ArrayList<TroupesAction> coups = this.coupsIntelligentPosssibles(troupe);
-		for(int i=0; i<coups.size(); ++i) {
-			if(coups.get(i)==TroupesAction.ATTACK1) {
-				return TroupesAction.ATTACK1;
-			}
+		if(estPresent(TroupesAction.ATTACK1,coups)) {
+			return TroupesAction.ATTACK1;
 		}
 		if(y<ey) {
-			for(int i=0; i<coups.size(); ++i) {
-				if(coups.get(i)==TroupesAction.BOTTOM) {
-					return TroupesAction.BOTTOM;
-				}
+			if(estPresent(TroupesAction.BOTTOM,coups))
+				return TroupesAction.BOTTOM;
+			int r = new Random().nextInt(2);
+			if(r==0 && estPresent(TroupesAction.LEFT,coups)) {
+				return TroupesAction.LEFT;
+			}
+			else {
+				if(estPresent(TroupesAction.RIGHT,coups))
+					return TroupesAction.RIGHT;
+			}
+		}
+		if(y>ey) {
+			if(estPresent(TroupesAction.TOP,coups))
+				return TroupesAction.TOP;
+			int r = new Random().nextInt(2);
+			if(r==0 && estPresent(TroupesAction.LEFT,coups)) {
+				return TroupesAction.LEFT;
+			}
+			else {
+				if(estPresent(TroupesAction.RIGHT,coups))
+					return TroupesAction.RIGHT;
 			}
 		}
 		else {
-			if(y>ey) {
-				for(int i=0; i<coups.size(); ++i) {
-					if(coups.get(i)==TroupesAction.TOP) {
-						return TroupesAction.TOP;
-					}
+			if(x<ex) {
+				if(estPresent(TroupesAction.RIGHT,coups))
+					return TroupesAction.RIGHT;
+				int r = new Random().nextInt(2);
+				if(r==0 && estPresent(TroupesAction.TOP,coups)) {
+					return TroupesAction.TOP;
+				}
+				else {
+					if(estPresent(TroupesAction.BOTTOM,coups))
+						return TroupesAction.BOTTOM;
 				}
 			}
-			else {
-				if(x<ex) {
-					for(int i=0; i<coups.size(); ++i) {
-						if(coups.get(i)==TroupesAction.RIGHT) {
-							return TroupesAction.RIGHT;
-						}
-					}
+			if(x>ex) {
+				if(estPresent(TroupesAction.LEFT,coups))
+					return TroupesAction.LEFT;
+				int r = new Random().nextInt(2);
+				if(r==0 && estPresent(TroupesAction.TOP,coups)) {
+					return TroupesAction.TOP;
 				}
-				if(x>ex) {
-					for(int i=0; i<coups.size(); ++i) {
-						if(coups.get(i)==TroupesAction.LEFT) {
-							return TroupesAction.LEFT;
-						}
-					}
+				else {
+					if(estPresent(TroupesAction.BOTTOM,coups))
+						return TroupesAction.BOTTOM;
 				}
 			}
 		}
+		System.out.println("Random");
 		int coup = new Random().nextInt(coups.size());
 		return coups.get(coup);
 	}
