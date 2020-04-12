@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package Strategie;
 
 import IG.Plateau;
@@ -76,4 +77,12 @@ public class StrategieFocusChateau extends Strategie{
 
 		return null;
 	}
+	
+	
+	
+	
+	
+	
+	
 }
+>>>>>>> 92bea207bbfc5b2ef6a98d0a29f0367602b5c4ab
