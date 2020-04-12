@@ -15,7 +15,7 @@ public class Main {
 		}catch(Exception e) {
 			
 		} 
-		Jeu jeu = new Jeu(plateau,new StrategiePlusProche(plateau),new StrategieRandom(plateau));
+		Jeu jeu = new Jeu(plateau,new StrategiePlusProche(plateau),new StrategieFocusChateau(plateau));
 	}
 
 }

@@ -229,7 +229,7 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unite.getType()=="Château") {
+			if(unite.getType()=="Chateau") {
 				try {
 					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(bleu, contraste, null);
@@ -311,7 +311,7 @@ public class Plateau extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if(unite_rouge.get(i).getType()=="Château") {
+			if(unite_rouge.get(i).getType()=="Chateau") {
 				try {
 					img = ImageIO.read(new File(path+"chateau.png"));
 					RescaleOp op = new RescaleOp(rouge, contraste, null);
@@ -432,7 +432,7 @@ public class Plateau extends JPanel{
 	
 	public Troupes getChateau(ArrayList<Troupes> unites) {
 		for(Troupes unite : unites) {
-			if(unite.getType() == "Château") return unite;
+			if(unite.getType() == "Chateau") return unite;
 		}
 		return null;
 	}

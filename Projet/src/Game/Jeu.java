@@ -53,7 +53,7 @@ public class Jeu extends Game{
 			if(bleu==0) {
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
-						if(troupe.getType()!="Château" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieBleu.coup(troupe);
 							System.out.println(troupe.toString()+", action="+action);
 							strategieBleu.jouer(action, troupe,true);
@@ -74,7 +74,7 @@ public class Jeu extends Game{
 			else {
 				if(TroupesRouges.size()>1) {
 					for(Troupes troupe : TroupesRouges) {
-						if(troupe.getType()!="Château" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieRouge.coup(troupe);
 							System.out.println(troupe.toString()+", action="+action);
 							strategieRouge.jouer(action, troupe,false);
