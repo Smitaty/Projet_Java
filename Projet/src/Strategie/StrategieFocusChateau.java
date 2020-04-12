@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 package Strategie;
 
 import IG.Plateau;
 import Game.TroupesAction;
 import Troupes.*;
 import java.util.ArrayList;
-import java.util.Random;
-
 /*
  * Les unites se dirigent toujours vers le chateau ennemi et attaquent des qu'un ennemi est a portee.
  * Les unites ne prennent pas en compte les positions des unites ennemies, elles se concentrent uniquemenet sur le chateau ennemi.
@@ -85,4 +82,3 @@ public class StrategieFocusChateau extends Strategie{
 	
 	
 }
->>>>>>> 92bea207bbfc5b2ef6a98d0a29f0367602b5c4ab
