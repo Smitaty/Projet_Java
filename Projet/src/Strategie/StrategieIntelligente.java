@@ -1,9 +1,6 @@
 package Strategie;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import Game.TroupesAction;
 import IG.Plateau;
 import Troupes.*;
 
@@ -16,8 +13,6 @@ public class StrategieIntelligente extends Strategie{
 	}
 	
 	public TroupesAction coup(Troupes troupe) {
-		int x = troupe.getPosition().getX();
-		int y = troupe.getPosition().getY();
 		boolean estBleu = this.estBleu(troupe);
 		TroupesAction action;
 		ArrayList<Troupes> ennemis = ennemiAPortee(troupe.getPosition(),estBleu);
@@ -26,21 +21,14 @@ public class StrategieIntelligente extends Strategie{
 			Troupes chateau;
 			if(estBleu) {
 				chateau = plateau.getChateau(plateau.getUnite_bleue());
-				
 			}
 			else {
 				chateau = plateau.getChateau(plateau.getUnite_rouge());
 			}
-			
-			double terme1 = Math.pow((chateau.getPosition().getX()-x),2);
-			double terme2 = Math.pow((chateau.getPosition().getY()-y),2);
-			double d1 = Math.sqrt(terme1+terme2);
-			terme1 = Math.pow((assaillant.getPosition().getX()-x),2);
-			terme2 = Math.pow((assaillant.getPosition().getY()-y),2);
-			double d2 = Math.sqrt(terme1+terme2);
-			if(estEnDanger(chateau,estBleu) && d1<d2) {
+			if(estEnDanger(chateau,estBleu) && estABonneDistance(troupe,chateau)) {
 				assaillant = rechercheAssaillantChateau(troupe,estBleu);
-				action = protegerChateau(troupe,assaillant);					
+				System.out.println("Protéger château");
+				action = protegerChateau(troupe,assaillant);
 			}
 			else {
 				action = coupOptimal(troupe,assaillant);
@@ -57,81 +45,108 @@ public class StrategieIntelligente extends Strategie{
 	public TroupesAction protegerChateau(Troupes troupe, Troupes assaillant) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
-		int ex = assaillant.getPosition().getX();
-		int ey = assaillant.getPosition().getY();
-		
-		ArrayList<TroupesAction> coups = this.coupsIntelligentPossibles(troupe);
+		int ax = assaillant.getPosition().getX();
+		int ay = assaillant.getPosition().getY();
+		String type = troupe.getType();
+		Coordonnees gauche = new Coordonnees(x-1,y);
+		Coordonnees droite = new Coordonnees(x+1,y);
+		Coordonnees bas = new Coordonnees(x,y+1);
+		Coordonnees haut = new Coordonnees(x,y-1);
+		boolean estBleu = this.estBleu(troupe);
+		ArrayList<TroupesAction> coups = this.coupsIntelligentsPossibles(troupe);
 		if(coups.size()>0) {
 			if(estPresent(TroupesAction.ATTACK1,coups)) {
 				return TroupesAction.ATTACK1;
 			}
-			if(y<ey) {
-				if(estPresent(TroupesAction.BOTTOM,coups))
-					return TroupesAction.BOTTOM;
-				if(x<ex && estPresent(TroupesAction.RIGHT,coups))
-					return TroupesAction.RIGHT;
-				if(x>ex && estPresent(TroupesAction.LEFT,coups))
-					return TroupesAction.LEFT;
-				else{
-					int r = new Random().nextInt(2);
-					if(r==0 && estPresent(TroupesAction.LEFT,coups)) {
-						return TroupesAction.LEFT;
+			if(type=="Chevalier") {
+				// Si l'ennemi est à une portée de 1 case et dans la diagonale du Chevalier
+				if(Math.abs(ax-x)==1 && Math.abs(ay-y)==1) {
+					if(this.deplacementValide(new Coordonnees(x,ay))) {
+						if(ay<y)
+							return TroupesAction.TOP;
+						else
+							return TroupesAction.BOTTOM;
 					}
-					else {
-						if(estPresent(TroupesAction.RIGHT,coups))
+					if(this.deplacementValide(new Coordonnees(ax,y))) {
+						if(ax<x)
+							return TroupesAction.LEFT;
+						else
 							return TroupesAction.RIGHT;
-						else if(estPresent(TroupesAction.TOP,coups))
+					}
+					return TroupesAction.STOP;
+				}
+				// Gestion si l'ennemi n'est pas à portée
+				else {
+					if(ay<y && this.deplacementValide(haut)) {
 							return TroupesAction.TOP;
 					}
-				}
-			}
-			if(y>ey) {
-				if(estPresent(TroupesAction.TOP,coups))
-					return TroupesAction.TOP;
-				if(x<ex && estPresent(TroupesAction.RIGHT,coups))
-					return TroupesAction.RIGHT;
-				if(x>ex && estPresent(TroupesAction.LEFT,coups))
-					return TroupesAction.LEFT;
-				else{
-					int r = new Random().nextInt(2);
-					if(r==0 && estPresent(TroupesAction.LEFT,coups)) {
-						return TroupesAction.LEFT;
+					if(ay>y && this.deplacementValide(bas)) {
+							return TroupesAction.BOTTOM;
+					}	
+					if(ax<x && this.deplacementValide(gauche)) {
+							return TroupesAction.LEFT;
 					}
-					else {
-						if(estPresent(TroupesAction.RIGHT,coups))
+					if(ax>x && this.deplacementValide(droite)) {
 							return TroupesAction.RIGHT;
 					}
+					else 
+						return TroupesAction.STOP;
 				}
 			}
-			else {
-				if(x<ex) {
-					if(estPresent(TroupesAction.RIGHT,coups))
-						return TroupesAction.RIGHT;
-					int r = new Random().nextInt(2);
-					if(r==0 && estPresent(TroupesAction.TOP,coups)) {
-						return TroupesAction.TOP;
+			if(type=="Archer" || type=="Mage") {
+				if(Math.abs(ax-x)==1 && Math.abs(ay-y)<=3) {
+					if(ax<x && this.deplacementValide(gauche)){
+							return TroupesAction.LEFT;
 					}
-					else {
-						if(estPresent(TroupesAction.BOTTOM,coups))
+					if(ax>x && this.deplacementValide(droite)) {
+							return TroupesAction.RIGHT;
+					}
+					if(ay<y && this.deplacementValide(haut)) {
+							return TroupesAction.TOP;
+					}
+					if(ay>y && this.deplacementValide(bas)) {
 							return TroupesAction.BOTTOM;
 					}
+					else
+						return TroupesAction.STOP;
 				}
-				if(x>ex) {
-					if(estPresent(TroupesAction.LEFT,coups))
-						return TroupesAction.LEFT;
-					int r = new Random().nextInt(2);
-					if(r==0 && estPresent(TroupesAction.TOP,coups)) {
-						return TroupesAction.TOP;
+				else {
+					if(Math.abs(ay-y)>3) {
+						if(ay<y && this.deplacementValide(haut)) {
+								return TroupesAction.TOP;
+						}
+						if(ay>y && this.deplacementValide(bas)) {
+								return TroupesAction.BOTTOM;
+						}
+						if(ax<x && this.deplacementValide(gauche)){
+								return TroupesAction.LEFT;
+						}
+						if(ax>x && this.deplacementValide(droite)) {
+								return TroupesAction.RIGHT;
+						}
+						else
+							return TroupesAction.STOP;
 					}
 					else {
-						if(estPresent(TroupesAction.BOTTOM,coups))
-							return TroupesAction.BOTTOM;
+						if(ax<x && this.deplacementValide(gauche)){
+								return TroupesAction.LEFT;
+						}
+						if(ax>x && this.deplacementValide(droite)) {
+								return TroupesAction.RIGHT;
+						}
+						if(ay<y && this.deplacementValide(haut)) {
+							if(!deplacementDangereux(troupe,haut,estBleu))
+								return TroupesAction.TOP;
+						}
+						if(ay>y && this.deplacementValide(bas)) {
+								return TroupesAction.BOTTOM;
+						}
+						else
+							return TroupesAction.STOP;
 					}
 				}
 			}
-			System.out.println("Random");
-			int coup = new Random().nextInt(coups.size());
-			return coups.get(coup);
+			return TroupesAction.STOP;
 		}
 		else {
 			return TroupesAction.STOP;
@@ -239,7 +254,7 @@ public class StrategieIntelligente extends Strategie{
 					return TroupesAction.RIGHT;
 				if(!deplacementDangereux(troupe,bas,estBleu) && this.deplacementValide(bas))
 					return TroupesAction.BOTTOM;
-				if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+				else
 					return TroupesAction.STOP;
 			}
 			if(ay>y) {
@@ -254,7 +269,7 @@ public class StrategieIntelligente extends Strategie{
 					return TroupesAction.RIGHT;
 				if(!deplacementDangereux(troupe,haut,estBleu) && this.deplacementValide(haut))
 					return TroupesAction.TOP;
-				if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+				else
 					return TroupesAction.STOP;
 			}
 		}
@@ -307,7 +322,7 @@ public class StrategieIntelligente extends Strategie{
 					return TroupesAction.BOTTOM;
 				if(!deplacementDangereux(troupe,haut,estBleu) && this.deplacementValide(haut))
 					return TroupesAction.TOP;
-				if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+				else
 					return TroupesAction.STOP;
 			}
 			if(ax<x) {
@@ -322,7 +337,7 @@ public class StrategieIntelligente extends Strategie{
 					return TroupesAction.RIGHT;
 				if(!deplacementDangereux(troupe,haut,estBleu) && this.deplacementValide(haut))
 					return TroupesAction.TOP;
-				if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+				else
 					return TroupesAction.STOP;
 			}
 		}
@@ -367,7 +382,7 @@ public class StrategieIntelligente extends Strategie{
 						if(!deplacementDangereux(troupe,droite,estBleu))
 							return TroupesAction.RIGHT;
 					}
-					if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+					else
 						return TroupesAction.STOP;
 				}
 			}
@@ -389,7 +404,7 @@ public class StrategieIntelligente extends Strategie{
 						if(!deplacementDangereux(troupe,bas,estBleu))
 							return TroupesAction.BOTTOM;
 					}
-					if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+					else
 						return TroupesAction.STOP;
 				}
 				else {
@@ -410,7 +425,7 @@ public class StrategieIntelligente extends Strategie{
 							if(!deplacementDangereux(troupe,droite,estBleu))
 								return TroupesAction.RIGHT;
 						}
-						if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+						else
 							return TroupesAction.STOP;
 					}
 					else {
@@ -430,7 +445,7 @@ public class StrategieIntelligente extends Strategie{
 							if(!deplacementDangereux(troupe,bas,estBleu))
 								return TroupesAction.BOTTOM;
 						}
-						if(!deplacementDangereux(troupe,troupe.getPosition(),estBleu))
+						else
 							return TroupesAction.STOP;
 					}
 				}
@@ -439,9 +454,62 @@ public class StrategieIntelligente extends Strategie{
 		return TroupesAction.STOP;
 	}
 	
+	public boolean estABonneDistance(Troupes troupe, Troupes chateau) {
+		ArrayList<Troupes> ennemis = ennemiAPortee(troupe.getPosition(),estBleu(troupe));
+		int x = troupe.getPosition().getX();
+		int y = troupe.getPosition().getY();
+		int cx = chateau.getPosition().getX();
+		int cy = chateau.getPosition().getY();
+		double terme1 = Math.pow((cx-x),2);
+		double terme2 = Math.pow((cy-y),2);
+		double d1 = Math.sqrt(terme1+terme2);
+		Troupes chateauEnnemi;
+		double d2;
+		if(estBleu(troupe)) {
+			chateauEnnemi = plateau.getChateau(plateau.getUnite_rouge());
+			terme1 = Math.pow(chateauEnnemi.getPosition().getX()-x,2);
+			terme2 = Math.pow(chateauEnnemi.getPosition().getY()-y,2);
+			d2 = Math.sqrt(terme1+terme2);
+		}
+		else {
+			chateauEnnemi = plateau.getChateau(plateau.getUnite_bleue());
+			terme1 = Math.pow(chateauEnnemi.getPosition().getX()-x,2);
+			terme2 = Math.pow(chateauEnnemi.getPosition().getY()-y,2);
+			d2 = Math.sqrt(terme1+terme2);
+		}
+		if(ennemis.size()==1) {
+			if(estAPortee(chateau,ennemis.get(0).getPosition()))
+				return true;
+			else
+				return false;
+		}
+		else {
+			if(estBleu(troupe)) {
+				if(d1<=d2)
+					return true;
+				else {
+					if(plateau.getUnite_bleue().size()==1)
+						return true;
+					else
+						return false;
+				}
+			}
+			else {
+				if(d1<=d2)
+					return true;
+				else {
+					if(plateau.getUnite_rouge().size()==1)
+						return true;
+					else
+						return false;
+				}
+			}
+		}
+	}
 	
 	// Fonction qui renvoie vrai s'il y a un ennemi à une distance de 5 cases ou moins du château allié
 	
+
 	public boolean estEnDanger(Troupes chateau, boolean estBleu) {
 		if(chateau.getType()=="Chateau") {
 			if(estBleu) {
@@ -451,8 +519,19 @@ public class StrategieIntelligente extends Strategie{
 				for(Troupes unite : uniteRouge) {
 					int ux = unite.getPosition().getX();
 					int uy = unite.getPosition().getY();
-					if(Math.abs(ux-x)<6 || Math.abs(uy-y)<6)
-						return true;
+					if(unite.getType()=="Chevalier") {
+						if(ux==x-1 && uy==y)
+							return true;
+						if(ux==x+1 && uy==y)
+							return true;
+						if(ux==x && uy==y+1)
+							return true;
+					}
+					if(unite.getType()=="Archer" || unite.getType()=="Mage") {
+						if(Math.abs(ux-x)<=3 && Math.abs(uy-y)<=3)
+							return true;
+						
+					}
 				}
 				return false;
 			}
@@ -463,8 +542,14 @@ public class StrategieIntelligente extends Strategie{
 				for(Troupes unite : uniteBleue) {
 					int ux = unite.getPosition().getX();
 					int uy = unite.getPosition().getY();
-					if(Math.abs(ux-x)<6 || Math.abs(uy-y)<6)
-						return true;
+					if(unite.getType()=="Chevalier") {
+						if(ux==x-1 && uy==y)
+							return true;
+						if(ux==x+1 && uy==y)
+							return true;
+						if(ux==x && uy==y+1)
+							return true;
+					}
 				}
 				return false;
 			}
@@ -474,6 +559,7 @@ public class StrategieIntelligente extends Strategie{
 	
 	// Fonction qui retourne l'ennemi le plus proche du château et de la troupe
 	
+
 	public Troupes rechercheAssaillantChateau(Troupes troupe, boolean estBleu) {
 		if(estBleu) {
 			Troupes ennemi = null;
@@ -561,6 +647,7 @@ public class StrategieIntelligente extends Strategie{
 	
 	// Fonction qui retourne une liste des ennemis à portée de la case correspondante et montre ainsi si la case est dangereuse ou non
 	
+
 	public ArrayList<Troupes> ennemiAPortee(Coordonnees coor, boolean estBleu) {
 		int x = coor.getX();
 		int y = coor.getY();
@@ -699,6 +786,7 @@ public class StrategieIntelligente extends Strategie{
 		}
 	}
 	
+
 	public boolean estAPortee(Troupes troupe, Coordonnees pos) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
@@ -724,6 +812,7 @@ public class StrategieIntelligente extends Strategie{
 	}
 	
 	// Fonction qui recherche l'ennemi le plus proche de la troupe
+	
 	
 	public Troupes rechercheEnnemi(Troupes troupe) {
 		int x = troupe.getPosition().getX();

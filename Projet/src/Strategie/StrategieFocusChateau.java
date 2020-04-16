@@ -1,7 +1,6 @@
 package Strategie;
 
 import IG.Plateau;
-import Game.TroupesAction;
 import Troupes.*;
 import java.util.ArrayList;
 /*

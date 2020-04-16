@@ -7,7 +7,8 @@ public abstract class Troupes {
 	private Coordonnees position;
 	private String type;
 	private Direction direction;
-	
+	private TroupesAction action;
+
 	public Troupes(int pv, int degats, Coordonnees pos, String t,Direction dir) {
 		PV = pv;
 		Degats = degats;
@@ -29,10 +30,13 @@ public abstract class Troupes {
 	public Coordonnees getPosition() {return position;}
 	public String getType() {return type;}
 	public Direction getDirection() {return direction;}
+	public TroupesAction getAction() {return action;}
+	
 	// Setters
 	public void setPV(int pv) {PV=pv;}
 	public void setDegats(int degats) {Degats=degats;}
 	public void setPosition(Coordonnees pos) {position=pos;}
 	public void setType(String type) {this.type = type;}
 	public void setDirection(Direction dir) {direction=dir;}
+	public void setAction(TroupesAction action) {this.action = action;}
 }

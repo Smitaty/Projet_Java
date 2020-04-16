@@ -2,7 +2,7 @@ package Game;
 
 import IG.Plateau;
 import Strategie.*;
-import Troupes.Troupes;
+import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -1,8 +1,7 @@
 package Strategie;
 
 import IG.Plateau;
-import Troupes.Troupes;
-import Game.*;
+import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -27,7 +26,7 @@ public class StrategiePlusProche extends Strategie{
 		int ex = ennemi.getPosition().getX();
 		int ey = ennemi.getPosition().getY();
 		
-		ArrayList<TroupesAction> coups = this.coupsIntelligentPossibles(troupe);
+		ArrayList<TroupesAction> coups = this.coupsIntelligentsPossibles(troupe);
 		if(coups.size()>0) {
 			if(estPresent(TroupesAction.ATTACK1,coups)) {
 				return TroupesAction.ATTACK1;
