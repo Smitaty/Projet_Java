@@ -12,6 +12,14 @@ public class StrategieIntelligente extends Strategie{
 		this.plateau=plateau;
 	}
 	
+	/*
+	 * Si une troupe est à portée de 2 ennemis ou plus il fuit
+	 * Si une troupe a ses PV inférieur au dégat de l'ennemi à sa portée il fuit
+	 * Si le château est en danger la priorité des troupes est de le défendre
+	 * Avant chaque déplacement on regarde si la case où la troupe veut se déplacer est risqué ou non 
+	 * grâce au nombre d'ennemis qui serait à la portée de case où la troupe veut se déplacer
+	 */
+	
 	public TroupesAction coup(Troupes troupe) {
 		boolean estBleu = this.estBleu(troupe);
 		TroupesAction action;
@@ -41,6 +49,8 @@ public class StrategieIntelligente extends Strategie{
 			return coupOptimal(troupe,assaillant);
 		}
 	}
+	
+	// Fonction qui retourne un coup si le château est attaquer, ici la troupe se déplace peut importe la dangerosité de la case
 	
 	public TroupesAction protegerChateau(Troupes troupe, Troupes assaillant) {
 		int x = troupe.getPosition().getX();
@@ -153,6 +163,8 @@ public class StrategieIntelligente extends Strategie{
 		}
 	}
 	
+	// Fonction qui retourne la somme des degats d'une liste de troupes
+	
 	public int sommeDegats(ArrayList<Troupes> ennemis) {
 		int somme=0;
 		for(Troupes ennemi : ennemis) {
@@ -161,19 +173,27 @@ public class StrategieIntelligente extends Strategie{
 		return somme;
 	}
 	
+	// Fonction qui regarde si la situation de la troupe est dangereuse ou non pour attaquer
+	
 	public boolean estDangereux(Troupes troupe, boolean estBleu) {
 		int PV = troupe.getPV();
 		ArrayList<Troupes> ennemis = ennemiAPortee(troupe.getPosition(),estBleu);
 		if(ennemis.size()>=2)
 			return true;
-		for(Troupes ennemi : ennemis) {
-			if(ennemi.getPV()<=troupe.getDegats() && estAPortee(troupe,ennemi.getPosition()))
-				return false;
+		else {
+			if(ennemis.size()==1) {
+				if(ennemis.get(0).getPV()<=troupe.getDegats() && estAPortee(troupe,ennemis.get(0).getPosition()))
+					return false;
+				else {
+					if(PV<=ennemis.get(0).getDegats())
+						return true;
+				}
+			}
+			return false;
 		}
-		if(PV<=sommeDegats(ennemis))
-			return true;
-		return false;
 	}
+	
+	// Fonction qui retourne si un déplacement aux coordonnées passées est dangereux pour la troupe ou non
 	
 	public boolean deplacementDangereux(Troupes troupe,Coordonnees pos, boolean estBleu) {
 		int PV = troupe.getPV();
@@ -191,6 +211,8 @@ public class StrategieIntelligente extends Strategie{
 			}
 		}
 	}
+	
+	// Fonction qui retourne un coup optimal en fonction de la troupe pour aller attaquer son assaillant
 	
 	public TroupesAction coupOptimal(Troupes troupe, Troupes assaillant) {
 		int x = troupe.getPosition().getX();
@@ -454,6 +476,11 @@ public class StrategieIntelligente extends Strategie{
 		return TroupesAction.STOP;
 	}
 	
+	// Fonction qui juge si la troupe doit défendre le château o
+	
+
+	// Fonction qui retourne si la troupe est à une bonne distance pour aller défendre le château
+	
 	public boolean estABonneDistance(Troupes troupe, Troupes chateau) {
 		ArrayList<Troupes> ennemis = ennemiAPortee(troupe.getPosition(),estBleu(troupe));
 		int x = troupe.getPosition().getX();
@@ -507,9 +534,11 @@ public class StrategieIntelligente extends Strategie{
 		}
 	}
 	
-	// Fonction qui renvoie vrai s'il y a un ennemi à une distance de 5 cases ou moins du château allié
+	// Fonction qui renvoie vrai s'il y a un ennemi à portée d'attaque du château allié	
 	
-
+	
+	// Fonction qui retourne si le château est en danger ou non
+	
 	public boolean estEnDanger(Troupes chateau, boolean estBleu) {
 		if(chateau.getType()=="Chateau") {
 			if(estBleu) {
@@ -557,9 +586,11 @@ public class StrategieIntelligente extends Strategie{
 		return false;
 	}
 	
+	// Fonction qui retourne l'ennemi le plus proche du château et de la troupe	
+
+	
 	// Fonction qui retourne l'ennemi le plus proche du château et de la troupe
 	
-
 	public Troupes rechercheAssaillantChateau(Troupes troupe, boolean estBleu) {
 		if(estBleu) {
 			Troupes ennemi = null;
@@ -645,9 +676,11 @@ public class StrategieIntelligente extends Strategie{
 		}
 	}
 	
-	// Fonction qui retourne une liste des ennemis à portée de la case correspondante et montre ainsi si la case est dangereuse ou non
-	
+	// Fonction qui retourne une liste des ennemis à portée de la case correspondante	
 
+	
+	// Fonction qui retourne une liste des ennemis à portée d'attaque de la case correspondant aux coordonnées passées
+	
 	public ArrayList<Troupes> ennemiAPortee(Coordonnees coor, boolean estBleu) {
 		int x = coor.getX();
 		int y = coor.getY();
@@ -786,7 +819,11 @@ public class StrategieIntelligente extends Strategie{
 		}
 	}
 	
-
+	// Fonction qui retourne si une troupe est à portée d'attaque de la case correspondant aux coordonnées
+	
+	
+	// Fonction qui retourne si une troupe est à portée d'attaque de la case correspondant aux coordonnées passées
+	
 	public boolean estAPortee(Troupes troupe, Coordonnees pos) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
@@ -811,8 +848,10 @@ public class StrategieIntelligente extends Strategie{
 		return false;
 	}
 	
-	// Fonction qui recherche l'ennemi le plus proche de la troupe
+	// Fonction qui recherche l'ennemi le plus proche de la troupe	
 	
+	
+	// Fonction qui retourne l'ennemi le plus proche de la troupe
 	
 	public Troupes rechercheEnnemi(Troupes troupe) {
 		int x = troupe.getPosition().getX();

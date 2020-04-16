@@ -1,12 +1,8 @@
 package Strategie;
 
 import IG.Plateau;
-import Game.TroupesAction;
 import Troupes.*;
 import java.util.ArrayList;
-import java.util.Random;
-
-
 
 /*
  * Si un ennemi peut attaquer le chevalier celui-ci recule.
@@ -240,8 +236,7 @@ public class StrategieGroupe extends Strategie{
 					int enX = enPlusProche.getPosition().getX();
 					int enY = enPlusProche.getPosition().getY();
 					if(enY < troupe.getPosition().getY()) {
-					//	Coordonnees posTest = new Coordonnees(xMage, yMage+1);
-						Coordonnees posTest = new Coordonnees(0,0);
+						Coordonnees posTest = new Coordonnees(xMage, yMage+1);
 						if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(posTest, color)) {
 							return TroupesAction.TOP;
 						}
@@ -321,7 +316,8 @@ public class StrategieGroupe extends Strategie{
 				}
 			}
 		}
-		System.out.println("Chevalier plus proche = " + chevalierPlusProche.toString());
+		if(chevalierPlusProche!=null)
+			System.out.println("Chevalier plus proche = " + chevalierPlusProche.toString());
 		return chevalierPlusProche;
 	}
 	

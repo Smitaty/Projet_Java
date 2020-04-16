@@ -15,7 +15,7 @@ public class Main {
 		}catch(Exception e) {
 			
 		}
-		Jeu jeu = new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieFocusChateau(plateau));
+		Jeu jeu = new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau));
 		Thread t1 = new Thread(jeu);
 		t1.start();
 		/*int nbpartie = 0;
