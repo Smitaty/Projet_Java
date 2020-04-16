@@ -7,19 +7,12 @@ public abstract class Game implements Runnable,Observable{
 	static private long tpsParTour=90;
 	private int tour;
 	private ArrayList<Observer> obs = new ArrayList<Observer>();
-	private Thread thread;
 	
 	public Game() {
 		tour=0;
-		launch();
 	}
 	
 	public abstract void partie();
-	
-	public void launch() {
-		thread = new Thread(this);
-		thread.start();
-	}
 	
 	public void run() {
 		partie();

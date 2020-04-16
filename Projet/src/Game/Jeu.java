@@ -2,10 +2,8 @@ package Game;
 
 import IG.Plateau;
 import Strategie.*;
-
-import java.util.ArrayList;
 import Troupes.Troupes;
-
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Jeu extends Game{
@@ -17,6 +15,9 @@ public class Jeu extends Game{
 	private Strategie strategieBleu;
 	private Strategie strategieRouge;
 	private int bleu;
+	private boolean partieFini = false;
+	private boolean gagneRouge;
+	private boolean gagneBleu;
 	
 	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge) {
 		super();
@@ -92,9 +93,42 @@ public class Jeu extends Game{
 				bleu=0;
 			}
 		}
-		if(chateauBleu.getPV()<=0)
+		if(chateauBleu.getPV()<=0) {
 			System.out.println("Equipe Rouge gagne !!");
-		else
+			partieFini=true;
+			gagneBleu=false;
+			gagneRouge=true;
+		}
+		else {
 			System.out.println("Equipe Bleue gagne !!");
+			partieFini=true;
+			gagneBleu=true;
+			gagneRouge=false;
+		}
 	}
+
+	public boolean isPartieFini() {
+		return partieFini;
+	}
+
+	public void setPartieFini(boolean partieFini) {
+		this.partieFini = partieFini;
+	}
+
+	public boolean isGagneRouge() {
+		return gagneRouge;
+	}
+
+	public void setGagneRouge(boolean gagneRouge) {
+		this.gagneRouge = gagneRouge;
+	}
+
+	public boolean isGagneBleu() {
+		return gagneBleu;
+	}
+
+	public void setGagneBleu(boolean gagneBleu) {
+		this.gagneBleu = gagneBleu;
+	}
+	
 }

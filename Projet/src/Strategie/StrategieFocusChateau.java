@@ -66,7 +66,6 @@ public class StrategieFocusChateau extends Strategie{
 		
 		for(Troupes unite : ennemi) {
 			if(unite.getType() == "Chateau") {
-				System.out.println("Chateau trouve");
 				return unite.getPosition();
 			}
 		}

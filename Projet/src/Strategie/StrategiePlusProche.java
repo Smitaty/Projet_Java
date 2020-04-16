@@ -20,15 +20,6 @@ public class StrategiePlusProche extends Strategie{
 		this.plateau=plateau;
 	}
 	
-	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
-		for(int i=0; i<coups.size(); ++i) {
-			if(coups.get(i)==action) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public TroupesAction coup(Troupes troupe) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
@@ -36,7 +27,7 @@ public class StrategiePlusProche extends Strategie{
 		int ex = ennemi.getPosition().getX();
 		int ey = ennemi.getPosition().getY();
 		
-		ArrayList<TroupesAction> coups = this.coupsIntelligentPosssibles(troupe);
+		ArrayList<TroupesAction> coups = this.coupsIntelligentPossibles(troupe);
 		if(coups.size()>0) {
 			if(estPresent(TroupesAction.ATTACK1,coups)) {
 				return TroupesAction.ATTACK1;
@@ -145,7 +136,6 @@ public class StrategiePlusProche extends Strategie{
 				}
 			}
 		}
-		System.out.println(ennemiPlusProche.toString());
 		return ennemiPlusProche;
 	}
 }

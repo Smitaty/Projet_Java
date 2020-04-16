@@ -14,6 +14,15 @@ public abstract class Strategie {
 	
 	public abstract TroupesAction coup(Troupes troupe);
 	
+	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
+		for(int i=0; i<coups.size(); ++i) {
+			if(coups.get(i)==action) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean estBleu(Troupes troup) {
 		if(plateau.getTroupeBleu(troup)!=null)
 			return true;
@@ -51,10 +60,10 @@ public abstract class Strategie {
 			return false;
 	}
 	
-	public boolean attaqueValide(Coordonnees coor,boolean couleur) {
+	public boolean attaqueValide(Coordonnees coor,boolean estBleu) {
 		int x = coor.getX();
 		int y = coor.getY();
-		if(!couleur) {
+		if(!estBleu) {
 			ArrayList<Troupes> listeTroupes = plateau.getUnite_bleue();
 			for(int i=0; i<listeTroupes.size(); ++i) {
 				if(listeTroupes.get(i).getPosition().getX()==x && listeTroupes.get(i).getPosition().getY()==y)
@@ -72,7 +81,7 @@ public abstract class Strategie {
 		}
 	}
 	
-	public ArrayList<TroupesAction> coupsIntelligentPosssibles(Troupes troupe){
+	public ArrayList<TroupesAction> coupsIntelligentPossibles(Troupes troupe){
 		ArrayList<TroupesAction> listecoups = new ArrayList<TroupesAction>();
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
