@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.util.ArrayList;
 import Troupes.*;
-import java.lang.Thread;
 
 public class Plateau extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -183,63 +182,129 @@ public class Plateau extends JPanel{
 			else {
 				if(unite.getType()=="Chevalier") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"chevalier_avant.png"));
+						if(cpt<3 && unite.getAction()!=TroupesAction.STOP) {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"chevalier_avant"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"chevalier_arriere"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"chevalier_gauche"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"chevalier_droite"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"chevalier_arriere.png"));
+						else {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"chevalier_avant.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"chevalier_arriere.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"chevalier_gauche.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"chevalier_droite.png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							cpt=1;
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"chevalier_gauche.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"chevalier_droite.png"));
-						}
-						RescaleOp op = new RescaleOp(bleu, contraste, null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}
 				}
 				if(unite.getType()=="Archer") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"Bas_Repos.png"));
+						if(cpt<5) {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"Bas_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"Haut_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"Gauche_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"Droite_Deplacement"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"Haut_Repos.png"));
+						else {
+							cpt=1;
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"Bas_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"Haut_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"Droite_Repos.png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"Droite_Repos.png"));
-						}
-						RescaleOp op = new RescaleOp(bleu, contraste, null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}
 				}
 				if(unite.getType()=="Mage") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"mage_avant.png"));
+						if(cpt<3 && unite.getAction()!=TroupesAction.STOP) {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"mage_avant"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"mage_arriere"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"mage_gauche"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"mage_droite"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"mage_arriere.png"));
+						else {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"mage_avant.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"mage_arriere.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"mage_gauche.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"mage_droite.png"));
+							}
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							cpt=1;
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"mage_gauche.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"mage_droite.png"));
-						}
-						RescaleOp op = new RescaleOp(bleu, contraste, null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}
@@ -276,63 +341,129 @@ public class Plateau extends JPanel{
 			else {
 				if(unite_rouge.get(i).getType()=="Chevalier") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"warrior_avant.png"));
+						if(cpt<3 && unite.getAction()!=TroupesAction.STOP) {
+							if(unite.getDirection()==Direction.SUD) {								
+								img = ImageIO.read(new File(path+"warrior_avant"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"warrior_arriere"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"warrior_gauche"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"warrior_droite"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(rouge,contraste,null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"warrior_arriere.png"));
+						else {
+							cpt=1;
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"warrior_avant.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"warrior_arriere.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"warrior_gauche.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"warrior_droite.png"));
+							}
+							RescaleOp op = new RescaleOp(rouge,contraste,null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"warrior_gauche.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"warrior_droite.png"));
-						}
-						RescaleOp op = new RescaleOp(rouge,contraste,null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}
 				}
 				if(unite_rouge.get(i).getType()=="Archer") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"Bas_Repos.png"));
+						if(cpt<5 && unite.getAction()!=TroupesAction.STOP) {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"Bas_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"Haut_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"Gauche_Deplacement"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"Droite_Deplacement"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"Haut_Repos.png"));
+						else {
+							cpt=1;
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"Bas_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"Haut_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"Droite_Repos.png"));
+							}
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"Droite_Repos.png"));
-						}
-						RescaleOp op = new RescaleOp(rouge, contraste, null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}
 				}
 				if(unite_rouge.get(i).getType()=="Mage") {
 					try {
-						if(unite.getDirection()==Direction.SUD) {
-							img = ImageIO.read(new File(path+"witch_avant.png"));
+						if(cpt<3 && unite.getAction()!=TroupesAction.STOP) {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"witch_avant"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"witch_arriere"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"witch_gauche"+cpt+".png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"witch_droite"+cpt+".png"));
+							}
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							++cpt;
+							this.repaint();
 						}
-						if(unite.getDirection()==Direction.NORD) {
-							img = ImageIO.read(new File(path+"witch_arriere.png"));
+						else {
+							if(unite.getDirection()==Direction.SUD) {
+								img = ImageIO.read(new File(path+"witch_avant.png"));
+							}
+							if(unite.getDirection()==Direction.NORD) {
+								img = ImageIO.read(new File(path+"witch_arriere.png"));
+							}
+							if(unite.getDirection()==Direction.OUEST) {
+								img = ImageIO.read(new File(path+"witch_gauche.png"));
+							}
+							if(unite.getDirection()==Direction.EST) {
+								img = ImageIO.read(new File(path+"witch_droite.png"));
+							}
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							cpt=1;
 						}
-						if(unite.getDirection()==Direction.OUEST) {
-							img = ImageIO.read(new File(path+"witch_gauche.png"));
-						}
-						if(unite.getDirection()==Direction.EST) {
-							img = ImageIO.read(new File(path+"witch_droite.png"));
-						}
-						RescaleOp op = new RescaleOp(rouge, contraste, null);
-						img = op.filter( img, null);
-						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 					}catch(IOException e) {
 						e.printStackTrace();
 					}

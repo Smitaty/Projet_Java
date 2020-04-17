@@ -8,7 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Plateau plateau = new Plateau("src/Layout/attaque.lay");
+		Plateau plateau = new Plateau("src/Layout/Plateau.lay");
 		ViewGame view = new ViewGame(plateau);
 		try {
 			Thread.sleep(2000);
