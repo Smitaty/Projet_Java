@@ -65,7 +65,7 @@ public class Jeu extends Game{
 					//notifyObserver();
 					plateau.repaint();
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(3500);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
 					}
@@ -85,7 +85,7 @@ public class Jeu extends Game{
 					//notifyObserver();
 					plateau.repaint();
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(3500);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
 					}

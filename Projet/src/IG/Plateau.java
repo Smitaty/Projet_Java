@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.util.ArrayList;
 import Troupes.*;
+import java.lang.Thread;
 
 public class Plateau extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -22,6 +23,9 @@ public class Plateau extends JPanel{
 	private ArrayList<Coordonnees> rochers;
 	private int largeur;
 	private int hauteur;
+	
+	int cpt=1;
+	int cptProjectile=1;
 	
 	public Plateau(String file) {
 		try {
@@ -166,77 +170,89 @@ public class Plateau extends JPanel{
 			Troupes unite = unite_bleue.get(i);
 			double pos_x=x*stepx;
 			double pos_y=y*stepy;
-			if(unite.getType()=="Chevalier") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"chevalier_avant.png"));
-					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"chevalier_arriere.png"));
-					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"chevalier_gauche.png"));
-					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"chevalier_droite.png"));
-					}
-					RescaleOp op = new RescaleOp(bleu, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
+			if(unite.getAction()==TroupesAction.ATTACK1) {
+				dessine_attaque(g,unite,true);
+				if(cpt<5)
+					++cpt;
+				else {
+					cpt=1;
+					cptProjectile=1;
+					unite.setAction(TroupesAction.STOP);
 				}
 			}
-			if(unite.getType()=="Archer") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"Bas_Repos.png"));
+			else {
+				if(unite.getType()=="Chevalier") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"chevalier_avant.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"chevalier_arriere.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"chevalier_gauche.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"chevalier_droite.png"));
+						}
+						RescaleOp op = new RescaleOp(bleu, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"Haut_Repos.png"));
-					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"Gauche_Repos.png"));
-					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"Droite_Repos.png"));
-					}
-					RescaleOp op = new RescaleOp(bleu, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
 				}
-			}
-			if(unite.getType()=="Mage") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"mage_avant.png"));
+				if(unite.getType()=="Archer") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"Bas_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"Haut_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"Droite_Repos.png"));
+						}
+						RescaleOp op = new RescaleOp(bleu, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"mage_arriere.png"));
-					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"mage_gauche.png"));
-					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"mage_droite.png"));
-					}
-					RescaleOp op = new RescaleOp(bleu, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
 				}
-			}
-			if(unite.getType()=="Chateau") {
-				try {
-					img = ImageIO.read(new File(path+"chateau.png"));
-					RescaleOp op = new RescaleOp(bleu, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
+				if(unite.getType()=="Mage") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"mage_avant.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"mage_arriere.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"mage_gauche.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"mage_droite.png"));
+						}
+						RescaleOp op = new RescaleOp(bleu, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if(unite.getType()=="Chateau") {
+					try {
+						img = ImageIO.read(new File(path+"chateau.png"));
+						RescaleOp op = new RescaleOp(bleu, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -247,78 +263,663 @@ public class Plateau extends JPanel{
 			Troupes unite = unite_rouge.get(i);
 			double pos_x=x*stepx;
 			double pos_y=y*stepy;
-			
-			if(unite_rouge.get(i).getType()=="Chevalier") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"warrior_avant.png"));
-					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"warrior_arriere.png"));
-					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"warrior_gauche.png"));
-					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"warrior_droite.png"));
-					}
-					RescaleOp op = new RescaleOp(rouge,contraste,null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
+			if(unite.getAction()==TroupesAction.ATTACK1) {
+				dessine_attaque(g,unite,false);
+				if(cpt<5)
+					++cpt;
+				else {
+					cpt=1;
+					cptProjectile=1;
+					unite.setAction(TroupesAction.STOP);
 				}
 			}
-			if(unite_rouge.get(i).getType()=="Archer") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"Bas_Repos.png"));
+			else {
+				if(unite_rouge.get(i).getType()=="Chevalier") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"warrior_avant.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"warrior_arriere.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"warrior_gauche.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"warrior_droite.png"));
+						}
+						RescaleOp op = new RescaleOp(rouge,contraste,null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"Haut_Repos.png"));
+				}
+				if(unite_rouge.get(i).getType()=="Archer") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"Bas_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"Haut_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"Droite_Repos.png"));
+						}
+						RescaleOp op = new RescaleOp(rouge, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+				}
+				if(unite_rouge.get(i).getType()=="Mage") {
+					try {
+						if(unite.getDirection()==Direction.SUD) {
+							img = ImageIO.read(new File(path+"witch_avant.png"));
+						}
+						if(unite.getDirection()==Direction.NORD) {
+							img = ImageIO.read(new File(path+"witch_arriere.png"));
+						}
+						if(unite.getDirection()==Direction.OUEST) {
+							img = ImageIO.read(new File(path+"witch_gauche.png"));
+						}
+						if(unite.getDirection()==Direction.EST) {
+							img = ImageIO.read(new File(path+"witch_droite.png"));
+						}
+						RescaleOp op = new RescaleOp(rouge, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"Droite_Repos.png"));
+				}
+				if(unite_rouge.get(i).getType()=="Chateau") {
+					try {
+						img = ImageIO.read(new File(path+"chateau.png"));
+						RescaleOp op = new RescaleOp(rouge, contraste, null);
+						img = op.filter( img, null);
+						g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+					}catch(IOException e) {
+						e.printStackTrace();
 					}
-					RescaleOp op = new RescaleOp(rouge, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
 				}
 			}
-			if(unite_rouge.get(i).getType()=="Mage") {
-				try {
-					if(unite.getDirection()==Direction.SUD) {
-						img = ImageIO.read(new File(path+"witch_avant.png"));
-					}
-					if(unite.getDirection()==Direction.NORD) {
-						img = ImageIO.read(new File(path+"witch_arriere.png"));
-					}
-					if(unite.getDirection()==Direction.OUEST) {
-						img = ImageIO.read(new File(path+"witch_gauche.png"));
-					}
-					if(unite.getDirection()==Direction.EST) {
-						img = ImageIO.read(new File(path+"witch_droite.png"));
-					}
-					RescaleOp op = new RescaleOp(rouge, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
+		}
+	}
+	
+	public void dessine_attaque(Graphics g, Troupes troupe, boolean estBleu) {
+		int x = troupe.getPosition().getX();
+		int y = troupe.getPosition().getY();
+		
+		int fen_x = getSize().width;
+		int fen_y = getSize().height;
+		
+		double stepx = fen_x/(double)largeur;
+		double stepy = fen_y/(double)hauteur;
+		
+		double pos_x = x*stepx;
+		double pos_y = y*stepy;
+		
+		float[] rouge = {3,0.75f,0.75f,1.0f};
+		float[] bleu = {0.75f,0.75f,3,1.0f};
+		float[] contraste = {0,0,0,1.0f};
+		
+		BufferedImage img = null;
+		
+		if(troupe.getType()=="Chevalier") {
+			if(estBleu) {
+				switch(troupe.getDirection()) {
+					case NORD:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"chevalier_attaque2_arriere_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"chevalier_arriere.png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case SUD:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"chevalier_attaque2_avant_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"chevalier_avant.png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case OUEST:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"chevalier_attaque2_gauche_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"chevalier_gauche.png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case EST:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"chevalier_attaque2_droite_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"chevalier_droite.png"));
+								RescaleOp op = new RescaleOp(bleu, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
 				}
 			}
-			if(unite_rouge.get(i).getType()=="Chateau") {
-				try {
-					img = ImageIO.read(new File(path+"chateau.png"));
-					RescaleOp op = new RescaleOp(rouge, contraste, null);
-					img = op.filter( img, null);
-					g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-				}catch(IOException e) {
-					e.printStackTrace();
+			else {
+				switch(troupe.getDirection()) {
+					case NORD:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"warrior_attaque2_arriere_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"warrior_arriere.png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case SUD:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"warrior_attaque2_avant_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"warrior_avant.png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case OUEST:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"warrior_attaque2_gauche_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"warrior_gauche.png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case EST:
+						try {
+							if(cpt<5) {
+								img = ImageIO.read(new File(path+"warrior_attaque2_droite_"+cpt+".png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+								this.repaint();
+							}
+							else {
+								img = ImageIO.read(new File(path+"warrior_droite.png"));
+								RescaleOp op = new RescaleOp(rouge, contraste, null);
+								img = op.filter( img, null);
+								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							}
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+				}
+			}
+		}
+		if(troupe.getType()=="Archer") {
+			switch(troupe.getDirection()) {
+				case NORD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"Haut_Attaque"+cpt+".png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"Haut.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y - (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+								else {
+									cptProjectile=1;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"Haut_Repos.png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case SUD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"Bas_Attaque"+cpt+".png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"Haut.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"Bas_Repos.png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case OUEST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"Gauche_Attaque"+cpt+".png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"Haut.png"));
+									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y , (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+								else {
+									cptProjectile=1;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case EST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"Droite_Attaque"+cpt+".png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"Haut.png"));
+									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)(pos_y - (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+								else {
+									cptProjectile=1;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"Droite_Repos.png"));
+							RescaleOp op;
+							if(estBleu)
+								op = new RescaleOp(bleu, contraste, null);
+							else
+								op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+			}
+		}
+		if(troupe.getType()=="Mage") {
+			if(estBleu) {
+				switch(troupe.getDirection()) {
+				case NORD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"mage_attaque2_arriere_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuHaut.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"mage_arriere.png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case SUD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"mage_attaque2_avant_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"mage_avant.png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case OUEST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"mage_attaque2_gauche_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"mage_gauche.png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case EST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"mage_attaque2_droite_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"mage_droite.png"));
+							RescaleOp op = new RescaleOp(bleu, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
+			}
+			else {
+				switch(troupe.getDirection()) {
+				case NORD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"witch_attaque2_arriere_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuHaut.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y - (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"witch_arriere.png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case SUD:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"witch_attaque2_avant_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"witch_avant.png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case OUEST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"witch_attaque2_gauche_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"witch_gauche.png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				case EST:
+					try {
+						if(cpt<5) {
+							img = ImageIO.read(new File(path+"witch_attaque2_droite_"+cpt+".png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+							if(cpt>=3) {
+								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
+								int range = Math.abs(cible.getPosition().getY()-y);
+								if(cptProjectile<=range) {
+									img = ImageIO.read(new File(path+"FeuBas.png"));
+									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
+									++cptProjectile;
+								}
+							}
+							this.repaint();
+						}
+						else {
+							img = ImageIO.read(new File(path+"witch_droite.png"));
+							RescaleOp op = new RescaleOp(rouge, contraste, null);
+							img = op.filter( img, null);
+							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
+						}
+					}catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
 				}
 			}
 		}
@@ -367,6 +968,86 @@ public class Plateau extends JPanel{
 			}
 		}
 	}
+	
+	public Troupes chercheCible(Troupes troupe,Direction dir, boolean estBleu) {
+		int x = troupe.getPosition().getX();
+		int y = troupe.getPosition().getY();
+		String type = troupe.getType();
+		Troupes cible = null;
+		if(estBleu) {
+			switch (dir) {
+				case NORD:
+					cible = getTroupeRouge(new Coordonnees(x, y-1));
+					if(cible==null && (type=="Archer" || type=="Mage")) {
+						cible = getTroupeRouge(new Coordonnees(x,y-2));
+						if(cible==null)
+							cible = getTroupeRouge(new Coordonnees(x,y-3));
+					}
+					break;
+				case SUD:
+					cible = getTroupeRouge(new Coordonnees(x, y+1));
+					if(cible==null && (type=="Archer" || type=="Mage")) {
+						cible = getTroupeRouge(new Coordonnees(x,y+2));
+						if(cible==null)
+							cible = getTroupeRouge(new Coordonnees(x,y+3));
+					}
+					break;
+				case OUEST:
+					cible = getTroupeRouge(new Coordonnees(x-1, y));
+					if(cible==null && (type=="Archer" || type=="Mage")) {
+						cible = getTroupeRouge(new Coordonnees(x-2,y));
+						if(cible==null)
+							cible = getTroupeRouge(new Coordonnees(x-3,y));
+					}
+					break;
+				case EST:
+					cible = getTroupeRouge(new Coordonnees(x+1, y));
+					if(cible==null && (type=="Archer" || type=="Mage")) {
+						cible = getTroupeRouge(new Coordonnees(x+2,y));
+						if(cible==null)
+							cible = getTroupeRouge(new Coordonnees(x+3,y));
+					}
+					break;
+			}
+		}
+		else {
+			switch (dir) {
+			case NORD:
+				cible = getTroupeBleu(new Coordonnees(x, y-1));
+				if(cible==null && (type=="Archer" || type=="Mage")) {
+					cible = getTroupeBleu(new Coordonnees(x,y-2));
+					if(cible==null)
+						cible = getTroupeBleu(new Coordonnees(x,y-3));
+				}
+				break;
+			case SUD:
+				cible = getTroupeBleu(new Coordonnees(x, y+1));
+				if(cible==null && (type=="Archer" || type=="Mage")) {
+					cible = getTroupeBleu(new Coordonnees(x,y+2));
+					if(cible==null)
+						cible = getTroupeBleu(new Coordonnees(x,y+3));
+				}
+				break;
+			case OUEST:
+				cible = getTroupeBleu(new Coordonnees(x-1, y));
+				if(cible==null && (type=="Archer" || type=="Mage")) {
+					cible = getTroupeBleu(new Coordonnees(x-2,y));
+					if(cible==null)
+						cible = getTroupeBleu(new Coordonnees(x-3,y));
+				}
+				break;
+			case EST:
+				cible = getTroupeBleu(new Coordonnees(x+1, y));
+				if(cible==null && (type=="Archer" || type=="Mage")) {
+					cible = getTroupeBleu(new Coordonnees(x+2,y));
+					if(cible==null)
+						cible = getTroupeBleu(new Coordonnees(x+3,y));
+				}
+				break;
+			}
+		}
+		return cible;
+	}
 
 	
 	public ArrayList<Troupes> getUnite_rouge() {
@@ -392,7 +1073,7 @@ public class Plateau extends JPanel{
 	public boolean ArbreEn(Coordonnees coor) {
 		int x = coor.getX();
 		int y = coor.getY();
-		for(int i=0; i<arbres.size(); ++i) {
+		for(int i=100; i<arbres.size(); ++i) {
 			int ax = arbres.get(i).getX();
 			int ay = arbres.get(i).getY();
 			if(x==ax && y==ay)

@@ -15,6 +15,7 @@ public abstract class Troupes {
 		position=pos;
 		type=t;
 		direction=dir;
+		action = TroupesAction.STOP;
 	}
 	
 		

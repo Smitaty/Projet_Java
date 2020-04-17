@@ -185,8 +185,12 @@ public class StrategieIntelligente extends Strategie{
 				if(ennemis.get(0).getPV()<=troupe.getDegats() && estAPortee(troupe,ennemis.get(0).getPosition()))
 					return false;
 				else {
-					if(PV<=ennemis.get(0).getDegats())
-						return true;
+					if(ennemiAPortee(ennemis.get(0).getPosition(),!estBleu).size()>=2)
+						return false;
+					else {
+						if(PV<=ennemis.get(0).getDegats())
+							return true;
+					}
 				}
 			}
 			return false;
