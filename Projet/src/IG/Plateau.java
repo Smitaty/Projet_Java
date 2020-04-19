@@ -23,6 +23,7 @@ public class Plateau extends JPanel{
 	private int largeur;
 	private int hauteur;
 	
+	boolean premierefois = true;
 	int cpt=1;
 	int cptProjectile=1;
 	
@@ -150,6 +151,22 @@ public class Plateau extends JPanel{
 		}
 		dessine_arbres(g);
 		dessine_rochers(g);
+		if(premierefois==true) {
+			cpt=1;
+			cptProjectile=1;
+			premierefois=false;
+		}
+		else {
+			if(cpt>=5) {
+				cpt=1;
+				cptProjectile=1;
+				metActionStop();
+			}
+			else {
+				++cpt;
+				this.repaint();
+			}
+		}
 	}
 	
 	public void dessine_troupes(Graphics g) {
@@ -171,13 +188,6 @@ public class Plateau extends JPanel{
 			double pos_y=y*stepy;
 			if(unite.getAction()==TroupesAction.ATTACK1) {
 				dessine_attaque(g,unite,true);
-				if(cpt<5)
-					++cpt;
-				else {
-					cpt=1;
-					cptProjectile=1;
-					unite.setAction(TroupesAction.STOP);
-				}
 			}
 			else {
 				if(unite.getType()=="Chevalier") {
@@ -198,8 +208,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(bleu, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
 							if(unite.getDirection()==Direction.SUD) {
@@ -217,7 +225,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(bleu, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							cpt=1;
 						}
 					}catch(IOException e) {
 						e.printStackTrace();
@@ -225,7 +232,7 @@ public class Plateau extends JPanel{
 				}
 				if(unite.getType()=="Archer") {
 					try {
-						if(cpt<5) {
+						if(cpt<5 && unite.getAction()!=TroupesAction.STOP) {
 							if(unite.getDirection()==Direction.SUD) {
 								img = ImageIO.read(new File(path+"Bas_Deplacement"+cpt+".png"));
 							}
@@ -241,11 +248,8 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(bleu, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
-							cpt=1;
 							if(unite.getDirection()==Direction.SUD) {
 								img = ImageIO.read(new File(path+"Bas_Repos.png"));
 							}
@@ -284,8 +288,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(bleu, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
 							if(unite.getDirection()==Direction.SUD) {
@@ -303,7 +305,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(bleu, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							cpt=1;
 						}
 					}catch(IOException e) {
 						e.printStackTrace();
@@ -319,6 +320,7 @@ public class Plateau extends JPanel{
 						e.printStackTrace();
 					}
 				}
+				
 			}
 		}
 		
@@ -330,13 +332,6 @@ public class Plateau extends JPanel{
 			double pos_y=y*stepy;
 			if(unite.getAction()==TroupesAction.ATTACK1) {
 				dessine_attaque(g,unite,false);
-				if(cpt<5)
-					++cpt;
-				else {
-					cpt=1;
-					cptProjectile=1;
-					unite.setAction(TroupesAction.STOP);
-				}
 			}
 			else {
 				if(unite_rouge.get(i).getType()=="Chevalier") {
@@ -357,11 +352,8 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(rouge,contraste,null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
-							cpt=1;
 							if(unite.getDirection()==Direction.SUD) {
 								img = ImageIO.read(new File(path+"warrior_avant.png"));
 							}
@@ -400,11 +392,8 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(rouge, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
-							cpt=1;
 							if(unite.getDirection()==Direction.SUD) {
 								img = ImageIO.read(new File(path+"Bas_Repos.png"));
 							}
@@ -443,8 +432,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(rouge, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							++cpt;
-							this.repaint();
 						}
 						else {
 							if(unite.getDirection()==Direction.SUD) {
@@ -462,7 +449,6 @@ public class Plateau extends JPanel{
 							RescaleOp op = new RescaleOp(rouge, contraste, null);
 							img = op.filter( img, null);
 							g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-							cpt=1;
 						}
 					}catch(IOException e) {
 						e.printStackTrace();
@@ -511,7 +497,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(bleu, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"chevalier_arriere.png"));
@@ -530,7 +516,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(bleu, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"chevalier_avant.png"));
@@ -549,7 +535,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(bleu, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"chevalier_gauche.png"));
@@ -568,7 +554,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(bleu, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"chevalier_droite.png"));
@@ -591,7 +577,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(rouge, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"warrior_arriere.png"));
@@ -610,7 +596,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(rouge, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"warrior_avant.png"));
@@ -629,7 +615,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(rouge, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"warrior_gauche.png"));
@@ -648,7 +634,7 @@ public class Plateau extends JPanel{
 								RescaleOp op = new RescaleOp(rouge, contraste, null);
 								img = op.filter( img, null);
 								g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
-								this.repaint();
+								//this.repaint();
 							}
 							else {
 								img = ImageIO.read(new File(path+"warrior_droite.png"));
@@ -688,7 +674,7 @@ public class Plateau extends JPanel{
 									cptProjectile=1;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"Haut_Repos.png"));
@@ -719,12 +705,12 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"Haut.png"));
+									img = ImageIO.read(new File(path+"Bas.png"));
 									g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"Bas_Repos.png"));
@@ -755,7 +741,7 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"Haut.png"));
+									img = ImageIO.read(new File(path+"Gauche.png"));
 									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y , (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
@@ -763,7 +749,7 @@ public class Plateau extends JPanel{
 									cptProjectile=1;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"Gauche_Repos.png"));
@@ -794,7 +780,7 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"Haut.png"));
+									img = ImageIO.read(new File(path+"Droite.png"));
 									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)(pos_y - (stepy * cptProjectile)), (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
@@ -802,7 +788,7 @@ public class Plateau extends JPanel{
 									cptProjectile=1;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"Droite_Repos.png"));
@@ -839,7 +825,7 @@ public class Plateau extends JPanel{
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"mage_arriere.png"));
@@ -867,7 +853,7 @@ public class Plateau extends JPanel{
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"mage_avant.png"));
@@ -890,12 +876,12 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"FeuBas.png"));
+									img = ImageIO.read(new File(path+"FeuGauche.png"));
 									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"mage_gauche.png"));
@@ -918,12 +904,12 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"FeuBas.png"));
+									img = ImageIO.read(new File(path+"FeuDroite.png"));
 									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"mage_droite.png"));
@@ -955,7 +941,7 @@ public class Plateau extends JPanel{
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"witch_arriere.png"));
@@ -983,7 +969,7 @@ public class Plateau extends JPanel{
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"witch_avant.png"));
@@ -1006,12 +992,12 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"FeuBas.png"));
+									img = ImageIO.read(new File(path+"FeuGauche.png"));
 									g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"witch_gauche.png"));
@@ -1034,12 +1020,12 @@ public class Plateau extends JPanel{
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								int range = Math.abs(cible.getPosition().getY()-y);
 								if(cptProjectile<=range) {
-									img = ImageIO.read(new File(path+"FeuBas.png"));
+									img = ImageIO.read(new File(path+"FeuDroite.png"));
 									g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
 									++cptProjectile;
 								}
 							}
-							this.repaint();
+							//this.repaint();
 						}
 						else {
 							img = ImageIO.read(new File(path+"witch_droite.png"));
@@ -1179,6 +1165,15 @@ public class Plateau extends JPanel{
 		}
 		return cible;
 	}
+	
+	public void metActionStop() {
+		for(Troupes unite : this.unite_bleue) {
+			unite.setAction(TroupesAction.STOP);
+		}
+		for(Troupes unite : this.unite_rouge) {
+			unite.setAction(TroupesAction.STOP);
+		}
+	}
 
 	
 	public ArrayList<Troupes> getUnite_rouge() {
@@ -1249,25 +1244,6 @@ public class Plateau extends JPanel{
 		return null;
 	}
 	
-	public Troupes getTroupeBleu(Troupes troupe) {
-		boolean trouver=false;
-		int i=0;
-		int tx = troupe.getPosition().getX();
-		int ty = troupe.getPosition().getY();
-		while(trouver==false && i<unite_bleue.size()) {
-			int x = unite_bleue.get(i).getPosition().getX();
-			int y = unite_bleue.get(i).getPosition().getY();
-			if(tx==x && ty==y) {
-				trouver = true;
-				return unite_bleue.get(i);
-			}
-			else {
-				++i;
-			}
-		}
-		return null;
-	}
-	
 	public Troupes getTroupeBleu(Coordonnees coor) {
 		boolean trouver=false;
 		int i=0;
@@ -1285,24 +1261,6 @@ public class Plateau extends JPanel{
 			}
 		}
 		return null;
-	}
-	
-	public Troupes getTroupeRouge(Troupes troupe) {
-		boolean trouver=false;
-		int i=0;
-		int tx = troupe.getPosition().getX();
-		int ty = troupe.getPosition().getY();
-		while(trouver==false && i<unite_rouge.size()) {
-			int x = unite_rouge.get(i).getPosition().getX();
-			int y = unite_rouge.get(i).getPosition().getY();
-			if(tx==x && ty==y) {
-				trouver = true;
-			}
-			else {
-				++i;
-			}
-		}
-		return unite_rouge.get(i);
 	}
 	
 	public Troupes getTroupeRouge(Coordonnees coor) {

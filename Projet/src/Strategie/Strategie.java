@@ -23,7 +23,7 @@ public abstract class Strategie {
 	}
 	
 	public boolean estBleu(Troupes troup) {
-		if(plateau.getTroupeBleu(troup)!=null)
+		if(plateau.getTroupeBleu(troup.getPosition())!=null)
 			return true;
 		else 
 			return false;
