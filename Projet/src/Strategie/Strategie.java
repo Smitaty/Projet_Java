@@ -486,13 +486,7 @@ public abstract class Strategie {
 				Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu(troupe));
 				cible.setPV(cible.getPV()-troupe.getDegats());
 				if(cible.getPV()<=0)
-					if(cible.getType()!="Chateau") {
-						if(estBleu)
-							plateau.getUnite_rouge().remove(cible);
-						else 
-							plateau.getUnite_bleue().remove(cible);
-					}
-					else {
+					if(cible.getType()=="Chateau") {
 						if(estBleu)
 							System.out.println("Château rouge détruit !");
 						else
@@ -503,13 +497,7 @@ public abstract class Strategie {
 				Troupes cible2 = chercheCible(troupe,troupe.getDirection(),true);
 				cible2.setPV(cible2.getPV()-troupe.getDegats()+20);
 				if(cible2.getPV()<=0) {
-					if(cible2.getType()!="Chateau") {
-						if(estBleu)
-							plateau.getUnite_rouge().remove(cible2);
-						else 
-							plateau.getUnite_bleue().remove(cible2);
-					}
-					else {
+					if(cible2.getType()=="Chateau") {
 						if(estBleu)
 							System.out.println("Château rouge détruit !");
 						else
