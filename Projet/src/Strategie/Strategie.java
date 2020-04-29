@@ -3,6 +3,7 @@ package Strategie;
 import Troupes.*;
 import IG.Plateau;
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Strategie {
 	private Plateau plateau;
@@ -484,14 +485,20 @@ public abstract class Strategie {
 				break;
 			case ATTACK1:
 				Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu(troupe));
-				cible.setPV(cible.getPV()-troupe.getDegats());
-				if(cible.getPV()<=0)
+				if(!esquive() || cible.getType()=="Chateau") {
+					System.out.println(troupe+" attaque "+cible);
+					cible.setPV(cible.getPV()-troupe.getDegats());
+				}
+				else 
+					System.out.println(cible+" a esquivé");
+				if(cible.getPV()<=0) {
 					if(cible.getType()=="Chateau") {
 						if(estBleu)
 							System.out.println("Château rouge détruit !");
 						else
 							System.out.println("Château bleu détruit !");
 					}
+				}
 				break;
 			case ATTACK2:
 				Troupes cible2 = chercheCible(troupe,troupe.getDirection(),true);
@@ -508,6 +515,15 @@ public abstract class Strategie {
 			case STOP:
 				break;
 		}
+	}
+	
+	public boolean esquive() {
+		Random r = new Random();
+		float esquive = r.nextFloat();
+		if(esquive<0.2)
+			return true;
+		else
+			return false;
 	}
 	
 	public Troupes chercheCible(Troupes troupe,Direction dir, boolean estBleu) {

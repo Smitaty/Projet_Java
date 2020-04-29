@@ -41,11 +41,9 @@ public class StrategieIntelligente extends Strategie{
 			else {
 				action = coupOptimal(troupe,assaillant);
 			}
-			System.out.println(assaillant);
 			return action;
 		}
 		else {
-			System.out.println(assaillant);
 			return coupOptimal(troupe,assaillant);
 		}
 	}
@@ -541,7 +539,7 @@ public class StrategieIntelligente extends Strategie{
 	// Fonction qui renvoie vrai s'il y a un ennemi à portée d'attaque du château allié	
 	
 	
-	// Fonction qui retourne si le château est en danger ou non
+	// Fonction qui retourne si le château est à portée d'un ennemi ou non
 	
 	public boolean estEnDanger(Troupes chateau, boolean estBleu) {
 		if(chateau.getType()=="Chateau") {
@@ -561,9 +559,14 @@ public class StrategieIntelligente extends Strategie{
 							return true;
 					}
 					if(unite.getType()=="Archer" || unite.getType()=="Mage") {
-						if(Math.abs(ux-x)<=3 && Math.abs(uy-y)<=3)
+						if((ux==x-1 || ux==x-2 || ux==x-3) && uy==y)
 							return true;
-						
+						if((ux==x+1 || ux==x+2 || ux==x+3) && uy==y)
+							return true;
+						if((uy==y-1 || uy==y-2 || uy==y-3) && ux==x)
+							return true;
+						if((uy==y+1 || uy==y+2 || uy==y+3) && ux==x)
+							return true;
 					}
 				}
 				return false;
