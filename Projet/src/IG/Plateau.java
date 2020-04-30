@@ -479,7 +479,6 @@ public class Plateau extends JPanel{
 			if(cpt>=5) {
 				cpt=1;
 				cptProjectile=1;
-				//metActionStop(); // Pour pas que l'animation d'attaque se répète en boucle
 			}
 			else {
 				++cpt;
@@ -524,7 +523,7 @@ public class Plateau extends JPanel{
 			if(unite.getAction()==TroupesAction.ATTACK1) {
 				dessine_attaque(g,unite,true);
 				if(cpt>=5)
-					unite.setAction(TroupesAction.STOP);
+					unite.setAction(TroupesAction.STOP); // Pour stopper l'animation d'attaque
 			}
 			else {
 				if(unite.getType()=="Chevalier") {

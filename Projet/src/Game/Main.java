@@ -18,8 +18,11 @@ public class Main {
 		Jeu jeu = new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau));
 		Thread t1 = new Thread(jeu);
 		t1.start();
-		
-		/*ArrayList<Game> list = new ArrayList<Game>();
+		//getAverageReward(plateau);
+	}
+
+	public void getAverageReward(Plateau plateau) {
+		ArrayList<Game> list = new ArrayList<Game>();
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<100; ++i) {
 			list.add(new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau)));
@@ -36,7 +39,6 @@ public class Main {
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
-
 }
