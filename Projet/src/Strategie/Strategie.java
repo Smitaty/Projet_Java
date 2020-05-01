@@ -486,19 +486,19 @@ public abstract class Strategie {
 			case ATTACK1:
 				Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu(troupe));
 				if(!esquive() || cible.getType()=="Chateau") {
-					System.out.println(troupe+" attaque "+cible);
+					//System.out.println(troupe+" attaque "+cible);
 					cible.setPV(cible.getPV()-troupe.getDegats());
 				}
-				else 
-					System.out.println(cible+" a esquivé");
-				if(cible.getPV()<=0) {
+				//else 
+					//System.out.println(cible+" a esquivé");
+				/*if(cible.getPV()<=0) {
 					if(cible.getType()=="Chateau") {
 						if(estBleu)
 							System.out.println("Château rouge détruit !");
 						else
 							System.out.println("Château bleu détruit !");
 					}
-				}
+				}*/
 				break;
 			case ATTACK2:
 				Troupes cible2 = chercheCible(troupe,troupe.getDirection(),true);

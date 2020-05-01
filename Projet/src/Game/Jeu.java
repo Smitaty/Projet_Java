@@ -47,8 +47,8 @@ public class Jeu extends Game{
 	}
 	
 	public void partie() {
-		System.out.println("Debut de partie");
-		afficheCoordonneesTroupes();
+		//System.out.println("Debut de partie");
+		//afficheCoordonneesTroupes();
 		//notifyObserver();
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 			if(bleu==0) {
@@ -56,19 +56,19 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieBleu.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
+							//System.out.println(troupe.toString()+", action="+action);
 							strategieBleu.jouer(action, troupe,true);
 							
 						}
 					}
-					System.out.println("Fin tour bleu");
+					/*System.out.println("Fin tour bleu");
 					//notifyObserver();
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
-					}
+					}*/
 				}
 				bleu=1;
 			}
@@ -77,30 +77,30 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieRouge.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
+							//System.out.println(troupe.toString()+", action="+action);
 							strategieRouge.jouer(action, troupe,false);
 						}
 					}
-					System.out.println("Fin tour rouge");
+					/*System.out.println("Fin tour rouge");
 					//notifyObserver();
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
-					}
+					}*/
 				}
 				bleu=0;
 			}
 		}
 		if(chateauBleu.getPV()<=0) {
-			System.out.println("Equipe Rouge gagne !!");
+			//System.out.println("Equipe Rouge gagne !!");
 			partieFini=true;
 			gagneBleu=false;
 			gagneRouge=true;
 		}
 		else {
-			System.out.println("Equipe Bleue gagne !!");
+			//System.out.println("Equipe Bleue gagne !!");
 			partieFini=true;
 			gagneBleu=true;
 			gagneRouge=false;

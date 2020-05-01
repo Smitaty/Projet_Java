@@ -35,7 +35,7 @@ public class StrategieIntelligente extends Strategie{
 			}
 			if(estEnDanger(chateau,estBleu) && estABonneDistance(troupe,chateau)) {
 				assaillant = rechercheAssaillantChateau(troupe,estBleu);
-				System.out.println("Protéger château");
+				//System.out.println("Protéger château");
 				action = protegerChateau(troupe,assaillant);
 			}
 			else {
