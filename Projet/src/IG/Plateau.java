@@ -1,5 +1,6 @@
 package IG;
 
+import org.apache.commons.lang3.SerializationUtils;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.RescaleOp;
@@ -11,7 +12,7 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 import Troupes.*;
 
-public class Plateau extends JPanel{
+public class Plateau extends JPanel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	String path ="src/Image/";
@@ -1324,6 +1325,10 @@ public class Plateau extends JPanel{
 		}
 	}
 
+	public Plateau clone() {
+		Plateau nouv_plateau = SerializationUtils.clone(this);
+		return nouv_plateau;
+	}
 	
 	public ArrayList<Troupes> getUnite_rouge() {
 		return unite_rouge;

@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import IG.Plateau;
 
-public class ViewGame implements Observer{	
+public class ViewGame{	
 	public ViewGame(Plateau plateau) {
 		
 		JFrame frame = new JFrame();

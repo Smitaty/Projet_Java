@@ -8,8 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Plateau plateau = new Plateau("src/Layout/Plateau.lay");
-		/*ViewGame view = new ViewGame(plateau);
+		/*Plateau plateau = new Plateau("src/Layout/Plateau.lay");
+		ViewGame view = new ViewGame(plateau);
 		try {
 			Thread.sleep(2000);
 		}catch(Exception e) {
@@ -18,42 +18,42 @@ public class Main {
 		Jeu jeu = new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau));
 		Thread t1 = new Thread(jeu);
 		t1.start();*/
-		getAverageReward(plateau);
+		getAverageReward();
 	}
 
-	public static void getAverageReward(Plateau plateau) {
+	public static void getAverageReward() {
 		int bleu = 0;
 		int rouge = 0;
 		ArrayList<Jeu> list = new ArrayList<Jeu>();
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		System.out.println("Jeu");
 		for(int i=0; i<100; ++i) {
-			list.add(new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau)));
-		}
-		System.out.println("Thread");
-		for (int i=0; i<100; ++i) {
-			Thread t1 = new Thread(list.get(i));
-			thread.add(t1);
+			Plateau plateau = new Plateau("./src/Layout/Plateau.lay");
+			Jeu jeu = new Jeu(plateau, new StrategieRandom(plateau), new StrategieRandom(plateau),100);
+			Thread t1 = new Thread(jeu);
 			t1.start();
-		}
-		System.out.println("Join");
-		for (int i=0; i<100; ++i) {
 			try{
-				thread.get(i).join();
+				t1.join();
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
-			if(list.get(i).isPartieFini()) {
-				if(list.get(i).isGagneBleu()) {
+			if(jeu.isPartieFini()) {
+				if(jeu.isGagneBleu()) {
 					++bleu;
 					System.out.println("Partie "+i+" victoire bleu");
 				}
 				else {
-					++rouge;
-					System.out.println("Partie "+i+" victoire rouge");
+					if(jeu.isGagneRouge()) {
+						++rouge;
+						System.out.println("Partie "+i+" victoire rouge");
+					}
+					else {
+						System.out.println("Partie "+i+" nulle");
+					}
 				}
 			}
 		}
-		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge);
+		int egalite = 100-bleu+rouge;
+		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalité : "+egalite);
 	}
 }
