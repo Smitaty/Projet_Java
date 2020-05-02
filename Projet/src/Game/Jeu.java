@@ -43,8 +43,8 @@ public class Jeu extends Game{
 	}
 	
 	public void partie() {
-		System.out.println("Debut de partie");
-		afficheCoordonneesTroupes();
+		//System.out.println("Debut de partie");
+		//afficheCoordonneesTroupes();
 		int tour = 0;
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
 			++tour;
@@ -53,18 +53,18 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieBleu.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
+							//System.out.println(troupe.toString()+", action="+action);
 							strategieBleu.jouer(action, troupe,true);
 							
 						}
 					}
-					System.out.println("Fin tour bleu");
+					/*System.out.println("Fin tour bleu");
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
-					}
+					}*/
 				}
 				bleu=1;
 			}
@@ -73,35 +73,35 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = strategieRouge.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
+							//System.out.println(troupe.toString()+", action="+action);
 							strategieRouge.jouer(action, troupe,false);
 						}
 					}
-					System.out.println("Fin tour rouge");
+					/*System.out.println("Fin tour rouge");
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
 					}catch(Exception e) {
 						System.out.println(e.getMessage());
-					}
+					}*/
 				}
 				bleu=0;
 			}
 		}
 		if(tour >= this.nbTours) {
-			System.out.println("Match nul, nombre de tours max atteint.");
+			//System.out.println("Match nul, nombre de tours max atteint.");
 			partieFini=true;
 			gagneBleu=false;
 			gagneRouge=false;
 		}
 		else if(chateauBleu.getPV()<=0) {
-			System.out.println("Equipe Rouge gagne !!");
+			//System.out.println("Equipe Rouge gagne !!");
 			partieFini=true;
 			gagneBleu=false;
 			gagneRouge=true;
 		}
 		else {
-			System.out.println("Equipe Bleue gagne !!");
+			//System.out.println("Equipe Bleue gagne !!");
 			partieFini=true;
 			gagneBleu=true;
 			gagneRouge=false;
@@ -131,6 +131,4 @@ public class Jeu extends Game{
 	public void setGagneBleu(boolean gagneBleu) {
 		this.gagneBleu = gagneBleu;
 	}
-	
 }
->>>>>>> 13a49dc416b75f86fd8f57dbad9dd237f861e140

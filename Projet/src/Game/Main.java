@@ -26,24 +26,28 @@ public class Main {
 		int rouge = 0;
 		ArrayList<Jeu> list = new ArrayList<Jeu>();
 		ArrayList<Thread> thread = new ArrayList<Thread>();
-		System.out.println("Jeu");
 		for(int i=0; i<100; ++i) {
-			Plateau plateau = new Plateau("./src/Layout/Plateau.lay");
-			Jeu jeu = new Jeu(plateau, new StrategieRandom(plateau), new StrategieRandom(plateau),100);
-			Thread t1 = new Thread(jeu);
+			Plateau plateau = new Plateau("src/Layout/Plateau.lay");
+			list.add(new Jeu(plateau, new StrategieRandom(plateau), new StrategieRandom(plateau),100));
+		}
+		for (int i=0; i<100; ++i) {
+			Thread t1 = new Thread(list.get(i));
+			thread.add(t1);
 			t1.start();
+		}
+		for (int i=0; i<100; ++i) {
 			try{
-				t1.join();
+				thread.get(i).join();
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
-			if(jeu.isPartieFini()) {
-				if(jeu.isGagneBleu()) {
+			if(list.get(i).isPartieFini()) {
+				if(list.get(i).isGagneBleu()) {
 					++bleu;
 					System.out.println("Partie "+i+" victoire bleu");
 				}
 				else {
-					if(jeu.isGagneRouge()) {
+					if(list.get(i).isGagneRouge()) {
 						++rouge;
 						System.out.println("Partie "+i+" victoire rouge");
 					}
@@ -54,6 +58,6 @@ public class Main {
 			}
 		}
 		int egalite = 100-bleu+rouge;
-		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalité : "+egalite);
+		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
 	}
 }
