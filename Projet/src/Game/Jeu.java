@@ -42,10 +42,17 @@ public class Jeu extends Game{
 		}
 	}
 	
+	public void notifyObserver() {
+		for (Observer ob : super.getObs()) {
+            ob.update(plateau);
+        }
+	}
+	
 	public void partie() {
 		System.out.println("Debut de partie");
 		afficheCoordonneesTroupes();
 		int tour = 0;
+		//notifyObserver();
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
 			++tour;
 			if(bleu==0) {
@@ -59,6 +66,7 @@ public class Jeu extends Game{
 						}
 					}
 					System.out.println("Fin tour bleu");
+					//notifyObserver();
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
@@ -78,6 +86,7 @@ public class Jeu extends Game{
 						}
 					}
 					System.out.println("Fin tour rouge");
+					//notifyObserver();
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
@@ -133,3 +142,4 @@ public class Jeu extends Game{
 	}
 	
 }
+>>>>>>> 13a49dc416b75f86fd8f57dbad9dd237f861e140
