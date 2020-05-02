@@ -28,7 +28,7 @@ public class Main {
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<100; ++i) {
 			Plateau plateau = new Plateau("src/Layout/Plateau.lay");
-			list.add(new Jeu(plateau, new StrategieRandom(plateau), new StrategieRandom(plateau),100));
+			list.add(new Jeu(plateau, new StrategieIntelligente(plateau), new StrategieRandom(plateau),200));
 		}
 		for (int i=0; i<100; ++i) {
 			Thread t1 = new Thread(list.get(i));
@@ -57,7 +57,7 @@ public class Main {
 				}
 			}
 		}
-		int egalite = 100-bleu+rouge;
+		int egalite = 100-(bleu+rouge);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
 	}
 }
