@@ -9,7 +9,8 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Plateau plateau = new Plateau("src/Layout/Plateau.lay");
-		getAverageReward(200,new StrategieRandom(plateau), new StrategieRandom(plateau), plateau);
+		//getAverageReward(200,new StrategieRandom(plateau), new StrategieRandom(plateau), plateau);
+		getAverageReward2(200, plateau);
 		//vizualise(100,new StrategieIntelligente(plateau), new StrategieRandom(plateau),plateau);
 	}
 
@@ -17,8 +18,6 @@ public class Main {
 		int bleu = 0;
 		int rouge = 0;
 		int egalite = 0;
-		ArrayList<Jeu> list = new ArrayList<Jeu>();
-		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<100; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
 			stratbleue.setPlateau(plateau);
@@ -47,7 +46,7 @@ public class Main {
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
 	}
 	
-	public static void getAverageReward2(int nbtour, Strategie stratbleue, Strategie stratrouge, Plateau plat) {
+	public static void getAverageReward2(int nbtour, Plateau plat) {
 		int bleu = 0;
 		int rouge = 0;
 		int egalite = 0;
@@ -55,8 +54,8 @@ public class Main {
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<100; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
-			stratbleue = new StrategieRandom(plateau);
-			stratrouge = new StrategieRandom(plateau);
+			Strategie stratbleue = new StrategieRandom(plateau);
+			Strategie stratrouge = new StrategieRandom(plateau);
 			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, true);
 			list.add(jeu);
 		}
