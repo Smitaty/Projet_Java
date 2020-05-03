@@ -1357,6 +1357,18 @@ public class Plateau extends JPanel{
 		}
 		return false;
 	}
+	
+	public boolean rocherEn(Coordonnees coor) {
+		int x = coor.getX();
+		int y = coor.getY();
+		for(int i=0; i<rochers.size(); ++i) {
+			int ax = rochers.get(i).getX();
+			int ay = rochers.get(i).getY();
+			if(x==ax && y==ay)
+				return true;
+		}
+		return false;
+	}
 
 	public void setArbres(ArrayList<Coordonnees> arbres) {
 		this.arbres = arbres;

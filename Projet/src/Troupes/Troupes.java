@@ -8,6 +8,7 @@ public abstract class Troupes {
 	private String type;
 	private Direction direction;
 	private TroupesAction action;
+	private int reward;
 
 	public Troupes(int pv, int degats, Coordonnees pos, String t,Direction dir) {
 		PV = pv;
@@ -16,6 +17,7 @@ public abstract class Troupes {
 		type=t;
 		direction=dir;
 		action = TroupesAction.STOP;
+		this.reward=0;
 	}
 	
 		
@@ -32,6 +34,7 @@ public abstract class Troupes {
 	public String getType() {return type;}
 	public Direction getDirection() {return direction;}
 	public TroupesAction getAction() {return action;}
+	public int getReward() {return reward;}
 	
 	// Setters
 	public void setPV(int pv) {PV=pv;}
@@ -40,4 +43,5 @@ public abstract class Troupes {
 	public void setType(String type) {this.type = type;}
 	public void setDirection(Direction dir) {direction=dir;}
 	public void setAction(TroupesAction action) {this.action = action;}
+	public void setReward(int r) {this.reward=r;}
 }

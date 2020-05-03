@@ -486,11 +486,25 @@ public abstract class Strategie {
 			case ATTACK1:
 				Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu(troupe));
 				cible.setPV(cible.getPV()-troupe.getDegats());
-				if(cible.getPV()<=0 && cible.getType()!="Chateau") {
-					if(estBleu)
-						plateau.getUnite_rouge().remove(cible);
-					else
-						plateau.getUnite_bleue().remove(cible);
+				if(cible.getType()!="Chateau") {
+					if(cible.getPV()<=0) {
+						troupe.setReward(troupe.getReward()+20);
+					}
+					else {
+						troupe.setReward(troupe.getReward()+10);
+					}
+				}
+				else {
+					if(cible.getPV()<=0) {
+						troupe.setReward(troupe.getReward()+50);
+						/*if(estBleu)
+							System.out.println("Château rouge détruit !");
+						else
+							System.out.println("Château bleu détruit !");*/
+					}
+					else {
+						troupe.setReward(troupe.getReward()+30);
+					}
 				}
 				/*if(!esquive() || cible.getType()=="Chateau") {
 					System.out.println(troupe+" attaque "+cible);
@@ -506,18 +520,6 @@ public abstract class Strategie {
 							System.out.println("Château bleu détruit !");
 					}
 				}*/
-				break;
-			case ATTACK2:
-				Troupes cible2 = chercheCible(troupe,troupe.getDirection(),true);
-				cible2.setPV(cible2.getPV()-troupe.getDegats()+20);
-				if(cible2.getPV()<=0) {
-					if(cible2.getType()=="Chateau") {
-						if(estBleu)
-							System.out.println("Château rouge détruit !");
-						else
-							System.out.println("Château bleu détruit !");
-					}
-				}
 				break;
 			case STOP:
 				break;

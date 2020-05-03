@@ -20,6 +20,7 @@ public class Jeu extends Game{
 	private boolean gagneBleu;
 	private boolean batch;
 	private int nbTours;
+	private int reward;
 	
 	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge, int nbTours, boolean batch) {
 		super();
@@ -55,6 +56,7 @@ public class Jeu extends Game{
 		System.out.println("Debut de partie");
 		afficheCoordonneesTroupes();
 		int tour = 0;
+		reward=0;
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
 			++tour;
 			System.out.println("Tour : "+tour);
@@ -65,7 +67,8 @@ public class Jeu extends Game{
 							TroupesAction action = strategieBleu.coup(troupe);
 							System.out.println(troupe.toString()+", action="+action);
 							strategieBleu.jouer(action, troupe,true);
-							
+							reward+=troupe.getReward();
+							EnleveTroupeMorte(true);
 						}
 					}
 					System.out.println("Fin tour bleu");
@@ -130,7 +133,8 @@ public class Jeu extends Game{
 							TroupesAction action = strategieBleu.coup(troupe);
 							//System.out.println(troupe.toString()+", action="+action);
 							strategieBleu.jouer(action, troupe,true);
-							
+							reward+=troupe.getReward();
+							EnleveTroupeMorte(true);
 						}
 					}
 				}
@@ -165,7 +169,30 @@ public class Jeu extends Game{
 			gagneRouge=false;
 		}
 	}
+	
+	public void EnleveTroupeMorte(boolean estBleu) {
+		if(!estBleu) {
+			for(int i=0; i<TroupesBleues.size(); ++i) {
+				if(TroupesBleues.get(i).getPV()<=0 && TroupesBleues.get(i).getType()!="Chateau")
+					this.TroupesBleues.remove(i);
+			}
+		}
+		else {
+			for(int i=0; i<TroupesRouges.size(); ++i) {
+				if(TroupesRouges.get(i).getPV()<=0 && TroupesRouges.get(i).getType()!="Chateau")
+					this.TroupesRouges.remove(i);
+			}
+		}
+	}
+	
+	public int getReward() {
+		return this.reward;
+	}
 
+	public Plateau getPlateau() {
+		return this.plateau;
+	}
+	
 	public boolean isPartieFini() {
 		return partieFini;
 	}
