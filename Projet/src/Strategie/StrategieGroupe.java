@@ -276,11 +276,9 @@ public class StrategieGroupe extends Strategie{
 		
 		for(Troupes unite : ennemi) {
 			if(unite.getType() == "Chateau") {
-				System.out.println("Chateau trouve");
 				return unite.getPosition();
 			}
 		}
-		System.out.println("Chateau non trouve");
 
 		return null;
 	}
@@ -316,8 +314,6 @@ public class StrategieGroupe extends Strategie{
 				}
 			}
 		}
-		if(chevalierPlusProche!=null)
-			System.out.println("Chevalier plus proche = " + chevalierPlusProche.toString());
 		return chevalierPlusProche;
 	}
 	
@@ -347,25 +343,6 @@ public class StrategieGroupe extends Strategie{
 					if(pos.getX() == unite.getPosition().getX() && pos.getY() == unite.getPosition().getY()-3) return true;
 				}	
 				else if(unite.getType() == "Mage") {
-					System.out.println("*************************************postest x = " + pos.getX() + "    y = " + pos.getY());
-
-					System.out.println("position mage : x=" + unite.getPosition().getX() + " y=" + unite.getPosition().getY());
-					System.out.println("MAGE ATQ POSSIBLES : ");
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()+1));
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()+2));
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()+3));
-
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()-1));
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()-2));
-					System.out.println("X = " +unite.getPosition().getX() + " Y = " + (unite.getPosition().getY()-3));
-					
-					System.out.println("X = " +(unite.getPosition().getX()+1) + " Y = " + unite.getPosition().getY());
-					System.out.println("X = " +(unite.getPosition().getX()+2) + " Y = " + unite.getPosition().getY());
-					System.out.println("X = " +(unite.getPosition().getX()+3) + " Y = " + unite.getPosition().getY());
-					
-					System.out.println("X = " +(unite.getPosition().getX()-1) + " Y = " + unite.getPosition().getY());
-					System.out.println("X = " +(unite.getPosition().getX()-2) + " Y = " + unite.getPosition().getY());
-					System.out.println("X = " +(unite.getPosition().getX()-3) + " Y = " + unite.getPosition().getY());
 					if(pos.getX() == unite.getPosition().getX()+1 && pos.getY() == unite.getPosition().getY()) return true;
 					if(pos.getX() == unite.getPosition().getX()-1 && pos.getY() == unite.getPosition().getY()) return true;
 					if(pos.getX() == unite.getPosition().getX()+2 && pos.getY() == unite.getPosition().getY()) return true;
@@ -417,7 +394,6 @@ public class StrategieGroupe extends Strategie{
 				}
 			}
 		}
-		System.out.println(ennemiPlusProche.toString());
 		return ennemiPlusProche;
 	}
 	

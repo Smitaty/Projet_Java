@@ -18,9 +18,10 @@ public class Jeu extends Game{
 	private boolean partieFini = false;
 	private boolean gagneRouge;
 	private boolean gagneBleu;
+	private boolean batch;
 	private int nbTours;
 	
-	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge, int nbTours) {
+	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge, int nbTours, boolean batch) {
 		super();
 		this.plateau = plateau;
 		TroupesBleues = plateau.getUnite_bleue();
@@ -31,6 +32,7 @@ public class Jeu extends Game{
 		strategieRouge=stratRouge;
 		bleu = new Random().nextInt(2);
 		this.nbTours = nbTours;
+		this.batch=batch;
 	}
 	
 	public void afficheCoordonneesTroupes() {
@@ -43,11 +45,84 @@ public class Jeu extends Game{
 	}
 	
 	public void partie() {
-		//System.out.println("Debut de partie");
-		//afficheCoordonneesTroupes();
+		if(batch)
+			partieBatch();
+		else
+			partieIG();
+	}
+	
+	public void partieIG() {
+		System.out.println("Debut de partie");
+		afficheCoordonneesTroupes();
 		int tour = 0;
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
 			++tour;
+			System.out.println("Tour : "+tour);
+			if(bleu==0) {
+				if(TroupesBleues.size()>1) {
+					for(Troupes troupe : TroupesBleues) {
+						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+							TroupesAction action = strategieBleu.coup(troupe);
+							System.out.println(troupe.toString()+", action="+action);
+							strategieBleu.jouer(action, troupe,true);
+							
+						}
+					}
+					System.out.println("Fin tour bleu");
+					plateau.repaint();
+					try {
+						Thread.sleep(3000);
+					}catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
+				bleu=1;
+			}
+			else {
+				if(TroupesRouges.size()>1) {
+					for(Troupes troupe : TroupesRouges) {
+						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
+							TroupesAction action = strategieRouge.coup(troupe);
+							System.out.println(troupe.toString()+", action="+action);
+							strategieRouge.jouer(action, troupe,false);
+						}
+					}
+					System.out.println("Fin tour rouge");
+					plateau.repaint();
+					try {
+						Thread.sleep(3000);
+					}catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
+				bleu=0;
+			}
+		}
+		if(tour >= this.nbTours) {
+			System.out.println("Match nul, nombre de tours max atteint.");
+			partieFini=true;
+			gagneBleu=false;
+			gagneRouge=false;
+		}
+		else if(chateauBleu.getPV()<=0) {
+			System.out.println("Equipe Rouge gagne !!");
+			partieFini=true;
+			gagneBleu=false;
+			gagneRouge=true;
+		}
+		else {
+			System.out.println("Equipe Bleue gagne !!");
+			partieFini=true;
+			gagneBleu=true;
+			gagneRouge=false;
+		}
+	}
+	
+	public void partieBatch() {
+		int tour = 0;
+		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
+			++tour;
+			//System.out.println("Tour : "+tour+" "+chateauBleu.getPV()+" "+chateauRouge.getPV());
 			if(bleu==0) {
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
@@ -58,13 +133,6 @@ public class Jeu extends Game{
 							
 						}
 					}
-					/*System.out.println("Fin tour bleu");
-					plateau.repaint();
-					try {
-						Thread.sleep(3000);
-					}catch(Exception e) {
-						System.out.println(e.getMessage());
-					}*/
 				}
 				bleu=1;
 			}
@@ -77,31 +145,21 @@ public class Jeu extends Game{
 							strategieRouge.jouer(action, troupe,false);
 						}
 					}
-					/*System.out.println("Fin tour rouge");
-					plateau.repaint();
-					try {
-						Thread.sleep(3000);
-					}catch(Exception e) {
-						System.out.println(e.getMessage());
-					}*/
 				}
 				bleu=0;
 			}
 		}
 		if(tour >= this.nbTours) {
-			//System.out.println("Match nul, nombre de tours max atteint.");
 			partieFini=true;
 			gagneBleu=false;
 			gagneRouge=false;
 		}
 		else if(chateauBleu.getPV()<=0) {
-			//System.out.println("Equipe Rouge gagne !!");
 			partieFini=true;
 			gagneBleu=false;
 			gagneRouge=true;
 		}
 		else {
-			//System.out.println("Equipe Bleue gagne !!");
 			partieFini=true;
 			gagneBleu=true;
 			gagneRouge=false;

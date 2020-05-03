@@ -13,7 +13,7 @@ public abstract class Strategie {
 	}
 	
 	public abstract TroupesAction coup(Troupes troupe);
-	
+		
 	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
 		for(int i=0; i<coups.size(); ++i) {
 			if(coups.get(i)==action) {
@@ -485,13 +485,20 @@ public abstract class Strategie {
 				break;
 			case ATTACK1:
 				Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu(troupe));
-				if(!esquive() || cible.getType()=="Chateau") {
-					//System.out.println(troupe+" attaque "+cible);
+				cible.setPV(cible.getPV()-troupe.getDegats());
+				if(cible.getPV()<=0 && cible.getType()!="Chateau") {
+					if(estBleu)
+						plateau.getUnite_rouge().remove(cible);
+					else
+						plateau.getUnite_bleue().remove(cible);
+				}
+				/*if(!esquive() || cible.getType()=="Chateau") {
+					System.out.println(troupe+" attaque "+cible);
 					cible.setPV(cible.getPV()-troupe.getDegats());
 				}
-				//else 
-					//System.out.println(cible+" a esquivé");
-				/*if(cible.getPV()<=0) {
+				else 
+					System.out.println(cible+" a esquivé");
+				if(cible.getPV()<=0) {
 					if(cible.getType()=="Chateau") {
 						if(estBleu)
 							System.out.println("Château rouge détruit !");

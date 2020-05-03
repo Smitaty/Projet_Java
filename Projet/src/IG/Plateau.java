@@ -1,6 +1,5 @@
 package IG;
 
-import org.apache.commons.lang3.SerializationUtils;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.RescaleOp;
@@ -12,11 +11,12 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 import Troupes.*;
 
-public class Plateau extends JPanel implements Serializable{
+public class Plateau extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	String path ="src/Image/";
-
+	String file;
+	
 	private ArrayList<Troupes> unite_rouge;
 	private ArrayList<Troupes> unite_bleue;
 	private ArrayList<Coordonnees> arbres;
@@ -35,6 +35,7 @@ public class Plateau extends JPanel implements Serializable{
 	int cptProjectile=1;
 	
 	public Plateau(String file) {
+		this.file=file;
 		try {
 			InputStream flux =new FileInputStream(file); 
 			InputStreamReader lecture =new InputStreamReader(flux);
@@ -896,7 +897,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"Gauche.png"));
 										g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y , (int)stepx, (int)stepy, this);
@@ -932,7 +933,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"Droite.png"));
 										g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
@@ -1025,7 +1026,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"FeuGauche.png"));
 										g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
@@ -1053,7 +1054,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"FeuDroite.png"));
 										g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
@@ -1141,7 +1142,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"FeuGauche.png"));
 										g.drawImage(img, (int)(pos_x - (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
@@ -1169,7 +1170,7 @@ public class Plateau extends JPanel implements Serializable{
 							if(cpt>=3) {
 								Troupes cible = chercheCible(troupe,troupe.getDirection(),estBleu);
 								if(cible!=null) {
-									int range = Math.abs(cible.getPosition().getY()-y);
+									int range = Math.abs(cible.getPosition().getX()-x);
 									if(cptProjectile<=range) {
 										img = ImageIO.read(new File(path+"FeuDroite.png"));
 										g.drawImage(img, (int)(pos_x + (stepx * cptProjectile)), (int)pos_y, (int)stepx, (int)stepy, this);
@@ -1324,11 +1325,6 @@ public class Plateau extends JPanel implements Serializable{
 			unite.setAction(TroupesAction.STOP);
 		}
 	}
-
-	public Plateau clone() {
-		Plateau nouv_plateau = SerializationUtils.clone(this);
-		return nouv_plateau;
-	}
 	
 	public ArrayList<Troupes> getUnite_rouge() {
 		return unite_rouge;
@@ -1434,6 +1430,10 @@ public class Plateau extends JPanel implements Serializable{
 			}
 		}
 		return null;
+	}
+	
+	public String getFile() {
+		return this.file;
 	}
 	
 }
