@@ -31,7 +31,7 @@ public class SparseVector implements Iterable<Integer>, Serializable
 	
 	public void setValue(int i,double v)
 	{
-		assert ((i>0) && (i<size));
+		assert ((i>=0) && (i<size));
 		if (v==0)
 		{
 			if (values.containsKey(i))
