@@ -1,5 +1,6 @@
 package Strategie;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import IG.Plateau;
@@ -20,55 +21,25 @@ public class StrategiePerceptron extends Strategie{
 		SparseVector etat = encodageEtat(plateau,troupe);
 		double maxScore = 0;
 		TroupesAction meilleureAction = TroupesAction.STOP;
-		
-		for(TroupesAction action : TroupesAction.values()) {
+		ArrayList<TroupesAction> coups = super.coupsPossibles(troupe);
+		for(TroupesAction action : coups) {
 			double score = perceptron.getScore(encodageAction(etat,action));
-			System.out.println(action+" "+score);
 			if(score>maxScore || meilleureAction==TroupesAction.STOP) {
-				if(action==TroupesAction.ATTACK1) {
-					if(ennemiAPortee(troupe)) {
-						maxScore = score;
-						meilleureAction = action;
-					}
-				}
-				else {
-					maxScore = score;
-					meilleureAction = action;
-				}
+				maxScore = score;
+				meilleureAction = action;
 			}
 			else {
 				if(score==maxScore) {
-					if(action==TroupesAction.ATTACK1) {
-						if(ennemiAPortee(troupe)) {
-							Random r = new Random();
-							int res = r.nextInt(2);
-							if(res==1) {
-								maxScore = score;
-								meilleureAction = action;
-							}
-						}
-					}
-					else {
-						if(action!=TroupesAction.STOP) {
-							if(meilleureAction==TroupesAction.STOP) {
-								maxScore = score;
-								meilleureAction = action;
-							}
-							else {
-								Random r = new Random();
-								int res = r.nextInt(2);
-								if(res==1) {
-									maxScore = score;
-									meilleureAction = action;
-								}
-							}
-						}
+					Random r = new Random();
+					int res = r.nextInt(2);
+					if(res==1) {
+						maxScore = score;
+						meilleureAction = action;
 					}
 				}
 			}
 		}
 		troupe.setReward(maxScore);
-		System.out.println(maxScore+" "+meilleureAction);
 		return meilleureAction;
 	}
 	
@@ -164,33 +135,5 @@ public class StrategiePerceptron extends Strategie{
 			break;
 		}
 		return vecteur;
-	}
-	
-	public boolean ennemiAPortee(Troupes troupe) {
-		int x = troupe.getPosition().getX();
-		int y = troupe.getPosition().getY();
-		for(Troupes ennemi : plateau.getUnite_rouge()) {
-			int ex = ennemi.getPosition().getX();
-			int ey = ennemi.getPosition().getY();
-			switch(troupe.getDirection()) {
-				case NORD:
-					if(ex==x && ey==y-1)
-						return true;
-					break;
-				case SUD:
-					if(ex==x && ey==y+1)
-						return true;
-					break;
-				case OUEST:
-					if(ex==x-1 && ey==y)
-						return true;
-					break;
-				case EST:
-					if(ex==x+1 && ey==y)
-						return true;
-					break;
-			}
-		}
-		return false;
 	}
 }

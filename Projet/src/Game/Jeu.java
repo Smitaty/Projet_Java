@@ -133,7 +133,6 @@ public class Jeu extends Game{
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action = troupe.getStrategie().coup(troupe);
 							troupe.getStrategie().jouer(action, troupe,true);
-							System.out.println(troupe.toString()+", strategie="+troupe.getStrategie().getClass()+", action="+action);
 							reward+=troupe.getReward();
 							EnleveTroupeMorte(true);
 						}
