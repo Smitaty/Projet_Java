@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import IG.Plateau;
-import Perceptron.Perceptron;
-import Perceptron.SparseVector;
+import Perceptron.*;
 import Troupes.*;
 
 public class StrategiePerceptron extends Strategie{

@@ -15,7 +15,6 @@ public class Jeu extends Game{
 	private Strategie strategieBleu;
 	private Strategie strategieRouge;
 	private int bleu;
-	private int estPerceptron;
 	private boolean partieFini = false;
 	private boolean gagneRouge;
 	private boolean gagneBleu;
@@ -31,7 +30,6 @@ public class Jeu extends Game{
 		chateauBleu = plateau.getChateau(TroupesBleues);
 		chateauRouge = plateau.getChateau(TroupesRouges);
 		strategieBleu=stratBleu;
-		metStrategie();
 		strategieRouge=stratRouge;
 		bleu = new Random().nextInt(2);
 		this.nbTours = nbTours;
@@ -61,14 +59,13 @@ public class Jeu extends Game{
 		reward=0;
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
 			++tour;
-			System.out.println("Tour : "+tour);
 			if(bleu==0) {
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = troupe.getStrategie().coup(troupe);
-							System.out.println(troupe.toString()+", strategie="+troupe.getStrategie().getClass()+", action="+action);
-							troupe.getStrategie().jouer(action, troupe,true);
+							TroupesAction action = strategieBleu.coup(troupe);
+							System.out.println(troupe.toString()+", action="+action);
+							strategieBleu.jouer(action, troupe,true);
 							reward+=troupe.getReward();
 							EnleveTroupeMorte(true);
 						}
@@ -131,8 +128,8 @@ public class Jeu extends Game{
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = troupe.getStrategie().coup(troupe);
-							troupe.getStrategie().jouer(action, troupe,true);
+							TroupesAction action = strategieBleu.coup(troupe);
+							strategieBleu.jouer(action, troupe,true);
 							reward+=troupe.getReward();
 							EnleveTroupeMorte(true);
 						}
@@ -181,26 +178,6 @@ public class Jeu extends Game{
 				if(TroupesRouges.get(i).getPV()<=0 && TroupesRouges.get(i).getType()!="Chateau")
 					this.TroupesRouges.remove(i);
 			}
-		}
-	}
-	
-	public void metStrategie() {
-		Random r = new Random();
-		this.estPerceptron = r.nextInt(this.TroupesBleues.size());
-		while(this.TroupesBleues.get(estPerceptron).getType()=="Chateau") {
-			estPerceptron = r.nextInt(this.TroupesBleues.size());
-		}
-		int cpt=0;
-		for(Troupes troupe : this.TroupesBleues) {
-			if(troupe.getType()!="Chateau") {
-				if(cpt==estPerceptron) {
-					troupe.setStrategie(new StrategiePerceptron(this.plateau));
-				}
-				else {
-					troupe.setStrategie(strategieBleu);
-				}
-			}
-			++cpt;
 		}
 	}
 	

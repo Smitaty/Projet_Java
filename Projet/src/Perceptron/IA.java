@@ -52,7 +52,7 @@ public class IA {
 		double avg = somme/100;
 		System.out.println(somme);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("Récompense moyenne : "+avg);
+		System.out.println("RÃ©compense moyenne : "+avg);
 	}
 	
 	public ArrayList<Jeu> getAverageReward2(int nbtour, Plateau plat, int nbPerceptrons, int nbMeilleurs) {
@@ -64,7 +64,7 @@ public class IA {
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<nbPerceptrons; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
-			Strategie stratbleue = new StrategieRandom(plateau);
+			Strategie stratbleue = new StrategiePerceptron(plateau);
 			Strategie stratrouge = new StrategieRandom(plateau);
 			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, true);
 			list.add(jeu);
@@ -95,9 +95,8 @@ public class IA {
 			somme+=list.get(i).getReward();
 		}
 		double avg = somme/nbPerceptrons;
-		System.out.println(somme);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("Récompense moyenne : "+avg);
+		System.out.println("RÃ©compense moyenne : "+avg);
 		
 		ArrayList<Jeu> listReturn = new ArrayList<Jeu>();
 		for(int i=0; i<nbMeilleurs; i++) {
@@ -105,8 +104,7 @@ public class IA {
 			listReturn.add(meilleurJeu);
 			list.remove(meilleurJeu);
 		}
-		System.out.println("Meilleur score = " + getMeilleurScore(list));
-		
+		System.out.println("Meilleur score = " + getMeilleurScore(listReturn));
 		return listReturn;
 		
 	}
@@ -120,7 +118,7 @@ public class IA {
 	}
 	
 	public double getMeilleurScore(ArrayList<Jeu> jeux) {
-		double meilleur = 0;
+		double meilleur = jeux.get(0).getReward();
 		for(int i=1; i<jeux.size(); i++) {
 			if(jeux.get(i).getReward() > meilleur)
 				meilleur = jeux.get(i).getReward();
@@ -131,7 +129,6 @@ public class IA {
 	// tailleMax = N perceptrons dans la population
 	public ArrayList<Jeu> rechercheAleatoire(int tailleMax, Plateau plateau){
 		ArrayList<Jeu> meilleursJeux = new ArrayList<Jeu>();
-		
 		while(meilleursJeux.size() < tailleMax) {
 			int nbPerceptrons = tailleMax - meilleursJeux.size(); // N - M
 			int tailleListAverage = 10;
@@ -139,13 +136,9 @@ public class IA {
 			for(int i=0; i < tailleListAverage; i++) {
 				meilleursJeux.add(jeux.get(i));
 			}
-			
-			
 		}
 		return meilleursJeux;
 	}
-	
-
 	
 	public void vizualise(int nbtour,Plateau plateau) {
 		ViewGame view = new ViewGame(plateau);
