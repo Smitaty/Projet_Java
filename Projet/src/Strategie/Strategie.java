@@ -2,6 +2,8 @@ package Strategie;
 
 import Troupes.*;
 import IG.Plateau;
+import Perceptron.SparseVector;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -498,9 +500,9 @@ public abstract class Strategie {
 					if(cible.getPV()<=0) {
 						troupe.setReward(troupe.getReward()+50);
 						/*if(estBleu)
-							System.out.println("ChÃ¢teau rouge dÃ©truit !");
+							System.out.println("Château rouge détruit !");
 						else
-							System.out.println("ChÃ¢teau bleu dÃ©truit !");*/
+							System.out.println("Château bleu détruit !");*/
 					}
 					else {
 						troupe.setReward(troupe.getReward()+30);
@@ -511,13 +513,13 @@ public abstract class Strategie {
 					cible.setPV(cible.getPV()-troupe.getDegats());
 				}
 				else 
-					System.out.println(cible+" a esquivÃ©");
+					System.out.println(cible+" a esquivé");
 				if(cible.getPV()<=0) {
 					if(cible.getType()=="Chateau") {
 						if(estBleu)
-							System.out.println("ChÃ¢teau rouge dÃ©truit !");
+							System.out.println("Château rouge détruit !");
 						else
-							System.out.println("ChÃ¢teau bleu dÃ©truit !");
+							System.out.println("Château bleu détruit !");
 					}
 				}*/
 				break;
@@ -623,5 +625,8 @@ public abstract class Strategie {
 		this.plateau = plateau;
 	}
 	
+	public abstract boolean estPerceptron();
 	
+	public abstract SparseVector encodageEtat(Plateau plateau, Troupes troupe);
+
 }

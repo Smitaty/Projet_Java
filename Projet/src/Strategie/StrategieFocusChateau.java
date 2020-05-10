@@ -1,6 +1,7 @@
 package Strategie;
 
 import IG.Plateau;
+import Perceptron.SparseVector;
 import Troupes.*;
 import java.util.ArrayList;
 /*
@@ -74,7 +75,9 @@ public class StrategieFocusChateau extends Strategie{
 	}
 	
 	
+	public boolean estPerceptron() {return false;}
 	
+	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
 	
 	
 	

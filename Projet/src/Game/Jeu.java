@@ -3,6 +3,7 @@ package Game;
 import IG.Plateau;
 import Strategie.*;
 import Troupes.*;
+import Perceptron.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class Jeu extends Game{
 	private boolean batch;
 	private int nbTours;
 	private double reward;
+	private ArrayList<Quadruplet> listQuad;
 	
 	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge, int nbTours, boolean batch) {
 		super();
@@ -34,6 +36,7 @@ public class Jeu extends Game{
 		bleu = new Random().nextInt(2);
 		this.nbTours = nbTours;
 		this.batch=batch;
+		this.listQuad = new ArrayList<Quadruplet>();
 	}
 	
 	public void afficheCoordonneesTroupes() {
@@ -132,6 +135,24 @@ public class Jeu extends Game{
 							strategieBleu.jouer(action, troupe,true);
 							reward+=troupe.getReward();
 							EnleveTroupeMorte(true);
+							if(strategieBleu.estPerceptron()) {
+								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
+								if(etatInit == null) System.out.println("ERREUR ----------------------");
+								TroupesAction action = troupe.getStrategie().coup(troupe);
+								troupe.getStrategie().jouer(action, troupe,true);
+								reward+=troupe.getReward();
+								EnleveTroupeMorte(true);
+							
+								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
+								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
+								listQuad.add(quad);
+							}
+							else {
+								TroupesAction action = troupe.getStrategie().coup(troupe);
+								troupe.getStrategie().jouer(action, troupe,true);
+								reward+=troupe.getReward();
+								EnleveTroupeMorte(true);
+							}
 						}
 					}
 				}
@@ -141,8 +162,18 @@ public class Jeu extends Game{
 				if(TroupesRouges.size()>1) {
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = strategieRouge.coup(troupe);
-							strategieRouge.jouer(action, troupe,false);
+							if(strategieRouge.estPerceptron()) {
+								SparseVector etatInit = strategieRouge.encodageEtat(plateau, troupe);
+								TroupesAction action = strategieRouge.coup(troupe);
+								strategieRouge.jouer(action, troupe,false);
+								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
+								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
+								listQuad.add(quad);
+							}
+							else {
+								TroupesAction action = strategieRouge.coup(troupe);
+								strategieRouge.jouer(action, troupe,false);
+							}
 						}
 					}
 				}
@@ -211,5 +242,9 @@ public class Jeu extends Game{
 
 	public void setGagneBleu(boolean gagneBleu) {
 		this.gagneBleu = gagneBleu;
+	}
+	
+	public ArrayList<Quadruplet> getListQuad(){
+		return listQuad;
 	}
 }
