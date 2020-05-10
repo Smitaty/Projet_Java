@@ -137,7 +137,6 @@ public class Jeu extends Game{
 							EnleveTroupeMorte(true);
 							if(strategieBleu.estPerceptron()) {
 								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
-								if(etatInit == null) System.out.println("ERREUR ----------------------");
 								TroupesAction action = troupe.getStrategie().coup(troupe);
 								troupe.getStrategie().jouer(action, troupe,true);
 								reward+=troupe.getReward();

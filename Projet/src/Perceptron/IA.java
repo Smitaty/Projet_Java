@@ -52,7 +52,7 @@ public class IA {
 		double avg = somme/100;
 		System.out.println(somme);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("Récompense moyenne : "+avg);
+		System.out.println("R�compense moyenne : "+avg);
 	}
 	
 	public ArrayList<Jeu> getAverageReward2(int nbtour, Plateau plat, int nbPerceptrons, int nbMeilleurs) {
@@ -64,7 +64,7 @@ public class IA {
 		ArrayList<Thread> thread = new ArrayList<Thread>();
 		for(int i=0; i<nbPerceptrons; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
-			Strategie stratbleue = new StrategiePerceptron(plateau);
+			Strategie stratbleue = new StrategieRandom(plateau);
 			Strategie stratrouge = new StrategieRandom(plateau);
 			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, true);
 			list.add(jeu);
@@ -95,8 +95,9 @@ public class IA {
 			somme+=list.get(i).getReward();
 		}
 		double avg = somme/nbPerceptrons;
+		System.out.println(somme);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("Récompense moyenne : "+avg);
+		System.out.println("R�compense moyenne : "+avg);
 		
 		ArrayList<Jeu> listReturn = new ArrayList<Jeu>();
 		for(int i=0; i<nbMeilleurs; i++) {
@@ -104,7 +105,8 @@ public class IA {
 			listReturn.add(meilleurJeu);
 			list.remove(meilleurJeu);
 		}
-		System.out.println("Meilleur score = " + getMeilleurScore(listReturn));
+		System.out.println("Meilleur score = " + getMeilleurScore(list));
+		
 		return listReturn;
 		
 	}
@@ -118,7 +120,7 @@ public class IA {
 	}
 	
 	public double getMeilleurScore(ArrayList<Jeu> jeux) {
-		double meilleur = jeux.get(0).getReward();
+		double meilleur = 0;
 		for(int i=1; i<jeux.size(); i++) {
 			if(jeux.get(i).getReward() > meilleur)
 				meilleur = jeux.get(i).getReward();
@@ -129,6 +131,7 @@ public class IA {
 	// tailleMax = N perceptrons dans la population
 	public ArrayList<Jeu> rechercheAleatoire(int tailleMax, Plateau plateau){
 		ArrayList<Jeu> meilleursJeux = new ArrayList<Jeu>();
+		
 		while(meilleursJeux.size() < tailleMax) {
 			int nbPerceptrons = tailleMax - meilleursJeux.size(); // N - M
 			int tailleListAverage = 10;
@@ -136,9 +139,13 @@ public class IA {
 			for(int i=0; i < tailleListAverage; i++) {
 				meilleursJeux.add(jeux.get(i));
 			}
+			
+			
 		}
 		return meilleursJeux;
 	}
+	
+
 	
 	public void vizualise(int nbtour,Plateau plateau) {
 		ViewGame view = new ViewGame(plateau);
@@ -152,5 +159,48 @@ public class IA {
 		Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, false);
 		Thread t1 = new Thread(jeu);
 		t1.start();
+	}
+
+	
+	public ArrayList<Quadruplet> getLearningSet(int nbTour, int nbSimulations, Plateau plat) {
+		ArrayList<Quadruplet> listQuad = new ArrayList<Quadruplet>();
+		
+		ArrayList<Jeu> list = new ArrayList<Jeu>();
+		ArrayList<Thread> thread = new ArrayList<Thread>();
+		for(int i=0; i<nbSimulations; ++i) {
+			Plateau plateau = new Plateau(plat.getFile());
+			Strategie stratbleue = new StrategiePerceptron(plateau);
+			Strategie stratrouge = new StrategieRandom(plateau);
+			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbTour, true);
+			list.add(jeu);
+		}
+		for(int i=0; i<nbSimulations; ++i) {
+			Thread t1 = new Thread(list.get(i));
+			thread.add(t1);
+			t1.start();
+		}
+		for(int i=0; i<nbSimulations; ++i) {
+			try{
+				thread.get(i).join();
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		 	listQuad.addAll(list.get(i).getListQuad());
+		}
+		System.out.println("Nombre de quadruplets = " + listQuad.size());
+		
+		return listQuad;
+	}
+	
+	public ArrayList<LabeledSet> genererExemples(int nbTour, int nbSimulations, Plateau plat){
+		ArrayList<LabeledSet> listLabel = new ArrayList<LabeledSet>();
+		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
+		int tailleVecteur = listQuad.get(0).getEtat().size();
+		for(int i = 0; i<listQuad.size(); i++) {
+			LabeledSet label = new LabeledSet(tailleVecteur);
+			label.addExample(listQuad.get(i).getEtat(), listQuad.get(i).getReward());
+		}
+		
+		return listLabel;
 	}
 }
