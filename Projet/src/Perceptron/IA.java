@@ -191,6 +191,18 @@ public class IA {
 		
 		return listQuad;
 	}
+	
+	public ArrayList<LabeledSet> genererExemples(int nbTour, int nbSimulations, Plateau plat){
+		ArrayList<LabeledSet> listLabel = new ArrayList<LabeledSet>();
+		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
+		int tailleVecteur = listQuad.get(0).getEtat().size();
+		for(int i = 0; i<listQuad.size(); i++) {
+			LabeledSet label = new LabeledSet(tailleVecteur);
+			label.addExample(listQuad.get(i).getEtat(), listQuad.get(i).getReward());
+		}
+		
+		return listLabel;
+	}
 
 
 
