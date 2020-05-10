@@ -136,7 +136,6 @@ public class Jeu extends Game{
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							if(strategieBleu.estPerceptron()) {
 								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
-								if(etatInit == null) System.out.println("ERREUR ----------------------");
 								TroupesAction action = troupe.getStrategie().coup(troupe);
 								troupe.getStrategie().jouer(action, troupe,true);
 								reward+=troupe.getReward();
