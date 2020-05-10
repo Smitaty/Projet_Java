@@ -136,4 +136,10 @@ public class StrategiePerceptron extends Strategie{
 		}
 		return vecteur;
 	}
+	
+	public boolean estPerceptron() {
+		return true;
+	}
+	
+	
 }

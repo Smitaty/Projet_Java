@@ -1,6 +1,7 @@
 package Strategie;
 
 import IG.Plateau;
+import Perceptron.SparseVector;
 import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,4 +27,8 @@ public class StrategieRandom extends Strategie{
 			return TroupesAction.STOP;
 		}
 	}
+	
+	public boolean estPerceptron() {return false;}
+	
+	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
 }

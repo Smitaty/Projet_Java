@@ -1,14 +1,15 @@
 package Strategie;
 
 import IG.Plateau;
+import Perceptron.SparseVector;
 import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * StratÃ©gie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'Ã©galitÃ©.
- * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournÃ©es mais elles peuvent se tourner 
- * dans la bonne direction si elles trouvent un ennemi Ã  portÃ©e.
+ * Stratégie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'égalité.
+ * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournées mais elles peuvent se tourner 
+ * dans la bonne direction si elles trouvent un ennemi à portée.
  */
 
 public class StrategiePlusProche extends Strategie{
@@ -137,4 +138,8 @@ public class StrategiePlusProche extends Strategie{
 		}
 		return ennemiPlusProche;
 	}
+	
+	public boolean estPerceptron() {return false;}
+	
+	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
 }
