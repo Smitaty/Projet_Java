@@ -66,14 +66,26 @@ public class Jeu extends Game{
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = strategieBleu.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
-							strategieBleu.jouer(action, troupe,true);
-							reward+=troupe.getReward();
-							EnleveTroupeMorte(true);
+							TroupesAction action;
+							if(strategieBleu.estPerceptron()) {
+								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
+								action = strategieBleu.coup(troupe);
+								strategieBleu.jouer(action, troupe);
+								reward+=troupe.getReward();
+								EnleveTroupeMorte(true);
+							
+								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
+								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
+								listQuad.add(quad);
+							}
+							else {
+								action = strategieBleu.coup(troupe);
+								strategieBleu.jouer(action, troupe);
+								reward+=troupe.getReward();
+								EnleveTroupeMorte(true);
+							}
 						}
 					}
-					System.out.println("Fin tour bleu");
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
@@ -87,12 +99,20 @@ public class Jeu extends Game{
 				if(TroupesRouges.size()>1) {
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = strategieRouge.coup(troupe);
-							System.out.println(troupe.toString()+", action="+action);
-							strategieRouge.jouer(action, troupe,false);
+							if(strategieRouge.estPerceptron()) {
+								SparseVector etatInit = strategieRouge.encodageEtat(plateau, troupe);
+								TroupesAction action = strategieRouge.coup(troupe);
+								strategieRouge.jouer(action, troupe);
+								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
+								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
+								listQuad.add(quad);
+							}
+							else {
+								TroupesAction action = strategieRouge.coup(troupe);
+								strategieRouge.jouer(action, troupe);
+							}
 						}
 					}
-					System.out.println("Fin tour rouge");
 					plateau.repaint();
 					try {
 						Thread.sleep(3000);
@@ -131,14 +151,11 @@ public class Jeu extends Game{
 				if(TroupesBleues.size()>1) {
 					for(Troupes troupe : TroupesBleues) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
-							TroupesAction action = strategieBleu.coup(troupe);
-							strategieBleu.jouer(action, troupe,true);
-							reward+=troupe.getReward();
-							EnleveTroupeMorte(true);
+							TroupesAction action;
 							if(strategieBleu.estPerceptron()) {
 								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
-								TroupesAction action = troupe.getStrategie().coup(troupe);
-								troupe.getStrategie().jouer(action, troupe,true);
+								action = strategieBleu.coup(troupe);
+								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
 								EnleveTroupeMorte(true);
 							
@@ -147,8 +164,8 @@ public class Jeu extends Game{
 								listQuad.add(quad);
 							}
 							else {
-								TroupesAction action = troupe.getStrategie().coup(troupe);
-								troupe.getStrategie().jouer(action, troupe,true);
+								action = strategieBleu.coup(troupe);
+								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
 								EnleveTroupeMorte(true);
 							}
@@ -164,14 +181,15 @@ public class Jeu extends Game{
 							if(strategieRouge.estPerceptron()) {
 								SparseVector etatInit = strategieRouge.encodageEtat(plateau, troupe);
 								TroupesAction action = strategieRouge.coup(troupe);
-								strategieRouge.jouer(action, troupe,false);
+								strategieRouge.jouer(action, troupe);
 								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
 								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
 								listQuad.add(quad);
 							}
 							else {
 								TroupesAction action = strategieRouge.coup(troupe);
-								strategieRouge.jouer(action, troupe,false);
+								strategieRouge.jouer(action, troupe);
+								EnleveTroupeMorte(false);
 							}
 						}
 					}

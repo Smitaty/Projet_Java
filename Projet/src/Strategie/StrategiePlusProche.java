@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * Stratégie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'égalité.
- * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournées mais elles peuvent se tourner 
- * dans la bonne direction si elles trouvent un ennemi à portée.
+ * Stratï¿½gie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'ï¿½galitï¿½.
+ * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournï¿½es mais elles peuvent se tourner 
+ * dans la bonne direction si elles trouvent un ennemi ï¿½ portï¿½e.
  */
 
 public class StrategiePlusProche extends Strategie{
@@ -96,7 +96,6 @@ public class StrategiePlusProche extends Strategie{
 					}
 				}
 			}
-			System.out.println("Random");
 			int coup = new Random().nextInt(coups.size());
 			return coups.get(coup);
 		}

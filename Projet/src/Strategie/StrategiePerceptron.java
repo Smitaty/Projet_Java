@@ -3,24 +3,26 @@ package Strategie;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Game.Jeu;
 import IG.Plateau;
 import Perceptron.*;
 import Troupes.*;
 
 public class StrategiePerceptron extends Strategie{
 	private Plateau plateau;
+	private Perceptron perceptron;
 	
 	public StrategiePerceptron(Plateau plateau) {
 		super(plateau);
 		this.plateau = plateau;
+		perceptron = new Perceptron(0.01,5,TroupesAction.values().length);
 	}
 	
 	public TroupesAction coup(Troupes troupe) {
-		Perceptron perceptron = new Perceptron(0.01,5,TroupesAction.values().length);
+		ArrayList<TroupesAction> coups = super.coupsPossibles(troupe);
 		SparseVector etat = encodageEtat(plateau,troupe);
 		double maxScore = 0;
 		TroupesAction meilleureAction = TroupesAction.STOP;
-		ArrayList<TroupesAction> coups = super.coupsPossibles(troupe);
 		for(TroupesAction action : coups) {
 			double score = perceptron.getScore(encodageAction(etat,action));
 			if(score>maxScore || meilleureAction==TroupesAction.STOP) {
@@ -53,32 +55,32 @@ public class StrategiePerceptron extends Strategie{
 		else {
 			estBleu=true;
 		}
-		int cpt = 1;
+		int cpt = 0;
 		for(int y=-2; y<3; ++y) {
 			for(int x=-2; x<3; ++x) {
 				Coordonnees pos = new Coordonnees(tx+x,ty+y);
 				if(estBleu) {
 					if(plateau.getTroupeRouge(pos)!=null) {
 						if(plateau.getTroupeRouge(pos).getType()=="Chateau")
-							s.setValue(51+cpt, 1);
+							s.setValue(50+cpt, 1);
 						else
 							s.setValue(cpt, 1);
 					}
 					else {
 						s.setValue(cpt, 0);
-						s.setValue(51+cpt, 0);
+						s.setValue(50+cpt, 0);
 					}
 				}
 				else {
 					if(plateau.getTroupeBleu(pos)!=null) {
 						if(plateau.getTroupeBleu(pos).getType()=="Chateau")
-							s.setValue(51+cpt, 1);
+							s.setValue(50+cpt, 1);
 						else
 							s.setValue(cpt, 1);
 					}
 				}
 				if(plateau.ArbreEn(pos) || plateau.rocherEn(pos)) {
-					s.setValue(26+cpt, 1);
+					s.setValue(25+cpt, 1);
 				}
 				++cpt;
 			}
@@ -135,4 +137,10 @@ public class StrategiePerceptron extends Strategie{
 		}
 		return vecteur;
 	}
+	
+	public Perceptron getPerceptron() {return perceptron;}
+	
+	public void setPerceptron(Perceptron p) {perceptron=p;}
+	
+	public boolean estPerceptron() {return true;}
 }

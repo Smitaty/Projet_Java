@@ -466,7 +466,7 @@ public abstract class Strategie {
 		return listecoups;
 	}
 	
-	public void jouer(TroupesAction action,Troupes troupe, boolean estBleu) {
+	public void jouer(TroupesAction action,Troupes troupe) {
 		troupe.setAction(action);
 		switch (action) {
 			case TOP:
@@ -499,29 +499,11 @@ public abstract class Strategie {
 				else {
 					if(cible.getPV()<=0) {
 						troupe.setReward(troupe.getReward()+50);
-						/*if(estBleu)
-							System.out.println("Château rouge détruit !");
-						else
-							System.out.println("Château bleu détruit !");*/
 					}
 					else {
 						troupe.setReward(troupe.getReward()+30);
 					}
 				}
-				/*if(!esquive() || cible.getType()=="Chateau") {
-					System.out.println(troupe+" attaque "+cible);
-					cible.setPV(cible.getPV()-troupe.getDegats());
-				}
-				else 
-					System.out.println(cible+" a esquivé");
-				if(cible.getPV()<=0) {
-					if(cible.getType()=="Chateau") {
-						if(estBleu)
-							System.out.println("Château rouge détruit !");
-						else
-							System.out.println("Château bleu détruit !");
-					}
-				}*/
 				break;
 			case STOP:
 				break;

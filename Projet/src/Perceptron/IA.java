@@ -10,26 +10,26 @@ import Game.ViewGame;
 
 public class IA {
 	
-	public void getAverageReward(int nbtour, Plateau plat) {
+	public void getAverageReward(int nbtour, int nbPartie,StrategieType strategieBleu, StrategieType strategieRouge, Plateau plat) {
 		int bleu = 0;
 		int rouge = 0;
 		int egalite = 0;
 		double somme = 0;
 		ArrayList<Jeu> list = new ArrayList<Jeu>();
 		ArrayList<Thread> thread = new ArrayList<Thread>();
-		for(int i=0; i<100; ++i) {
+		for(int i=0; i<nbPartie; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
-			Strategie stratbleue = new StrategieRandom(plateau);
-			Strategie stratrouge = new StrategieRandom(plateau);
+			Strategie stratbleue = affecteStrategie(strategieBleu,plateau);
+			Strategie stratrouge = affecteStrategie(strategieRouge,plateau);
 			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, true);
 			list.add(jeu);
 		}
-		for(int i=0; i<100; ++i) {
+		for(int i=0; i<nbPartie; ++i) {
 			Thread t1 = new Thread(list.get(i));
 			thread.add(t1);
 			t1.start();
 		}
-		for(int i=0; i<100; ++i) {
+		for(int i=0; i<nbPartie; ++i) {
 			try{
 				thread.get(i).join();
 			}catch(InterruptedException e) {
@@ -49,10 +49,35 @@ public class IA {
 			}
 			somme+=list.get(i).getReward();
 		}
-		double avg = somme/100;
-		System.out.println(somme);
-		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("R�compense moyenne : "+avg);
+		//double avg = somme/nbPartie;
+		double avgBleu = (bleu*100)/nbPartie;
+		double avgRouge = (rouge*100)/nbPartie;
+		double avgEgalite = (egalite*100)/nbPartie;
+		System.out.println(bleu+","+rouge+","+egalite);
+		System.out.println("Victoire bleue : "+avgBleu+"% Victoire rouge : "+avgRouge+"% Egalite : "+avgEgalite+"%");
+		//System.out.println("Récompense moyenne : "+avg);
+	}
+	
+	public Strategie affecteStrategie(StrategieType strat, Plateau plateau) {
+		switch(strat) {
+			case RANDOM:
+				return new StrategieRandom(plateau);
+			case PLUSPROCHE:
+				return new StrategiePlusProche(plateau);
+			case FOCUS:
+				return new StrategieFocusChateau(plateau);
+			case INTELLIGENTE:
+				return new StrategieIntelligente(plateau);
+			case GROUPE:
+				return new StrategieGroupe(plateau);
+			case PERCEPTRON:
+				StrategiePerceptron strategie = new StrategiePerceptron(plateau);
+				LabeledSet training = this.genererExemples(100, 20, plateau);
+				strategie.getPerceptron().setNb_iteration(20);
+				strategie.getPerceptron().train(training);
+			default:
+				return new StrategieRandom(plateau);
+		}
 	}
 	
 	public ArrayList<Jeu> getAverageReward2(int nbtour, Plateau plat, int nbPerceptrons, int nbMeilleurs) {
@@ -97,7 +122,7 @@ public class IA {
 		double avg = somme/nbPerceptrons;
 		System.out.println(somme);
 		System.out.println("Victoire bleue : "+bleu+" Victoire rouge : "+rouge+" Egalite : "+egalite);
-		System.out.println("R�compense moyenne : "+avg);
+		System.out.println("Récompense moyenne : "+avg);
 		
 		ArrayList<Jeu> listReturn = new ArrayList<Jeu>();
 		for(int i=0; i<nbMeilleurs; i++) {
@@ -145,17 +170,16 @@ public class IA {
 		return meilleursJeux;
 	}
 	
-
 	
-	public void vizualise(int nbtour,Plateau plateau) {
+	public void vizualise(int nbtour, StrategieType strategieBleu, StrategieType strategieRouge, Plateau plateau) {
 		ViewGame view = new ViewGame(plateau);
 		try {
 			Thread.sleep(2000);
 		}catch(Exception e) {
 			
 		}
-		Strategie stratbleue = new StrategieRandom(plateau);
-		Strategie stratrouge = new StrategieRandom(plateau);
+		Strategie stratbleue = affecteStrategie(strategieBleu,plateau);
+		Strategie stratrouge = affecteStrategie(strategieRouge,plateau);
 		Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, false);
 		Thread t1 = new Thread(jeu);
 		t1.start();
@@ -164,12 +188,12 @@ public class IA {
 	
 	public ArrayList<Quadruplet> getLearningSet(int nbTour, int nbSimulations, Plateau plat) {
 		ArrayList<Quadruplet> listQuad = new ArrayList<Quadruplet>();
-		
 		ArrayList<Jeu> list = new ArrayList<Jeu>();
 		ArrayList<Thread> thread = new ArrayList<Thread>();
+		
 		for(int i=0; i<nbSimulations; ++i) {
 			Plateau plateau = new Plateau(plat.getFile());
-			Strategie stratbleue = new StrategiePerceptron(plateau);
+			Strategie stratbleue = affecteStrategie(StrategieType.PERCEPTRON,plateau);
 			Strategie stratrouge = new StrategieRandom(plateau);
 			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbTour, true);
 			list.add(jeu);
@@ -186,21 +210,17 @@ public class IA {
 				e.printStackTrace();
 			}
 		 	listQuad.addAll(list.get(i).getListQuad());
-		}
-		System.out.println("Nombre de quadruplets = " + listQuad.size());
-		
+		}		
 		return listQuad;
 	}
 	
-	public ArrayList<LabeledSet> genererExemples(int nbTour, int nbSimulations, Plateau plat){
-		ArrayList<LabeledSet> listLabel = new ArrayList<LabeledSet>();
+	public LabeledSet genererExemples(int nbTour, int nbSimulations, Plateau plat){
 		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
 		int tailleVecteur = listQuad.get(0).getEtat().size();
+		LabeledSet label = new LabeledSet(tailleVecteur);
 		for(int i = 0; i<listQuad.size(); i++) {
-			LabeledSet label = new LabeledSet(tailleVecteur);
 			label.addExample(listQuad.get(i).getEtat(), listQuad.get(i).getReward());
 		}
-		
-		return listLabel;
+		return label;
 	}
 }

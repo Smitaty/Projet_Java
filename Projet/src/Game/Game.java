@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.lang.Thread;
 
 public abstract class Game implements Runnable{
-	static private long tpsParTour=90;
 	private int tour;
 	
 	public Game() {
@@ -15,10 +14,6 @@ public abstract class Game implements Runnable{
 	
 	public void run() {
 		partie();
-	}
-		
-	public static long getTpsParTour() {
-		return tpsParTour;
 	}
 
 	public int getTour() {
