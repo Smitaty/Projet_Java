@@ -68,21 +68,23 @@ public class Jeu extends Game{
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action;
 							if(strategieBleu.estPerceptron()) {
+								EnleveTroupeMorte(true);
 								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
 								action = strategieBleu.coup(troupe);
 								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
-								EnleveTroupeMorte(true);
+								
 							
 								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
 								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
 								listQuad.add(quad);
 							}
 							else {
+								EnleveTroupeMorte(true);
 								action = strategieBleu.coup(troupe);
 								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
-								EnleveTroupeMorte(true);
+								
 							}
 						}
 					}
@@ -100,16 +102,20 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							if(strategieRouge.estPerceptron()) {
+								EnleveTroupeMorte(false);
 								SparseVector etatInit = strategieRouge.encodageEtat(plateau, troupe);
 								TroupesAction action = strategieRouge.coup(troupe);
 								strategieRouge.jouer(action, troupe);
 								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
 								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
 								listQuad.add(quad);
+								
 							}
 							else {
+								EnleveTroupeMorte(false);
 								TroupesAction action = strategieRouge.coup(troupe);
 								strategieRouge.jouer(action, troupe);
+								
 							}
 						}
 					}
@@ -153,21 +159,21 @@ public class Jeu extends Game{
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							TroupesAction action;
 							if(strategieBleu.estPerceptron()) {
+								EnleveTroupeMorte(true);
 								SparseVector etatInit = strategieBleu.encodageEtat(plateau, troupe);
 								action = strategieBleu.coup(troupe);
 								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
-								EnleveTroupeMorte(true);
 							
 								SparseVector etatAtteint = strategieBleu.encodageEtat(plateau, troupe);
 								Quadruplet quad = new Quadruplet(etatInit,action,etatAtteint,troupe.getReward());
 								listQuad.add(quad);
 							}
 							else {
+								EnleveTroupeMorte(true);
 								action = strategieBleu.coup(troupe);
 								strategieBleu.jouer(action, troupe);
 								reward+=troupe.getReward();
-								EnleveTroupeMorte(true);
 							}
 						}
 					}
@@ -179,6 +185,7 @@ public class Jeu extends Game{
 					for(Troupes troupe : TroupesRouges) {
 						if(troupe.getType()!="Chateau" && chateauBleu.getPV()>0 && chateauRouge.getPV()>0) {
 							if(strategieRouge.estPerceptron()) {
+								EnleveTroupeMorte(false);
 								SparseVector etatInit = strategieRouge.encodageEtat(plateau, troupe);
 								TroupesAction action = strategieRouge.coup(troupe);
 								strategieRouge.jouer(action, troupe);
@@ -187,9 +194,9 @@ public class Jeu extends Game{
 								listQuad.add(quad);
 							}
 							else {
+								EnleveTroupeMorte(false);
 								TroupesAction action = strategieRouge.coup(troupe);
 								strategieRouge.jouer(action, troupe);
-								EnleveTroupeMorte(false);
 							}
 						}
 					}
