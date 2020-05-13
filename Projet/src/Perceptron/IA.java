@@ -72,7 +72,7 @@ public class IA {
 				return new StrategieGroupe(plateau);
 			case PERCEPTRON:
 				StrategiePerceptron strategie = new StrategiePerceptron(plateau);
-				LabeledSet training = this.genererExemples(100, 20, plateau);
+				LabeledSet training = strategie.genererExemples(100, 100, plateau);
 				strategie.getPerceptron().setNb_iteration(20);
 				strategie.getPerceptron().train(training);
 			default:
@@ -133,7 +133,6 @@ public class IA {
 		System.out.println("Meilleur score = " + getMeilleurScore(list));
 		
 		return listReturn;
-		
 	}
 	
 	public Jeu getMeilleurJeu(ArrayList<Jeu> list) {
@@ -163,64 +162,23 @@ public class IA {
 			ArrayList<Jeu> jeux = getAverageReward2(100,plateau,nbPerceptrons,tailleListAverage);
 			for(int i=0; i < tailleListAverage; i++) {
 				meilleursJeux.add(jeux.get(i));
-			}
-			
-			
+			}			
 		}
 		return meilleursJeux;
 	}
 	
-	
 	public void vizualise(int nbtour, StrategieType strategieBleu, StrategieType strategieRouge, Plateau plateau) {
+		Strategie stratbleue = affecteStrategie(strategieBleu,plateau);
+		Strategie stratrouge = affecteStrategie(strategieRouge,plateau);
+		Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, false);
 		ViewGame view = new ViewGame(plateau);
 		try {
 			Thread.sleep(2000);
 		}catch(Exception e) {
 			
 		}
-		Strategie stratbleue = affecteStrategie(strategieBleu,plateau);
-		Strategie stratrouge = affecteStrategie(strategieRouge,plateau);
-		Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbtour, false);
 		Thread t1 = new Thread(jeu);
 		t1.start();
 	}
 
-	
-	public ArrayList<Quadruplet> getLearningSet(int nbTour, int nbSimulations, Plateau plat) {
-		ArrayList<Quadruplet> listQuad = new ArrayList<Quadruplet>();
-		ArrayList<Jeu> list = new ArrayList<Jeu>();
-		ArrayList<Thread> thread = new ArrayList<Thread>();
-		
-		for(int i=0; i<nbSimulations; ++i) {
-			Plateau plateau = new Plateau(plat.getFile());
-			Strategie stratbleue = affecteStrategie(StrategieType.PERCEPTRON,plateau);
-			Strategie stratrouge = new StrategieRandom(plateau);
-			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbTour, true);
-			list.add(jeu);
-		}
-		for(int i=0; i<nbSimulations; ++i) {
-			Thread t1 = new Thread(list.get(i));
-			thread.add(t1);
-			t1.start();
-		}
-		for(int i=0; i<nbSimulations; ++i) {
-			try{
-				thread.get(i).join();
-			}catch(InterruptedException e) {
-				e.printStackTrace();
-			}
-		 	listQuad.addAll(list.get(i).getListQuad());
-		}		
-		return listQuad;
-	}
-	
-	public LabeledSet genererExemples(int nbTour, int nbSimulations, Plateau plat){
-		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
-		int tailleVecteur = listQuad.get(0).getEtat().size();
-		LabeledSet label = new LabeledSet(tailleVecteur);
-		for(int i = 0; i<listQuad.size(); i++) {
-			label.addExample(listQuad.get(i).getEtat(), listQuad.get(i).getReward());
-		}
-		return label;
-	}
 }

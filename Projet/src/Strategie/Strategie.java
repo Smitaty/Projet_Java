@@ -610,5 +610,5 @@ public abstract class Strategie {
 	public abstract boolean estPerceptron();
 	
 	public abstract SparseVector encodageEtat(Plateau plateau, Troupes troupe);
-
+	
 }

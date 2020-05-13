@@ -138,6 +138,45 @@ public class StrategiePerceptron extends Strategie{
 		return vecteur;
 	}
 	
+	public ArrayList<Quadruplet> getLearningSet(int nbTour, int nbSimulations, Plateau plat) {
+		ArrayList<Quadruplet> listQuad = new ArrayList<Quadruplet>();
+		ArrayList<Jeu> list = new ArrayList<Jeu>();
+		ArrayList<Thread> thread = new ArrayList<Thread>();
+		
+		for(int i=0; i<nbSimulations; ++i) {
+			Plateau plateau = new Plateau(plat.getFile());
+			Strategie stratbleue = new StrategiePerceptron(plateau);
+			Strategie stratrouge = new StrategieRandom(plateau);
+			Jeu jeu = new Jeu(plateau, stratbleue, stratrouge, nbTour, true);
+			list.add(jeu);
+		}
+		for(int i=0; i<nbSimulations; ++i) {
+			Thread t1 = new Thread(list.get(i));
+			thread.add(t1);
+			t1.start();
+		}
+		for(int i=0; i<nbSimulations; ++i) {
+			try{
+				thread.get(i).join();
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		 	listQuad.addAll(list.get(i).getListQuad());
+		}		
+		return listQuad;
+	}
+	
+	public LabeledSet genererExemples(int nbTour, int nbSimulations, Plateau plat){
+		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
+		int tailleVecteur = listQuad.get(0).getEtat().size();
+		LabeledSet label = new LabeledSet(tailleVecteur);
+		for(int i = 0; i<listQuad.size(); i++) {
+			SparseVector apprentissage = encodageAction(listQuad.get(i).getEtat(),listQuad.get(i).getAction());
+			label.addExample(apprentissage, listQuad.get(i).getReward());
+		}
+		return label;
+	}
+	
 	public Perceptron getPerceptron() {return perceptron;}
 	
 	public void setPerceptron(Perceptron p) {perceptron=p;}

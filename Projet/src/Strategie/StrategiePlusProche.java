@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * Strat�gie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'�galit�.
- * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tourn�es mais elles peuvent se tourner 
- * dans la bonne direction si elles trouvent un ennemi � port�e.
+ * Stratégie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'égalité.
+ * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournées mais elles peuvent se tourner 
+ * dans la bonne direction si elles trouvent un ennemi à portée.
  */
 
 public class StrategiePlusProche extends Strategie{
@@ -141,4 +141,5 @@ public class StrategiePlusProche extends Strategie{
 	public boolean estPerceptron() {return false;}
 	
 	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
+	
 }

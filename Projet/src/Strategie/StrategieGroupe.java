@@ -4,6 +4,7 @@ import IG.Plateau;
 import Perceptron.SparseVector;
 import Troupes.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
  * Si un ennemi peut attaquer le chevalier celui-ci recule.
@@ -164,10 +165,23 @@ public class StrategieGroupe extends Strategie{
 				// S'il ne peut pas se faire attaquer
 				else {
 					Troupes chevalierPlusProche = chevalierAllie(troupe);
-					if(color == "bleu") {
-						if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
-							if(estPresent(TroupesAction.BOTTOM,coups)) {
-								return TroupesAction.BOTTOM;
+					if(chevalierPlusProche!=null) {
+						if(color == "bleu") {
+							if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
+								if(estPresent(TroupesAction.BOTTOM,coups)) {
+									return TroupesAction.BOTTOM;
+								}
+								else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
+									if(estPresent(TroupesAction.RIGHT,coups)) {
+										return TroupesAction.RIGHT;
+									}
+								}
+								else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
+									if(estPresent(TroupesAction.LEFT,coups)) {
+										return TroupesAction.LEFT;
+									}
+								}
+								else return TroupesAction.STOP;
 							}
 							else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
 								if(estPresent(TroupesAction.RIGHT,coups)) {
@@ -181,47 +195,47 @@ public class StrategieGroupe extends Strategie{
 							}
 							else return TroupesAction.STOP;
 						}
-						else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-							if(estPresent(TroupesAction.RIGHT,coups)) {
-								return TroupesAction.RIGHT;
+						else {
+							if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
+								if(estPresent(TroupesAction.TOP,coups)) {
+									return TroupesAction.TOP;
+								}
+								else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
+									if(estPresent(TroupesAction.RIGHT,coups)) {
+										return TroupesAction.RIGHT;
+									}
+								}
+								else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
+									if(estPresent(TroupesAction.LEFT,coups)) {
+										return TroupesAction.LEFT;
+									}
+								}
+								else return TroupesAction.STOP;
 							}
-						}
-						else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-							if(estPresent(TroupesAction.LEFT,coups)) {
-								return TroupesAction.LEFT;
+							else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
+								if(estPresent(TroupesAction.RIGHT,coups)) {
+									return TroupesAction.RIGHT;
+								}
 							}
+							else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
+								if(estPresent(TroupesAction.LEFT,coups)) {
+									return TroupesAction.LEFT;
+								}
+							}
+							else return TroupesAction.STOP;
+							
 						}
-						else return TroupesAction.STOP;
 					}
 					else {
-						if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
-							if(estPresent(TroupesAction.TOP,coups)) {
-								return TroupesAction.TOP;
-							}
-							else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.RIGHT,coups)) {
-									return TroupesAction.RIGHT;
-								}
-							}
-							else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.LEFT,coups)) {
-									return TroupesAction.LEFT;
-								}
-							}
-							else return TroupesAction.STOP;
+						ArrayList<TroupesAction> allCoups = coupsPossibles(troupe);
+						if(this.estPresent(TroupesAction.ATTACK1, allCoups))
+							return TroupesAction.ATTACK1;
+						else {
+							int nbcoups = allCoups.size();
+							Random r = new Random();
+							int coup = r.nextInt(nbcoups);
+							return allCoups.get(coup);
 						}
-						else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-							if(estPresent(TroupesAction.RIGHT,coups)) {
-								return TroupesAction.RIGHT;
-							}
-						}
-						else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-							if(estPresent(TroupesAction.LEFT,coups)) {
-								return TroupesAction.LEFT;
-							}
-						}
-						else return TroupesAction.STOP;
-						
 					}
 				}
 			}
@@ -401,6 +415,5 @@ public class StrategieGroupe extends Strategie{
 	public boolean estPerceptron() {return false;}
 	
 	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
-	
-	
+
 }

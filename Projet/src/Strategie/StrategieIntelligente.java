@@ -841,4 +841,5 @@ public class StrategieIntelligente extends Strategie{
 	public boolean estPerceptron() {return false;}
 	
 	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {return null;}
+	
 }

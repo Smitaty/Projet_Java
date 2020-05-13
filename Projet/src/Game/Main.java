@@ -12,10 +12,8 @@ public class Main {
 		
 		Plateau plateau = new Plateau("src/Layout/Plateau.lay");
 		IA perceptron = new IA();
-		//ArrayList<Jeu> list = perceptron.rechercheAleatoire(100, plateau);
-		//double meilleurScore = perceptron.getMeilleurScore(list);
-		//System.out.println("Meilleur score final= " + meilleurScore);
-		//perceptron.vizualise(100,StrategieType.INTELLIGENTE,StrategieType.GROUPE,plateau);
-		perceptron.getAverageReward(1000,10000,StrategieType.INTELLIGENTE,StrategieType.PLUSPROCHE,plateau);
+
+		//perceptron.vizualise(100,StrategieType.PERCEPTRON,StrategieType.RANDOM,plateau);
+		perceptron.getAverageReward(1000,10,StrategieType.PERCEPTRON,StrategieType.RANDOM,plateau);
 	}
 }
