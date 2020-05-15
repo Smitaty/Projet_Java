@@ -177,6 +177,17 @@ public class StrategiePerceptron extends Strategie{
 		return label;
 	}
 	
+	public LabeledSet amelioration(int nbTour, int nbSimulations, Plateau plat){
+		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
+		int tailleVecteur = listQuad.get(0).getEtat().size();
+		LabeledSet label = new LabeledSet(tailleVecteur);
+		for(int i = 0; i<listQuad.size(); i++) {
+			SparseVector apprentissage = encodageAction(listQuad.get(i).getEtat(),listQuad.get(i).getAction());
+			
+		}
+		return label;
+	}
+	
 	public Perceptron getPerceptron() {return perceptron;}
 	
 	public void setPerceptron(Perceptron p) {perceptron=p;}
