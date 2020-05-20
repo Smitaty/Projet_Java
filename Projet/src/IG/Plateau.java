@@ -11,6 +11,12 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 import Troupes.*;
 
+
+/**
+ * Cette classe lit un fichier layout et créer le plateau de jeu
+ * @author Simon et Rémi
+ */
+
 public class Plateau extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
@@ -33,6 +39,11 @@ public class Plateau extends JPanel{
 	boolean premierefois = true;
 	int cpt=1;
 	int cptProjectile=1;
+	
+	/**
+	 * Méthode qui instancie le plateau à l'aide d'un chemin d'un fichier layout
+	 * @param file
+	 */
 	
 	public Plateau(String file) {
 		this.file=file;
@@ -141,6 +152,10 @@ public class Plateau extends JPanel{
 		}
 	}
 	
+	/**
+	 * Méthode qui charge les images d'un archer dans une liste
+	 */
+	
 	public void LoadImageArcher() {
 		BufferedImage img = null;
 		try {
@@ -200,7 +215,11 @@ public class Plateau extends JPanel{
 			imagesArcher.add(img);
 		}
 	}
-		
+	
+	/**
+	 * Méthode qui charge les images d'un chevalier dans une liste
+	 */
+	
 	public void LoadImageChevalier() {
 		BufferedImage img = null;
 		try {
@@ -261,6 +280,10 @@ public class Plateau extends JPanel{
 		}
 	}
 
+	/**
+	 * Méthode qui charge les images d'un warrior (chevalier pour équipe rouge) dans une liste
+	 */
+	
 	public void LoadImageWarrior() {
 		BufferedImage img = null;
 		try {
@@ -320,6 +343,10 @@ public class Plateau extends JPanel{
 			imagesWarrior.add(img);
 		}
 	}
+	
+	/**
+	 * Méthode qui charge les images d'un mage dans une liste
+	 */
 	
 	public void LoadImageMage() {
 		BufferedImage img = null;
@@ -381,6 +408,10 @@ public class Plateau extends JPanel{
 		}
 	}
 	
+	/**
+	 * Méthode qui charge les images d'une witch (mage pour équipe rouge) dans une liste
+	 */
+	
 	public void LoadImageWitch() {
 		BufferedImage img = null;
 		try {
@@ -441,6 +472,11 @@ public class Plateau extends JPanel{
 		}
 	}
 	
+	/**
+	 * Méthode qui affiche le plateau
+	 * @param g
+	 */
+	
 	public void paint(Graphics g) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
@@ -471,7 +507,6 @@ public class Plateau extends JPanel{
 		}
 		dessine_arbres(g);
 		dessine_rochers(g);
-		EnleveTroupeMorte();
 		if(premierefois) {
 			cpt=1;
 			cptProjectile=1;
@@ -491,16 +526,10 @@ public class Plateau extends JPanel{
 		}
 	}
 	
-	public void EnleveTroupeMorte() {
-		for(int i=0; i<unite_bleue.size(); ++i) {
-			if(unite_bleue.get(i).getPV()<=0 && unite_bleue.get(i).getType()!="Chateau")
-				this.unite_bleue.remove(i);
-		}
-		for(int i=0; i<unite_rouge.size(); ++i) {
-			if(unite_rouge.get(i).getPV()<=0 && unite_rouge.get(i).getType()!="Chateau")
-				this.unite_rouge.remove(i);
-		}
-	}
+	/**
+	 * Méthode qui affiche les troupes sur le plateau
+	 * @param g
+	 */
 	
 	public void dessine_troupes(Graphics g) {
 		int fen_x = getSize().width;
@@ -668,6 +697,13 @@ public class Plateau extends JPanel{
 			}
 		}
 	}
+	
+	/**
+	 * Méthode qui permet de générer l'animation d'attaque des troupes
+	 * @param g
+	 * @param troupe
+	 * @param estBleu
+	 */
 	
 	public void dessine_attaque(Graphics g, Troupes troupe, boolean estBleu) {
 		int x = troupe.getPosition().getX();
@@ -1193,6 +1229,11 @@ public class Plateau extends JPanel{
 		}
 	}
 	
+	/**
+	 * Méthode qui affiche les arbres sur le plateau
+	 * @param g
+	 */
+	
 	public void dessine_arbres(Graphics g) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
@@ -1215,6 +1256,11 @@ public class Plateau extends JPanel{
 		}
 	}
 	
+	/**
+	 * Méthode qui affiche les rochers sur le plateau
+	 * @param g
+	 */
+	
 	public void dessine_rochers(Graphics g) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
@@ -1236,6 +1282,13 @@ public class Plateau extends JPanel{
 			}
 		}
 	}
+	
+	/**
+	 * Méthode qui cherche la cible d'une troupe en fonction de sa direction et son équipe
+	 * @param troupe
+	 * @param dir
+	 * @param estBleu
+	 */
 	
 	public Troupes chercheCible(Troupes troupe,Direction dir, boolean estBleu) {
 		int x = troupe.getPosition().getX();
@@ -1317,6 +1370,11 @@ public class Plateau extends JPanel{
 		return cible;
 	}
 	
+	/**
+	 * Méthode qui met l'action de chaque troupe à STOP 
+	 * pour éviter que l'animation d'attaque tourne en boucle
+	 */
+	
 	public void metActionStop() {
 		for(Troupes unite : this.unite_bleue) {
 			unite.setAction(TroupesAction.STOP);
@@ -1324,6 +1382,105 @@ public class Plateau extends JPanel{
 		for(Troupes unite : this.unite_rouge) {
 			unite.setAction(TroupesAction.STOP);
 		}
+	}
+	
+	/**
+	 * Méthode qui retourne s'il y a un arbre ou non à la position donnée
+	 * @param coor
+	 * @return boolean
+	 */
+	
+	public boolean ArbreEn(Coordonnees coor) {
+		int x = coor.getX();
+		int y = coor.getY();
+		for(int i=0; i<arbres.size(); ++i) {
+			int ax = arbres.get(i).getX();
+			int ay = arbres.get(i).getY();
+			if(x==ax && y==ay)
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Méthode qui retourne s'il y a un rocher ou non à la position donnée
+	 * @param coor
+	 * @return boolean
+	 */
+	
+	public boolean rocherEn(Coordonnees coor) {
+		int x = coor.getX();
+		int y = coor.getY();
+		for(int i=0; i<rochers.size(); ++i) {
+			int ax = rochers.get(i).getX();
+			int ay = rochers.get(i).getY();
+			if(x==ax && y==ay)
+				return true;
+		}
+		return false;
+	}	
+	
+	/**
+	 * Méthode qui retourne le château dans une liste de Troupes
+	 * @param unites
+	 * @return Troupes
+	 */
+	
+	public Troupes getChateau(ArrayList<Troupes> unites) {
+		for(Troupes unite : unites) {
+			if(unite.getType() == "Chateau") return unite;
+		}
+		return null;
+	}
+	
+	/**
+	 * Méthode qui retourne la troupe de l'équipe bleue qui se trouve au coordonnée donnée
+	 * @param coor
+	 * @return Troupes
+	 */
+	
+	public Troupes getTroupeBleu(Coordonnees coor) {
+		boolean trouver=false;
+		int i=0;
+		int tx = coor.getX();
+		int ty = coor.getY();
+		while(trouver==false && i<unite_bleue.size()) {
+			int x = unite_bleue.get(i).getPosition().getX();
+			int y = unite_bleue.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+				return unite_bleue.get(i);
+			}
+			else {
+				++i;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Méthode qui retourne la troupe de l'équipe rouge qui se trouve au coordonnée donnée
+	 * @param coor
+	 * @return Troupes
+	 */
+	
+	public Troupes getTroupeRouge(Coordonnees coor) {
+		boolean trouver=false;
+		int i=0;
+		int tx = coor.getX();
+		int ty = coor.getY();
+		while(trouver==false && i<unite_rouge.size()) {
+			int x = unite_rouge.get(i).getPosition().getX();
+			int y = unite_rouge.get(i).getPosition().getY();
+			if(tx==x && ty==y) {
+				trouver = true;
+				return unite_rouge.get(i);
+			}
+			else {
+				++i;
+			}
+		}
+		return null;
 	}
 	
 	public ArrayList<Troupes> getUnite_rouge() {
@@ -1344,30 +1501,6 @@ public class Plateau extends JPanel{
 
 	public ArrayList<Coordonnees> getArbres() {
 		return arbres;
-	}
-	
-	public boolean ArbreEn(Coordonnees coor) {
-		int x = coor.getX();
-		int y = coor.getY();
-		for(int i=0; i<arbres.size(); ++i) {
-			int ax = arbres.get(i).getX();
-			int ay = arbres.get(i).getY();
-			if(x==ax && y==ay)
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean rocherEn(Coordonnees coor) {
-		int x = coor.getX();
-		int y = coor.getY();
-		for(int i=0; i<rochers.size(); ++i) {
-			int ax = rochers.get(i).getX();
-			int ay = rochers.get(i).getY();
-			if(x==ax && y==ay)
-				return true;
-		}
-		return false;
 	}
 
 	public void setArbres(ArrayList<Coordonnees> arbres) {
@@ -1396,52 +1529,6 @@ public class Plateau extends JPanel{
 
 	public void setHauteur(int hauteur) {
 		this.hauteur = hauteur;
-	}
-	
-	
-	public Troupes getChateau(ArrayList<Troupes> unites) {
-		for(Troupes unite : unites) {
-			if(unite.getType() == "Chateau") return unite;
-		}
-		return null;
-	}
-	
-	public Troupes getTroupeBleu(Coordonnees coor) {
-		boolean trouver=false;
-		int i=0;
-		int tx = coor.getX();
-		int ty = coor.getY();
-		while(trouver==false && i<unite_bleue.size()) {
-			int x = unite_bleue.get(i).getPosition().getX();
-			int y = unite_bleue.get(i).getPosition().getY();
-			if(tx==x && ty==y) {
-				trouver = true;
-				return unite_bleue.get(i);
-			}
-			else {
-				++i;
-			}
-		}
-		return null;
-	}
-	
-	public Troupes getTroupeRouge(Coordonnees coor) {
-		boolean trouver=false;
-		int i=0;
-		int tx = coor.getX();
-		int ty = coor.getY();
-		while(trouver==false && i<unite_rouge.size()) {
-			int x = unite_rouge.get(i).getPosition().getX();
-			int y = unite_rouge.get(i).getPosition().getY();
-			if(tx==x && ty==y) {
-				trouver = true;
-				return unite_rouge.get(i);
-			}
-			else {
-				++i;
-			}
-		}
-		return null;
 	}
 	
 	public String getFile() {

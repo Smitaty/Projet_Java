@@ -6,10 +6,23 @@ import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+
+/**
+ * Cette stratégie retourne une action aléatoire parmi les actions possibles pour la troupe
+ * @author Simon
+ */
+
+
 public class StrategieRandom extends Strategie{
 	public StrategieRandom(Plateau plateau) {
 		super(plateau);
 	}
+	
+	/**
+	 * Méthode qui retourne une action pour la troupe donnée
+	 * @param troupe
+	 * @return TroupesAction
+	 */
 
 	public TroupesAction coup(Troupes troupe) {
 		ArrayList<TroupesAction> coups = coupsPossibles(troupe);

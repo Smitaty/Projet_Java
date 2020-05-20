@@ -1,8 +1,13 @@
 package Troupes;
 
+/**
+ * Classe représentant des coordonnées avec une valeur en x et une en y
+ * @author Simon et Rémi
+ */
+
 public class Coordonnees {
-	protected int x;
-	protected int y;
+	private int x;
+	private int y;
 
 	public Coordonnees(int x, int y) {
 		super();

@@ -7,7 +7,13 @@ import Perceptron.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Jeu extends Game{
+
+/**
+ * Classe qui affecte les stratégies aux équipes et lance la partie
+ * @author Simon et Rémi
+ */
+
+public class Jeu implements Runnable{
 	private Plateau plateau;
 	private ArrayList<Troupes> TroupesBleues;
 	private ArrayList<Troupes> TroupesRouges;
@@ -24,8 +30,17 @@ public class Jeu extends Game{
 	private double reward;
 	private ArrayList<Quadruplet> listQuad;
 	
+	/**
+	 * Méthode qui instancie le Jeu, affecte les stratégies aux équipes 
+	 * et lance la partie en fonction de la valeur du booléen batch
+	 * @param plateau
+	 * @param stratBleu
+	 * @param stratRouge
+	 * @param nbTours
+	 * @param batch
+	 */
+	
 	public Jeu(Plateau plateau, Strategie stratBleu, Strategie stratRouge, int nbTours, boolean batch) {
-		super();
 		this.plateau = plateau;
 		TroupesBleues = plateau.getUnite_bleue();
 		TroupesRouges = plateau.getUnite_rouge();
@@ -39,6 +54,10 @@ public class Jeu extends Game{
 		this.listQuad = new ArrayList<Quadruplet>();
 	}
 	
+	/**
+	 * Méthode qui affiche les coordonnées des troupes de chaque équipe
+	 */
+	
 	public void afficheCoordonneesTroupes() {
 		for(Troupes troupe : TroupesBleues) {
 			System.out.println(troupe.getType()+" Bleu "+troupe.getDirection()+" "+troupe.getPosition().getX()+" "+troupe.getPosition().getY());
@@ -48,12 +67,20 @@ public class Jeu extends Game{
 		}
 	}
 	
-	public void partie() {
+	/**
+	 * Méthode qui lance la partie en fonction du booléen batch
+	 */
+	
+	public void run() {
 		if(batch)
 			partieBatch();
 		else
 			partieIG();
 	}
+	
+	/**
+	 * Méthode qui lance la partie avec l'interface graphique
+	 */
 	
 	public void partieIG() {
 		System.out.println("Debut de partie");
@@ -145,6 +172,10 @@ public class Jeu extends Game{
 		}
 	}
 	
+	/**
+	 * Méthode qui lance la partie sans l'interface graphique
+	 */
+	
 	public void partieBatch() {
 		int tour = 0;
 		while(chateauBleu.getPV()>0 && chateauRouge.getPV()>0 && tour < this.nbTours) {
@@ -217,6 +248,11 @@ public class Jeu extends Game{
 			gagneRouge=false;
 		}
 	}
+	
+	/**
+	 * Méthode qui enlève les troupes mortes des listes des équipes bleues et rouges
+	 * @param estBleu
+	 */
 	
 	public void EnleveTroupeMorte(boolean estBleu) {
 		if(!estBleu) {

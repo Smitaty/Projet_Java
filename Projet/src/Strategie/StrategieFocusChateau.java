@@ -4,9 +4,12 @@ import IG.Plateau;
 import Perceptron.SparseVector;
 import Troupes.*;
 import java.util.ArrayList;
-/*
- * Les unites se dirigent toujours vers le chateau ennemi et attaquent des qu'un ennemi est a portee.
- * Les unites ne prennent pas en compte les positions des unites ennemies, elles se concentrent uniquemenet sur le chateau ennemi.
+
+/**
+ * Dans cette stratégie les unites se dirigent toujours vers le chateau ennemi et attaquent des qu'un ennemi est a portee.
+ * Les unites ne prennent pas en compte les positions des unites ennemies,
+ *  elles se concentrent uniquement sur le chateau ennemi.
+ * @author Rémi
  */
 
 public class StrategieFocusChateau extends Strategie{
@@ -14,22 +17,19 @@ public class StrategieFocusChateau extends Strategie{
 	public StrategieFocusChateau(Plateau plateau) {
 		super(plateau);
 	}
-
-	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
-		for(int i=0; i<coups.size(); ++i) {
-			if(coups.get(i)==action) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
+	/**
+	 * Méthode qui retourne une action pour la troupe donnée
+	 * @param troupe
+	 * @return TroupesAction
+	 */
 	
 	public TroupesAction coup(Troupes troupe) {
 		int x = troupe.getPosition().getX();
 		int y = troupe.getPosition().getY();
 		ArrayList<TroupesAction> coups = this.coupsPossibles(troupe);
 		
-		if(estPresent(TroupesAction.ATTACK1,coups)) {
+		if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 			return TroupesAction.ATTACK1;
 		}
 		
@@ -55,7 +55,11 @@ public class StrategieFocusChateau extends Strategie{
 		
 	}
 	
-	
+	/**
+	 * Méthode qui retourne la position du château ennemi
+	 * @param troupe
+	 * @return Coordonnees
+	 */
 	
 	public Coordonnees rechercheChateauEn(Troupes troupe) {
 		ArrayList<Troupes> ennemi;
@@ -72,8 +76,7 @@ public class StrategieFocusChateau extends Strategie{
 		System.out.println("Chateau non trouve");
 
 		return null;
-	}
-	
+	}	
 	
 	public boolean estPerceptron() {return false;}
 	

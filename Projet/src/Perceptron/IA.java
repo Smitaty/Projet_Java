@@ -8,7 +8,24 @@ import java.util.ArrayList;
 import Game.Jeu;
 import Game.ViewGame;
 
+
+/**
+ * Cette classe permet de choisir de lancer une partie avec l'interface graphique
+ * ou de lancer un grand nombre de simulation
+ * @author Simon et Rémi
+ */
+
 public class IA {
+	
+	/**
+	 * Méthode qui permet de lancer un grand nombre de partie sans interface graphique 
+	 * et qui affiche la récompense moyenne et les stats de victoire de chaque équipe
+	 * @param nbtour
+	 * @param nbPartie
+	 * @param strategieBleu
+	 * @param strategieRouge
+	 * @param plat
+	 */
 	
 	public void getAverageReward(int nbtour, int nbPartie,StrategieType strategieBleu, StrategieType strategieRouge, Plateau plat) {
 		int bleu = 0;
@@ -49,14 +66,20 @@ public class IA {
 			}
 			somme+=list.get(i).getReward();
 		}
-		//double avg = somme/nbPartie;
+		double avg = somme/nbPartie;
 		double avgBleu = (bleu*100)/nbPartie;
 		double avgRouge = (rouge*100)/nbPartie;
 		double avgEgalite = (egalite*100)/nbPartie;
-		System.out.println(bleu+","+rouge+","+egalite);
 		System.out.println("Victoire bleue : "+avgBleu+"% Victoire rouge : "+avgRouge+"% Egalite : "+avgEgalite+"%");
-		//System.out.println("Récompense moyenne : "+avg);
+		System.out.println("Récompense moyenne : "+avg);
 	}
+	
+	/**
+	 * Méthode qui retourne une stratégie en fonction de la stratégie demandée 
+	 * @param strat
+	 * @param plateau
+	 * @return Strategie
+	 */
 	
 	public Strategie affecteStrategie(StrategieType strat, Plateau plateau) {
 		switch(strat) {
@@ -79,6 +102,17 @@ public class IA {
 				return new StrategieRandom(plateau);
 		}
 	}
+	
+	/**
+	 * Méthode qui permet de lancer un grand nombre de partie sans interface graphique 
+	 * qui affiche la récompense moyenne et les stats de victoire de chaque équipe 
+	 * et retourne une liste des meilleurs parties
+	 * @param nbtour
+	 * @param plat
+	 * @param nbPerceptrons
+	 * @param nbMeilleurs
+	 * @return ArrayList<Jeu>
+	 */
 	
 	public ArrayList<Jeu> getAverageReward2(int nbtour, Plateau plat, int nbPerceptrons, int nbMeilleurs) {
 		int bleu = 0;
@@ -135,6 +169,12 @@ public class IA {
 		return listReturn;
 	}
 	
+	/**
+	 * Méthode qui retourne la meilleure partie parmi une liste de parties
+	 * @param list
+	 * @return Jeu
+	 */
+	
 	public Jeu getMeilleurJeu(ArrayList<Jeu> list) {
 		Jeu meilleur = list.get(0);
 		for(int i=1; i < list.size(); i++) {
@@ -142,6 +182,12 @@ public class IA {
 		}
 		return meilleur;
 	}
+	
+	/**
+	 * Méthode qui retourne le meilleur score obtenu dans une liste de partie
+	 * @param list
+	 * @return double
+	 */
 	
 	public double getMeilleurScore(ArrayList<Jeu> jeux) {
 		double meilleur = 0;
@@ -151,6 +197,17 @@ public class IA {
 		}
 		return meilleur;
 	}
+	
+	/**
+	 * Cette méthode effectue N-M simulations jusqu'à ce que le nombre de simulation soit inférieure à tailleMax
+	 * N correspond à tailleMax
+	 * M correspond à la taille de la liste des meilleurs parties
+	 * Après avoir effectué les simulations on fait un tri en gardant les meilleurs parties
+	 * parmi celles déjà simulées et les nouvelles
+	 * @param tailleMax
+	 * @param plateau
+	 * @return ArrayList<Jeu>
+	 */
 	
 	// tailleMax = N perceptrons dans la population
 	public ArrayList<Jeu> rechercheAleatoire(int tailleMax, Plateau plateau){
@@ -166,6 +223,14 @@ public class IA {
 		}
 		return meilleursJeux;
 	}
+	
+	/**
+	 * Méthode qui permet de lancer une partie avec l'interface graphique
+	 * @param nbtour
+	 * @param strategieBleu
+	 * @param strategieRouge
+	 * @param plateau
+	 */
 	
 	public void vizualise(int nbtour, StrategieType strategieBleu, StrategieType strategieRouge, Plateau plateau) {
 		Strategie stratbleue = affecteStrategie(strategieBleu,plateau);

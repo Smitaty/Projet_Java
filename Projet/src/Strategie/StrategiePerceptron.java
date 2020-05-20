@@ -8,6 +8,10 @@ import IG.Plateau;
 import Perceptron.*;
 import Troupes.*;
 
+/**
+ * Stratégie qui implémente une Intelligence Artificielle en utilisant les classes du package Perceptron
+ * @author Simon et Rémi
+ */
 public class StrategiePerceptron extends Strategie{
 	private Plateau plateau;
 	private Perceptron perceptron;
@@ -17,6 +21,12 @@ public class StrategiePerceptron extends Strategie{
 		this.plateau = plateau;
 		perceptron = new Perceptron(0.01,5,TroupesAction.values().length);
 	}
+	
+	/**
+	 * Méthode qui retourne l'action avec le plus gros score parmi les actions possibles
+	 * @param troupe
+	 * @return TroupesAction
+	 */
 	
 	public TroupesAction coup(Troupes troupe) {
 		ArrayList<TroupesAction> coups = super.coupsPossibles(troupe);
@@ -43,6 +53,13 @@ public class StrategiePerceptron extends Strategie{
 		troupe.setReward(maxScore);
 		return meilleureAction;
 	}
+	
+	/**
+	 * Méthode qui encode l'environnement de la troupe dans un SparseVector
+	 * @param plateau
+	 * @param troupe
+	 * @return SparseVector
+	 */
 	
 	public SparseVector encodageEtat(Plateau plateau, Troupes troupe) {
 		int tx = troupe.getPosition().getX();
@@ -87,6 +104,13 @@ public class StrategiePerceptron extends Strategie{
 		}
 		return s;
 	}
+	
+	/**
+	 * Méthode qui encode un SparseVector dans un nouveau SparseVector en fonction de l'action donnée
+	 * @param s
+	 * @param action
+	 * @return SparseVector
+	 */
 	
 	public SparseVector encodageAction(SparseVector s, TroupesAction action) {
 		SparseVector vecteur = new SparseVector(s.size()*6+1);
@@ -138,6 +162,14 @@ public class StrategiePerceptron extends Strategie{
 		return vecteur;
 	}
 	
+	/**
+	 * Méthode qui retourne liste de Quadruplet
+	 * @param nbTour
+	 * @param nbSimulations
+	 * @param plat
+	 * @return ArrayList<Quadruplet>
+	 */
+	
 	public ArrayList<Quadruplet> getLearningSet(int nbTour, int nbSimulations, Plateau plat) {
 		ArrayList<Quadruplet> listQuad = new ArrayList<Quadruplet>();
 		ArrayList<Jeu> list = new ArrayList<Jeu>();
@@ -166,6 +198,12 @@ public class StrategiePerceptron extends Strategie{
 		return listQuad;
 	}
 	
+	/**
+	 * Méthode qui retourne un LabeledSet en fonction des Quadruplets récupérés
+	 * @param troupe
+	 * @return LabeledSet
+	 */
+	
 	public LabeledSet genererExemples(int nbTour, int nbSimulations, Plateau plat){
 		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
 		int tailleVecteur = listQuad.get(0).getEtat().size();
@@ -173,17 +211,6 @@ public class StrategiePerceptron extends Strategie{
 		for(int i = 0; i<listQuad.size(); i++) {
 			SparseVector apprentissage = encodageAction(listQuad.get(i).getEtat(),listQuad.get(i).getAction());
 			label.addExample(apprentissage, listQuad.get(i).getReward());
-		}
-		return label;
-	}
-	
-	public LabeledSet amelioration(int nbTour, int nbSimulations, Plateau plat){
-		ArrayList<Quadruplet> listQuad = getLearningSet(nbTour,nbSimulations,plat);
-		int tailleVecteur = listQuad.get(0).getEtat().size();
-		LabeledSet label = new LabeledSet(tailleVecteur);
-		for(int i = 0; i<listQuad.size(); i++) {
-			SparseVector apprentissage = encodageAction(listQuad.get(i).getEtat(),listQuad.get(i).getAction());
-			
 		}
 		return label;
 	}

@@ -6,27 +6,23 @@ import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
+/**
  * Si un ennemi peut attaquer le chevalier celui-ci recule.
  * Les archers et mages se regroupent derriere les chevaliers.
  * Les unites attaquent des qu'elles le peuvent.
- * 
- *  
+ * @author Rémi
  */
 
 public class StrategieGroupe extends Strategie{
 	public StrategieGroupe(Plateau plateau) {
 		super(plateau);
 	}
-
-	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
-		for(int i=0; i<coups.size(); ++i) {
-			if(coups.get(i)==action) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
+	/**
+	 * Méthode qui retourne une action pour la troupe donnée
+	 * @param troupe
+	 * @return TroupesAction
+	 */
 	
 	public TroupesAction coup(Troupes troupe) {
 		ArrayList<TroupesAction> coups = this.coupsPossibles(troupe);
@@ -54,18 +50,18 @@ public class StrategieGroupe extends Strategie{
 				if(chateauEn.getY() == troupe.getPosition().getY()+1 || chateauEn.getY() == troupe.getPosition().getY()-1) return TroupesAction.ATTACK1;
 			}		
 			if(troupe.getPosition().getY() == chateauEn.getY()) {
-				if(troupe.getPosition().getX() < chateauEn.getX() && estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
-				if(troupe.getPosition().getX() > chateauEn.getX() && estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
+				if(troupe.getPosition().getX() < chateauEn.getX() && this.estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
+				if(troupe.getPosition().getX() > chateauEn.getX() && this.estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
 			}
 			else if(troupe.getPosition().getY() > chateauEn.getY()) {
-				if(estPresent(TroupesAction.TOP,coups)) return TroupesAction.TOP;
-				if(troupe.getPosition().getX() < chateauEn.getX() && estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
-				if(troupe.getPosition().getX() > chateauEn.getX() && estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
+				if(this.estPresent(TroupesAction.TOP,coups)) return TroupesAction.TOP;
+				if(troupe.getPosition().getX() < chateauEn.getX() && this.estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
+				if(troupe.getPosition().getX() > chateauEn.getX() && this.estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
 			}
 			else {
-				if(estPresent(TroupesAction.BOTTOM,coups)) return TroupesAction.BOTTOM;
-				if(troupe.getPosition().getX() < chateauEn.getX() && estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
-				if(troupe.getPosition().getX() > chateauEn.getX() && estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
+				if(this.estPresent(TroupesAction.BOTTOM,coups)) return TroupesAction.BOTTOM;
+				if(troupe.getPosition().getX() < chateauEn.getX() && this.estPresent(TroupesAction.RIGHT,coups)) return TroupesAction.RIGHT;
+				if(troupe.getPosition().getX() > chateauEn.getX() && this.estPresent(TroupesAction.LEFT,coups)) return TroupesAction.LEFT;
 			}
 			return TroupesAction.STOP;
 		}
@@ -73,52 +69,52 @@ public class StrategieGroupe extends Strategie{
 			////////////////// CHEVALIER 
 			if(troupe.getType() == "Chevalier") {
 				// Si le chevalier peut se faire attaquer
-				if(estPresent(TroupesAction.ATTACK1,coups)) {
+				if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 					return TroupesAction.ATTACK1;
 				}
 				else if(peutEtreAttaque(troupe.getPosition(), color)) {
 					if(color == "bleu") {
-						if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
+						if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
 							return TroupesAction.TOP;
 						}
-						else if(estPresent(TroupesAction.ATTACK1,coups)) {
+						else if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 							return TroupesAction.ATTACK1;
 						}
-						else if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
+						else if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
 							return TroupesAction.BOTTOM;
 						}
 					}
 					else {
-						if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
+						if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
 							return TroupesAction.BOTTOM;
 						}
-						else if(estPresent(TroupesAction.ATTACK1,coups)) {
+						else if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 							return TroupesAction.ATTACK1;
 						}
-						else if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
+						else if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
 							return TroupesAction.TOP;
 						}					
 					}
-					if(estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
+					if(this.estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
 						return TroupesAction.RIGHT;
 					}
-					else if(estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
+					else if(this.estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
 						return TroupesAction.LEFT;
 					}
 				}
 				// S'il ne peut pas se faire attaquer
 				else {
-					if(estPresent(TroupesAction.ATTACK1,coups)) {
+					if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 						return TroupesAction.ATTACK1;
 					}
 					else if(color == "bleu") {
-						if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
+						if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
 							return TroupesAction.BOTTOM;
 						}
 						else return TroupesAction.STOP;
 					}
 					else {
-						if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
+						if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
 							return TroupesAction.TOP;
 						}
 						else return TroupesAction.STOP;
@@ -127,36 +123,36 @@ public class StrategieGroupe extends Strategie{
 			}
 			////////////////// ARCHER
 			else if (troupe.getType() == "Archer") {
-				if(estPresent(TroupesAction.ATTACK1,coups)) {
+				if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 					return TroupesAction.ATTACK1;
 				}
 				else if(peutEtreAttaque(troupe.getPosition(), color)) { // Cas ou l'archer est a portee d'un chevalier : il ne peut pas attaquer mais peut se faire attaquer
 					if(color == "bleu") {
-						if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
+						if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
 							return TroupesAction.TOP;
 						}
-						else if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
+						else if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
 							return TroupesAction.BOTTOM;
 						}
-						else if(estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
+						else if(this.estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
 							return TroupesAction.LEFT;
 						}
-						else if(estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
+						else if(this.estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
 							return TroupesAction.RIGHT;
 						}
 						else return TroupesAction.STOP;
 					}
 					else {
-						if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
+						if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()-1), color)) {
 							return TroupesAction.BOTTOM;
 						}
-						else if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
+						else if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX(),troupe.getPosition().getY()+1), color)) {
 							return TroupesAction.TOP;
 						}
-						else if(estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
+						else if(this.estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()-1,troupe.getPosition().getY()), color)) {
 							return TroupesAction.LEFT;
 						}
-						else if(estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
+						else if(this.estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(new Coordonnees(troupe.getPosition().getX()+1,troupe.getPosition().getY()), color)) {
 							return TroupesAction.RIGHT;
 						}
 						else return TroupesAction.STOP;					
@@ -168,28 +164,28 @@ public class StrategieGroupe extends Strategie{
 					if(chevalierPlusProche!=null) {
 						if(color == "bleu") {
 							if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
-								if(estPresent(TroupesAction.BOTTOM,coups)) {
+								if(this.estPresent(TroupesAction.BOTTOM,coups)) {
 									return TroupesAction.BOTTOM;
 								}
 								else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-									if(estPresent(TroupesAction.RIGHT,coups)) {
+									if(this.estPresent(TroupesAction.RIGHT,coups)) {
 										return TroupesAction.RIGHT;
 									}
 								}
 								else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-									if(estPresent(TroupesAction.LEFT,coups)) {
+									if(this.estPresent(TroupesAction.LEFT,coups)) {
 										return TroupesAction.LEFT;
 									}
 								}
 								else return TroupesAction.STOP;
 							}
 							else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.RIGHT,coups)) {
+								if(this.estPresent(TroupesAction.RIGHT,coups)) {
 									return TroupesAction.RIGHT;
 								}
 							}
 							else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.LEFT,coups)) {
+								if(this.estPresent(TroupesAction.LEFT,coups)) {
 									return TroupesAction.LEFT;
 								}
 							}
@@ -197,28 +193,28 @@ public class StrategieGroupe extends Strategie{
 						}
 						else {
 							if(chevalierPlusProche.getPosition().getY() - troupe.getPosition().getY() > 2) {
-								if(estPresent(TroupesAction.TOP,coups)) {
+								if(this.estPresent(TroupesAction.TOP,coups)) {
 									return TroupesAction.TOP;
 								}
 								else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-									if(estPresent(TroupesAction.RIGHT,coups)) {
+									if(this.estPresent(TroupesAction.RIGHT,coups)) {
 										return TroupesAction.RIGHT;
 									}
 								}
 								else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-									if(estPresent(TroupesAction.LEFT,coups)) {
+									if(this.estPresent(TroupesAction.LEFT,coups)) {
 										return TroupesAction.LEFT;
 									}
 								}
 								else return TroupesAction.STOP;
 							}
 							else if(chevalierPlusProche.getPosition().getX()-1 > troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.RIGHT,coups)) {
+								if(this.estPresent(TroupesAction.RIGHT,coups)) {
 									return TroupesAction.RIGHT;
 								}
 							}
 							else if(chevalierPlusProche.getPosition().getX()+1 < troupe.getPosition().getX()) {
-								if(estPresent(TroupesAction.LEFT,coups)) {
+								if(this.estPresent(TroupesAction.LEFT,coups)) {
 									return TroupesAction.LEFT;
 								}
 							}
@@ -241,7 +237,7 @@ public class StrategieGroupe extends Strategie{
 			}
 			////////////////// MAGE
 			else if(troupe.getType() == "Mage") {
-				if(estPresent(TroupesAction.ATTACK1,coups)) {
+				if(this.estPresent(TroupesAction.ATTACK1,coups)) {
 					return TroupesAction.ATTACK1;
 				}
 				else {
@@ -252,25 +248,25 @@ public class StrategieGroupe extends Strategie{
 					int enY = enPlusProche.getPosition().getY();
 					if(enY < troupe.getPosition().getY()) {
 						Coordonnees posTest = new Coordonnees(xMage, yMage+1);
-						if(estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(posTest, color)) {
+						if(this.estPresent(TroupesAction.TOP,coups) && !peutEtreAttaque(posTest, color)) {
 							return TroupesAction.TOP;
 						}
 					}
 					else if(enY > troupe.getPosition().getY()) {
 						Coordonnees posTest = new Coordonnees(xMage, yMage-1);
-						if(estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(posTest, color)) {
+						if(this.estPresent(TroupesAction.BOTTOM,coups) && !peutEtreAttaque(posTest, color)) {
 							return TroupesAction.BOTTOM;
 						}
 					}
 					else if(enX < troupe.getPosition().getX()) {
 						Coordonnees posTest = new Coordonnees(xMage+1,yMage);
-						if(estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(posTest, color)) {
+						if(this.estPresent(TroupesAction.RIGHT,coups) && !peutEtreAttaque(posTest, color)) {
 							return TroupesAction.RIGHT;
 						}
 					}
 					else if(enX > troupe.getPosition().getX()) {
 						Coordonnees posTest = new Coordonnees(xMage-1, yMage);
-						if(estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(posTest, color)) {
+						if(this.estPresent(TroupesAction.LEFT,coups) && !peutEtreAttaque(posTest, color)) {
 							return TroupesAction.LEFT;
 						}
 					}
@@ -280,7 +276,11 @@ public class StrategieGroupe extends Strategie{
 		return TroupesAction.STOP;
 	}
 	
-	
+	/**
+	 * Méthode qui retourne la position du château ennemi
+	 * @param troupe
+	 * @return Coordonnees
+	 */
 	
 	public Coordonnees rechercheChateauEn(Troupes troupe) {
 		ArrayList<Troupes> ennemi;
@@ -298,6 +298,11 @@ public class StrategieGroupe extends Strategie{
 		return null;
 	}
 	
+	/**
+	 * Méthode qui retourne le chevalier allié le plus proche
+	 * @param troupe
+	 * @return Troupes
+	 */
 	
 	public Troupes chevalierAllie(Troupes troupe) {
 		int x = troupe.getPosition().getX();
@@ -332,6 +337,12 @@ public class StrategieGroupe extends Strategie{
 		return chevalierPlusProche;
 	}
 	
+	/**
+	 * Méthode qui retourne vrai si la position passée est à portée d'ennemis ou non
+	 * @param pos
+	 * @param couleur
+	 * @return boolean
+	 */
 	
 	public boolean peutEtreAttaque(Coordonnees pos, String couleur) {
 		ArrayList<Troupes> ennemi;
@@ -340,7 +351,7 @@ public class StrategieGroupe extends Strategie{
 		else
 			ennemi = this.getPlateau().getUnite_bleue();
 		for(Troupes unite : ennemi) {
-			if(estPresent(TroupesAction.ATTACK1,this.coupsPossibles(unite))) {
+			if(this.estPresent(TroupesAction.ATTACK1,this.coupsPossibles(unite))) {
 				if(unite.getType() == "Chevalier") {
 					if(pos.getX() == unite.getPosition().getX()+1 && pos.getY() == unite.getPosition().getY()) return true;
 					if(pos.getX() == unite.getPosition().getX()-1 && pos.getY() == unite.getPosition().getY()) return true;
@@ -377,6 +388,11 @@ public class StrategieGroupe extends Strategie{
 		return false;
 	}
 	
+	/**
+	 * Méthode qui recherche l'ennemi le plus proche de la troupe donnée
+	 * @param troupe
+	 * @return Troupes
+	 */
 	
 	public Troupes rechercheEnnemi(Troupes troupe) {
 		int x = troupe.getPosition().getX();

@@ -6,10 +6,11 @@ import Troupes.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
+/**
  * Stratégie intelligente qui cherche l'ennemi le plus proche et ayant le moins de PV en cas d'égalité.
  * Les troupes n'attaque pas que dans la direction dans laquelle elles sont tournées mais elles peuvent se tourner 
  * dans la bonne direction si elles trouvent un ennemi à portée.
+ * @author Simon
  */
 
 public class StrategiePlusProche extends Strategie{
@@ -19,6 +20,12 @@ public class StrategiePlusProche extends Strategie{
 		super(plateau);
 		this.plateau=plateau;
 	}
+	
+	/**
+	 * Méthode qui retourne une action pour la troupe donnée
+	 * @param troupe
+	 * @return TroupesAction
+	 */
 	
 	public TroupesAction coup(Troupes troupe) {
 		int x = troupe.getPosition().getX();
@@ -103,6 +110,12 @@ public class StrategiePlusProche extends Strategie{
 			return TroupesAction.STOP;
 		}
 	}
+	
+	/**
+	 * Méthode qui recherche l'ennemi le plus proche de la troupe
+	 * @param troupe
+	 * @return Troupes
+	 */
 	
 	public Troupes rechercheEnnemi(Troupes troupe) {
 		int x = troupe.getPosition().getX();

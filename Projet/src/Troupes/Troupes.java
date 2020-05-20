@@ -2,6 +2,11 @@ package Troupes;
 
 import Strategie.*;
 
+/**
+ * Classe représentant une troupe
+ * @author Simon et Rémi
+ */
+
 public abstract class Troupes {
 	
 	private int PV;

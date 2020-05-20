@@ -7,6 +7,12 @@ import Perceptron.SparseVector;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Classe abstraite qui choisit le coup à jouer pour une troupe donnée 
+ * et qui actualise les informations du plateau en fonction du coup
+ * @author Simon et Rémi
+ */
+
 public abstract class Strategie {
 	private Plateau plateau;
 	
@@ -14,8 +20,21 @@ public abstract class Strategie {
 		plateau=plat;
 	}
 	
+	/**
+	 * Méthode abstraite qui retourne l'action que la troupe va effectuée
+	 * @param troupe
+	 * @return TroupesAction
+	 */
+	
 	public abstract TroupesAction coup(Troupes troupe);
-		
+	
+	/**
+	 * Méthode qui regarde si une action est dans une liste d'actions
+	 * @param action
+	 * @param coups
+	 * @return boolean
+	 */
+	
 	public boolean estPresent(TroupesAction action, ArrayList<TroupesAction> coups) {
 		for(int i=0; i<coups.size(); ++i) {
 			if(coups.get(i)==action) {
@@ -25,12 +44,24 @@ public abstract class Strategie {
 		return false;
 	}
 	
+	/**
+	 * Méthode qui retourne si une troupe est dans l'équipe bleue ou non
+	 * @param troup
+	 * @return boolean
+	 */
+	
 	public boolean estBleu(Troupes troup) {
 		if(plateau.getTroupeBleu(troup.getPosition())!=null)
 			return true;
 		else 
 			return false;
 	}
+	
+	/**
+	 * Méthode qui retourne si un deplacement aux coordonnées passées est valide ou non
+	 * @param coor
+	 * @return boolean
+	 */
 	
 	public boolean deplacementValide(Coordonnees coor) {
 		int x = coor.getX();
@@ -62,6 +93,13 @@ public abstract class Strategie {
 			return false;
 	}
 	
+	/**
+	 * Méthode qui retourne si une attaque aux coordonnées passées est valide ou non
+	 * @param coor
+	 * @param estBleu
+	 * @return boolean
+	 */
+	
 	public boolean attaqueValide(Coordonnees coor,boolean estBleu) {
 		int x = coor.getX();
 		int y = coor.getY();
@@ -82,6 +120,13 @@ public abstract class Strategie {
 			return false;
 		}
 	}
+	
+	/**
+	 * Méthode qui retourne une liste d'actions en donnant à la troupe la possibilitée de se tourner
+	 * dans la bonne direction si un ennemi est à portée d'attaque
+	 * @param troupe
+	 * @return ArrayList<TroupesAction>
+	 */
 	
 	public ArrayList<TroupesAction> coupsIntelligentsPossibles(Troupes troupe){
 		ArrayList<TroupesAction> listecoups = new ArrayList<TroupesAction>();
@@ -395,6 +440,13 @@ public abstract class Strategie {
 		return listecoups;
 	}
 	
+	/**
+	 * Méthode qui retourne une liste d'actions
+	 * La troupe peut seulement attaquer dans la direction dans laquelle elle est
+	 * @param troupe
+	 * @return ArrayList<TroupesAction>
+	 */
+	
 	public ArrayList<TroupesAction> coupsPossibles(Troupes troupe){
 		ArrayList<TroupesAction> listecoups = new ArrayList<TroupesAction>();
 		int x = troupe.getPosition().getX();
@@ -466,6 +518,12 @@ public abstract class Strategie {
 		return listecoups;
 	}
 	
+	/**
+	 * Méthode qui actualise les informations du plateau et de la troupe en fonction de l'action
+	 * @param action
+	 * @param troupe
+	 */
+	
 	public void jouer(TroupesAction action,Troupes troupe) {
 		troupe.setAction(action);
 		switch (action) {
@@ -510,6 +568,11 @@ public abstract class Strategie {
 		}
 	}
 	
+	/**
+	 * Méthode qui retourne vrai si la troupe réussi à esquiver ou non
+	 * @return boolean
+	 */
+	
 	public boolean esquive() {
 		Random r = new Random();
 		float esquive = r.nextFloat();
@@ -518,6 +581,14 @@ public abstract class Strategie {
 		else
 			return false;
 	}
+	
+	/**
+	 * Méthode qui regarde s'il y a un ennemi à portée de la troupe
+	 * @param troupe
+	 * @param dir
+	 * @param estBleu
+	 * @return Troupes
+	 */
 	
 	public Troupes chercheCible(Troupes troupe,Direction dir, boolean estBleu) {
 		int x = troupe.getPosition().getX();
@@ -606,6 +677,11 @@ public abstract class Strategie {
 	public void setPlateau(Plateau plateau) {
 		this.plateau = plateau;
 	}
+	
+	/**
+	 * Méthode abstraite qui retourn vrai si la stratégie est une stratégie perceptron
+	 * @return boolean
+	 */
 	
 	public abstract boolean estPerceptron();
 	
